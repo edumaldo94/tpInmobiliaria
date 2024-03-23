@@ -5,36 +5,39 @@ using tpInmobliaria.Models;
 
 namespace tpInmobliaria.Controllers;
 
-public class ProprietorController : Controller{
+public class TenantController : Controller{
 
-    private readonly ILogger<ProprietorController> _logger;
+    private readonly ILogger<TenantController> _logger;
 
-    public ProprietorController(ILogger<ProprietorController> logger){
+    public TenantController(ILogger<TenantController> logger){
         _logger = logger;
     }
-    public IActionResult Index(){
-        RepositorioProprietor ru= new RepositorioProprietor();
-        var lista= ru.GetProprietors();
-        
-        return View(lista);
-    }
+public IActionResult Index()
+{
+    RepositorioTenant ru = new RepositorioTenant();
+    var lista = ru.GetTenants();
+
+    return View(lista);
+}
+
+
     
       public IActionResult Create()
         {
             return View();
         }
-        public IActionResult Crear(Proprietor proprietors){
-            RepositorioProprietor ru= new RepositorioProprietor();
-            ru.High(proprietors);
+        public IActionResult Crear(Tenant tenants){
+            RepositorioTenant ru= new RepositorioTenant();
+            ru.High(tenants);
             return RedirectToAction(nameof(Index));
         }
 
 [HttpGet]
         public IActionResult Edit(int id){
 if(id > 0){
-RepositorioProprietor ru= new RepositorioProprietor ();
-var proprietor = ru.GetProprietorId(id);
-return View(proprietor);
+RepositorioTenant ru= new RepositorioTenant ();
+var tenants = ru.GetTenantId(id);
+return View(tenants);
 }else{
     
   return View();  
@@ -45,15 +48,15 @@ return View(proprietor);
 		//public ActionResult Edit(int id, IFormCollection collection)
         [HttpPost]
 	//[ValidateAntiForgeryToken]
-		public ActionResult Edit(int id, Proprietor entidad)
+		public ActionResult Edit(int id, Tenant entidad)
 		{
 		
 			// Si en lugar de IFormCollection ponemos Propietario, el enlace de datos lo hace el sistema
-			Proprietor? p = null;
-            RepositorioProprietor ru= new RepositorioProprietor ();
+			Tenant? p = null;
+            RepositorioTenant ru= new RepositorioTenant ();
 		 
 
-				p = ru.GetProprietorId(id);
+				p = ru.GetTenantId(id);
 				p.Name= entidad.Name;
 				p.Last_Name = entidad.Last_Name;
 				p.Dni = entidad.Dni;
@@ -74,26 +77,27 @@ return View(proprietor);
 try{
 if(id > 0){
 
-RepositorioProprietor ru= new RepositorioProprietor ();
-var proprietor = ru.GetProprietorId(id);
-return View(proprietor);
+RepositorioTenant ru= new RepositorioTenant ();
+var tenants = ru.GetTenantId(id);
+return View(tenants);
 }else{
     
   return View();  
 }
-}catch(Exception exception){
-	throw;
+}catch(Exception ex){
+		 TempData["ErrorMessage"] = "Error al intentar eliminar el propietario." + ex;
+        return RedirectToAction(nameof(Index));
 }
 
         }
 
 		[HttpPost, ActionName("Delet")]
 		//[ValidateAntiForgeryToken]
-		public IActionResult Delet(int id, Proprietor entidad)
+		public IActionResult Delet(int id, Tenant entidad)
 		{
 			try
 			{
-				RepositorioProprietor ru= new RepositorioProprietor ();
+				RepositorioTenant ru= new RepositorioTenant ();
                  var proprietor = ru.Low(id);
 				TempData["Mensaje"] = "Eliminación realizada correctamente";
 				return RedirectToAction(nameof(Index));

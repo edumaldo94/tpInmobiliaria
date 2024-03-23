@@ -113,7 +113,7 @@ if (reader.Read())
 return proprietors;
 }
 
-public int  Modificacion(Proprietor proprietors)
+public int  Modification(Proprietor proprietors)
 {
     	int res = -1;
     using (var connection = new MySqlConnection(ConnectionString))
