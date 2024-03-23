@@ -25,7 +25,7 @@ public class ProprietorController : Controller{
         }
         public IActionResult Crear(Proprietor proprietors){
             RepositorioProprietor ru= new RepositorioProprietor();
-            ru.CrearProprietor(proprietors);
+            ru.High(proprietors);
             return RedirectToAction(nameof(Index));
         }
 
@@ -87,8 +87,8 @@ return View(proprietor);
 
         }
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
+		[HttpPost, ActionName("Delet")]
+		//[ValidateAntiForgeryToken]
 		public IActionResult Delet(int id, Proprietor entidad)
 		{
 			try
@@ -100,7 +100,8 @@ return View(proprietor);
 			}
 			catch (Exception ex)
 			{//poner breakpoints para detectar errores
-				throw;
+				 TempData["ErrorMessage"] = "Error al intentar eliminar el propietario." + ex;
+        return RedirectToAction(nameof(Index));
 			}
 		}
 	

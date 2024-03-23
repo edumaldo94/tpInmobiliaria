@@ -8,9 +8,6 @@
 <div class="text-center">
     <h1 class="dispaly-4"> Lista de Propietarios</h1>
   
-<p>
-    @Html.ActionLink("Crear Nuevo", "Create")
-</p>
 
 <table class="table">
     <tr>
@@ -39,9 +36,7 @@
         <th>
             @Html.DisplayNameFor(model => model.Email)
         </th>
-         <th>
-            @Html.DisplayNameFor(model => model.StateP)
-        </th>
+       
         <th></th>
     </tr>
 
@@ -72,15 +67,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
-              <th>
-            @Html.DisplayFor(modelItem  => item.StateP)
-        </th>
+          
             <td>
-                @Html.ActionLink("Editar", "Edit", new { id = item.id_Proprietor }) |
-                @Html.ActionLink("Eliminar", "Delet", new { id = item.id_Proprietor })
+                <button class="btn btn-info" onclick="window.location.href='@Url.Action("Edit", new { id = item.id_Proprietor })'">Modificar</button> |
+<button class="btn btn-danger" onclick="window.location.href='@Url.Action("Delet", new { id = item.id_Proprietor })'">Baja</button>
+
             </td>
         </tr>
     }
 </table>
-
+<button class="btn btn-warning" onclick="window.location.href='@Url.Action("Create")'">Alta</button>
 </div>

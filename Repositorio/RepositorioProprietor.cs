@@ -22,7 +22,7 @@ public IList<Proprietor> GetProprietors(){
     using (var connection = new MySqlConnection(ConnectionString)){
 
         var sql= @$"SELECT {nameof(Proprietor.id_Proprietor)}, {nameof(Proprietor.Name)}, {nameof(Proprietor.Last_Name)}, {nameof(Proprietor.Birthdate)}, {nameof(Proprietor.Sex)}, {nameof(Proprietor.Address)}, {nameof(Proprietor.Phone)}, {nameof(Proprietor.Dni)}, {nameof(Proprietor.Email)},{nameof(Proprietor.StateP)}
-        From proprietor";
+        From proprietor  WHERE {nameof(Proprietor.StateP)} = 1";
         using (var command = new MySqlCommand(sql,connection)){
             connection.Open();
             using (var reader= command.ExecuteReader()){
@@ -51,7 +51,7 @@ while (reader.Read())
 return proprietors;
 }
 
-public int CrearProprietor(Proprietor proprietors){
+public int High(Proprietor proprietors){
     int id=0;
     using(var connection = new MySqlConnection(ConnectionString)){
      var sql = @$"INSERT INTO proprietor ({nameof(Proprietor.Name)},{nameof(Proprietor.Last_Name)},{nameof(Proprietor.Dni)},{nameof(Proprietor.Birthdate)},{nameof(Proprietor.Sex)},{nameof(Proprietor.Address)},{nameof(Proprietor.Phone)},{nameof(Proprietor.Email)},{nameof(Proprietor.StateP)})
@@ -152,20 +152,24 @@ connection.Close();
 }
 
 public int Low(int id)
-		{
-			int res = -1;
-			using (var connection = new MySqlConnection(ConnectionString))
-			{
-				string sql = @$"DELETE FROM proprietor SET StateP = 0 WHERE {nameof(Proprietor.id_Proprietor)} = @id";
-				      using (var command = new MySqlCommand(sql, connection))
-				{
-					command.CommandType = CommandType.Text;
-					command.Parameters.AddWithValue("@id", id);
-					connection.Open();
-					res = command.ExecuteNonQuery();
-					connection.Close();
-				}
-			}
-			return res;
-		}
+{
+    int res = -1;
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        string sql = @$"UPDATE proprietor
+                        SET stateP = 0
+                        WHERE {nameof(Proprietor.id_Proprietor)} = @id";
+        
+        using (var command = new MySqlCommand(sql, connection))
+        {
+            command.CommandType = CommandType.Text;
+            command.Parameters.AddWithValue("@id", id);
+            connection.Open();
+            res = command.ExecuteNonQuery();
+            connection.Close();
+        }
+    }
+    return res;
+}
+
 }
