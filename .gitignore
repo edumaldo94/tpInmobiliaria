@@ -1,0 +1,25 @@
+# Carpetas generadas durante la compilación
+/bin/
+/obj/
+
+# Paquetes NuGet instalados localmente
+/packages/
+
+# Archivos de configuración específicos de Visual Studio
+.vs/
+.vscode/
+
+# Archivos de configuración de usuario y solución de Visual Studio
+*.suo
+*.user
+
+# Archivo de configuración de aplicación sensible (reemplaza 'appsettings.json' con el nombre de tu archivo)
+appsettings.json
+
+# Archivos de copia de seguridad y caché
+*.bak
+*.cache
+
+# Archivos de registro y archivos de datos temporales
+*.log
+*.temp
