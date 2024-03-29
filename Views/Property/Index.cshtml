@@ -1,0 +1,80 @@
+@model IEnumerable<Property>
+
+    
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="dispaly-4"> Lista de Propietarios</h1>
+  
+
+<table class="table">
+    <tr>
+         <th>
+            @Html.DisplayNameFor(model => model.id_Property)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Coordinates)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Use_type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StateP)
+        </th>
+        <th>
+            
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.id_Proprietor)
+        </th>
+       
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.id_Property)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Coordinates)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Use_type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StateP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.id_Proprietor)
+            </td>
+          
+            <td>
+                <button class="btn btn-info" onclick="window.location.href='@Url.Action("Edit", new { id = item.id_Property })'">Modificar</button> |
+<button class="btn btn-danger" onclick="window.location.href='@Url.Action("Delet", new { id = item.id_Property })'">Baja</button>
+
+            </td>
+        </tr>
+    }
+</table>
+<button class="btn btn-warning" onclick="window.location.href='@Url.Action("Create")'">Alta</button>
+</div>
