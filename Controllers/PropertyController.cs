@@ -14,7 +14,7 @@ public class PropertyController : Controller{
     }
     public IActionResult Index(){
         RepositorioProperty ru= new RepositorioProperty();
-        var lista= ru.GetProperts();
+        var lista= ru.GetProperties();
         
         return View(lista);
     }
@@ -36,5 +36,9 @@ public class PropertyController : Controller{
             return RedirectToAction(nameof(Index));
         }
 
+public IActionResult CreateContract(){
+
+    return View();
+}
 
 } 

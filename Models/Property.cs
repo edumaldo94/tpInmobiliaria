@@ -24,5 +24,8 @@ namespace tpInmobliaria.Models;
         public double? Price { get; set; }
 
        public string? StateP { get; set; }
-        
+       [DisplayName("Nombre")]
+            public string ProprietorName { get; set; } 
+            [DisplayName("Apellido")]
+    public string ProprietorLastName { get; set; } 
     }

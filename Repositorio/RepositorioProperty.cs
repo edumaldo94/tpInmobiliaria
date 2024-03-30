@@ -17,35 +17,53 @@ public RepositorioProperty(){
 
 }
 
-public IList<Property> GetProperts(){
-    var properties = new List<Property>();
-    using (var connection = new MySqlConnection(ConnectionString)){
-
-        var sql= @$"SELECT {nameof(Property.id_Proprietor)}, {nameof(Property.Address)}, {nameof(Property.Type)}, {nameof(Property.Use_type)}, {nameof(Property.Coordinates)}, {nameof(Property.Price)}, {nameof(Property.StateP)}
-        From property";
-        using (var command = new MySqlCommand(sql,connection)){
-            connection.Open();
-            using (var reader= command.ExecuteReader()){
-while (reader.Read())
+public IList<Property> GetProperties()
 {
-    properties .Add(new Property{
-        id_Property = reader.GetInt32("id_Property"),
+    var properties = new List<Property>();
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        var sql = @"SELECT 
+                        prop.id_Property, 
+                        prop.id_Proprietor, 
+                        prop.Address, 
+                        prop.Type, 
+                        prop.Use_type, 
+                        prop.Coordinates, 
+                        prop.Price, 
+                        prop.StateP,
+                        pro.Name AS ProprietorName,
+                        pro.Last_Name AS ProprietorLastName
+                    FROM 
+                        property prop
+                    INNER JOIN 
+                        proprietor pro ON prop.id_Proprietor = pro.id_Proprietor";
+
+        using (var command = new MySqlCommand(sql, connection))
+        {
+            connection.Open();
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    properties.Add(new Property
+                    {
+                        id_Property = reader.GetInt32("id_Property"),
                         id_Proprietor = reader.GetInt32("id_Proprietor"),
-                     Address = reader.IsDBNull(reader.GetOrdinal("Address")) ? null : reader.GetString("Address"),
-                       Type = reader.IsDBNull(reader.GetOrdinal("Type")) ? null : reader.GetString("Type"),
+                        Address = reader.IsDBNull(reader.GetOrdinal("Address")) ? null : reader.GetString("Address"),
+                        Type = reader.IsDBNull(reader.GetOrdinal("Type")) ? null : reader.GetString("Type"),
                         Use_type = reader.IsDBNull(reader.GetOrdinal("Use_type")) ? null : reader.GetString("Use_type"),
                         Coordinates = reader.IsDBNull(reader.GetOrdinal("Coordinates")) ? null : reader.GetDouble("Coordinates"),
                         Price = reader.IsDBNull(reader.GetOrdinal("Price")) ? null : reader.GetDouble("Price"),
-                        StateP = reader.IsDBNull(reader.GetOrdinal("StateP")) ? null : reader.GetString("StateP")
+                        StateP = reader.IsDBNull(reader.GetOrdinal("StateP")) ? null : reader.GetString("StateP"),
+                        ProprietorName = reader.IsDBNull(reader.GetOrdinal("ProprietorName")) ? null : reader.GetString("ProprietorName"),
+                        ProprietorLastName = reader.IsDBNull(reader.GetOrdinal("ProprietorLastName")) ? null : reader.GetString("ProprietorLastName")
                     });
-}
-
+                }
             }
         }
     }
 
-
-return properties;
+    return properties;
 }
 
 

@@ -6,7 +6,7 @@
 }
 
 <div class="text-center">
-    <h1 class="dispaly-4"> Lista de Propietarios</h1>
+    <h1 class="dispaly-4"> Lista de Inmuebles</h1>
   
 
 <table class="table">
@@ -27,16 +27,18 @@
             @Html.DisplayNameFor(model => model.StateP)
         </th>
         <th>
+             @Html.DisplayNameFor(model => model.Type)
             
-            @Html.DisplayNameFor(model => model.Price)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Type)
+           @Html.DisplayNameFor(model => model.Price)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.id_Proprietor)
+            @Html.DisplayNameFor(model => model.ProprietorName)
         </th>
-       
+       <th>
+            @Html.DisplayNameFor(model => model.ProprietorLastName)
+        </th>
         <th></th>
     </tr>
 
@@ -59,19 +61,22 @@
                 @Html.DisplayFor(modelItem => item.StateP)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+
+               @Html.DisplayFor(modelItem => item.Type)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Type)
+                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.id_Proprietor)
+                @Html.DisplayFor(modelItem => item.ProprietorName)
             </td>
-          
+           <td>
+                @Html.DisplayFor(modelItem => item.ProprietorLastName)
+            </td>
             <td>
                 <button class="btn btn-info" onclick="window.location.href='@Url.Action("Edit", new { id = item.id_Property })'">Modificar</button> |
 <button class="btn btn-danger" onclick="window.location.href='@Url.Action("Delet", new { id = item.id_Property })'">Baja</button>
-
+<button class="btn btn-danger" onclick="window.location.href='@Url.Action("CreateContract", new { id = item.id_Property })'">Contrato</button>
             </td>
         </tr>
     }
