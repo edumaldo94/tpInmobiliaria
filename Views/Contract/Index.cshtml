@@ -1,4 +1,4 @@
-@model IEnumerable<Property>
+@model IEnumerable<Contract>
 
     
 @{
@@ -12,33 +12,31 @@
 <table class="table">
     <tr>
          <th>
+            @Html.DisplayNameFor(model => model.id_Contract)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.id_Property)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Address)
+            @Html.DisplayNameFor(model => model.id_Tenant)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Coordinates)
+            @Html.DisplayNameFor(model => model.Start_date)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Use_type)
+            @Html.DisplayNameFor(model => model.End_date)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StateP)
-        </th>
-        <th>
-             @Html.DisplayNameFor(model => model.Type)
+             @Html.DisplayNameFor(model => model.Rental_amount)
             
         </th>
         <th>
-           @Html.DisplayNameFor(model => model.Price)
+           @Html.DisplayNameFor(model => model.Penalize)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ProprietorName)
+            @Html.DisplayNameFor(model => model.StateC)
         </th>
-       <th>
-            @Html.DisplayNameFor(model => model.ProprietorLastName)
-        </th>
+      
         <th></th>
     </tr>
 
@@ -46,33 +44,31 @@
     {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.id_Contract)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.id_Property)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Address)
+                @Html.DisplayFor(modelItem => item.id_Tenant)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Coordinates)
+                @Html.DisplayFor(modelItem => item.Start_date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Use_type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StateP)
+                @Html.DisplayFor(modelItem => item.End_date)
             </td>
             <td>
 
-               @Html.DisplayFor(modelItem => item.Type)
+               @Html.DisplayFor(modelItem => item.Rental_amount)
             </td>
             <td>
-                 @Html.DisplayFor(modelItem => item.Price)
+                 @Html.DisplayFor(modelItem => item.Penalize)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProprietorName)
+                @Html.DisplayFor(modelItem => item.StateC)
             </td>
-           <td>
-                @Html.DisplayFor(modelItem => item.ProprietorLastName)
-            </td>
+       
             <td>
                 <button class="btn btn-info" onclick="window.location.href='@Url.Action("Edit", new { id = item.id_Property })'">Modificar</button> |
 <button class="btn btn-danger" onclick="window.location.href='@Url.Action("Delet", new { id = item.id_Property })'">Baja</button>
