@@ -5,15 +5,15 @@ using tpInmobliaria.Models;
 
 namespace tpInmobliaria.Controllers;
 
-public class ProprietorController : Controller{
+public class PropietarioController : Controller{
 
-    private readonly ILogger<ProprietorController> _logger;
+    private readonly ILogger<PropietarioController> _logger;
 
-    public ProprietorController(ILogger<ProprietorController> logger){
+    public PropietarioController(ILogger<PropietarioController> logger){
         _logger = logger;
     }
     public IActionResult Index(){
-        RepositorioProprietor ru= new RepositorioProprietor();
+        RepositorioPropietario ru= new RepositorioPropietario();
         var lista= ru.GetProprietors();
         
         return View(lista);
@@ -23,8 +23,8 @@ public class ProprietorController : Controller{
         {
             return View();
         }
-        public IActionResult Crear(Proprietor proprietors){
-            RepositorioProprietor ru= new RepositorioProprietor();
+        public IActionResult Crear(Propietario proprietors){
+            RepositorioPropietario ru= new RepositorioPropietario();
             ru.High(proprietors);
             return RedirectToAction(nameof(Index));
         }
@@ -32,7 +32,7 @@ public class ProprietorController : Controller{
 [HttpGet]
         public IActionResult Edit(int id){
 if(id > 0){
-RepositorioProprietor ru= new RepositorioProprietor ();
+RepositorioPropietario ru= new RepositorioPropietario ();
 var proprietor = ru.GetProprietorId(id);
 return View(proprietor);
 }else{
@@ -45,23 +45,21 @@ return View(proprietor);
 		//public ActionResult Edit(int id, IFormCollection collection)
         [HttpPost]
 	//[ValidateAntiForgeryToken]
-		public ActionResult Edit(int id, Proprietor entidad)
+		public ActionResult Edit(int id, Propietario entidad)
 		{
 		
 			// Si en lugar de IFormCollection ponemos Propietario, el enlace de datos lo hace el sistema
-			Proprietor? p = null;
-            RepositorioProprietor ru= new RepositorioProprietor ();
+			Propietario? p = null;
+            RepositorioPropietario ru= new RepositorioPropietario ();
 		 
 
 				p = ru.GetProprietorId(id);
-				p.Name= entidad.Name;
-				p.Last_Name = entidad.Last_Name;
+				p.Nombre= entidad.Nombre;
+				p.Apellido = entidad.Apellido;
 				p.Dni = entidad.Dni;
-                p.Birthdate=entidad.Birthdate;
-                p.Sex=p.Sex;
-                p.Address=entidad.Address;
-				p.Phone = entidad.Phone;
-                p.Email = entidad.Email;
+               p.Email = entidad.Email;
+				p.Telefono = entidad.Telefono;
+                
 				ru.Modification(p);
 				TempData["Mensaje"] = "Datos guardados correctamente";
 				return RedirectToAction(nameof(Index));
@@ -74,7 +72,7 @@ return View(proprietor);
 try{
 if(id > 0){
 
-RepositorioProprietor ru= new RepositorioProprietor ();
+RepositorioPropietario ru= new RepositorioPropietario ();
 var proprietor = ru.GetProprietorId(id);
 return View(proprietor);
 }else{
@@ -89,11 +87,11 @@ return View(proprietor);
 
 		[HttpPost, ActionName("Delet")]
 		//[ValidateAntiForgeryToken]
-		public IActionResult Delet(int id, Proprietor entidad)
+		public IActionResult Delet(int id, Propietario entidad)
 		{
 			try
 			{
-				RepositorioProprietor ru= new RepositorioProprietor ();
+				RepositorioPropietario ru= new RepositorioPropietario ();
                  var proprietor = ru.Low(id);
 				TempData["Mensaje"] = "Eliminación realizada correctamente";
 				return RedirectToAction(nameof(Index));

@@ -1,0 +1,70 @@
+@model tpInmobliaria.Models.Contrato
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<div class="container">
+    <div class="row justify-content-center mt-2">
+        <div class="col-md-4" style="background-color: #c4ccc2; border-radius: 10px; padding: 20px;">
+        <h3 class="text-center">Formulario de Edición Contrato</h3>
+    <div class="col-md-12">
+                            <!--Aca va el form -->
+                            <form asp-action="Edit">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="id_Contrato" class="control-label"></label>
+                                    <input asp-for="id_Contrato" class="form-control" />
+                                    <span asp-validation-for="id_Contrato" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="InmuebleId" class="control-label">ID de Propiedad:</label>
+                                    <input asp-for="InmuebleId" class="form-control" />
+                                    <span asp-validation-for="InmuebleId" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="InquilinoId" class="control-label">ID de Inquilino:</label>
+                                    <input asp-for="InquilinoId" class="form-control" />
+                                    <span asp-validation-for="InquilinoId" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Fecha_Inicio" class="control-label">Fecha de Inicio:</label>
+                                    <input asp-for="Fecha_Inicio" class="form-control" />
+                                    <span asp-validation-for="Fecha_Inicio" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Fecha_Fin" class="control-label">Fecha de Finalización:</label>
+                                    <input asp-for="Fecha_Fin" class="form-control" />
+                                    <span asp-validation-for="Fecha_Fin" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Monto" class="control-label">Monto del Alquiler:</label>
+                                    <input asp-for="Monto" class="form-control" />
+                                    <span asp-validation-for="Monto" class="text-danger"></span>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label asp-for="Estado" class="control-label">Estado:</label>
+                                    <input asp-for="Estado" class="form-control" />
+                                    <span asp-validation-for="Estado" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Editar" class="btn btn-success" />
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+              
+           <div class="text-center mt-3">
+                
+                    <a asp-action="Index">Regresar a la lista</a>
+                </div>
+            </div>
+          

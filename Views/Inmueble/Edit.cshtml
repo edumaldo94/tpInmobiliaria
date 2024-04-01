@@ -1,0 +1,85 @@
+@model tpInmobliaria.Models.Inmueble
+@{
+    ViewData["Title"] = "Crear Propiedad";
+}
+
+
+<div class="container">
+    <div class="row justify-content-center mt-2">
+        <div class="col-md-4" style="background-color: #c4ccc2; border-radius: 10px; padding: 20px;">
+        <h3 class="text-center">Formulario de Edición Inmueble</h3>
+    <div class="col-md-12">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="id_Inmuebles" />
+ <div class="form-group">
+                <label asp-for="PropietarioId" class="control-label">Propietario:</label>
+                <select asp-for="PropietarioId" class="form-control">
+                    <option value="">Seleccione un propietario</option>
+                    @foreach (var proprietor in ViewBag.Proprietors)
+                    {
+                        <option value="@proprietor.id_Propietario">@proprietor.Nombre</option>
+                    }
+                </select>
+                <span asp-validation-for="PropietarioId" class="text-danger"></span>
+            </div>
+
+
+
+
+ <div class="form-group">
+                <label asp-for="Direccion" class="control-label">Dirección:</label>
+                <input asp-for="Direccion" class="form-control" />
+                <span asp-validation-for="Direccion" class="text-danger"></span>
+            </div>
+              <div class="form-group">
+                <label asp-for="Ambientes" class="control-label">Ambiente:</label>
+                <input asp-for="Ambientes" class="form-control" />
+                <span asp-validation-for="Ambientes" class="text-danger"></span>
+            </div>
+  <div class="form-group">
+    <label asp-for="Uso" class="control-label">Tipo de Uso:</label>
+    <select asp-for="Uso" class="form-control">
+        <option value="Comercial">Comercial</option>
+        <option value="Residencial">Residencial</option>
+    </select>
+    <span asp-validation-for="Uso" class="text-danger"></span>
+</div>
+            <div class="form-group">
+                <label asp-for="Tipo" class="control-label">Tipo de Propiedad:</label>
+                <input asp-for="Tipo" class="form-control" />
+                <span asp-validation-for="Tipo" class="text-danger"></span>
+            </div>
+
+           
+      
+
+
+            <div class="form-group">
+                <label asp-for="Precio" class="control-label">Precio:</label>
+                <input asp-for="Precio" class="form-control" />
+                <span asp-validation-for="Precio" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Disponible" class="control-label">Disponible:</label>
+                <input asp-for="Disponible" class="form-control" />
+                <span asp-validation-for="Disponible" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EstadoIn" class="control-label">Estado:</label>
+                <input asp-for="EstadoIn" class="form-control" />
+                <span asp-validation-for="EstadoIn" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Editar" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+<div class="text-center mt-3">
+    <button class="btn btn-primary" onclick="window.location.href='@Url.Action("Index")'">Back to List</button>
+</div>
+</div>

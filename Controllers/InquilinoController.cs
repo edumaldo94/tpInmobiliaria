@@ -5,16 +5,16 @@ using tpInmobliaria.Models;
 
 namespace tpInmobliaria.Controllers;
 
-public class TenantController : Controller{
+public class InquilinoController : Controller{
 
-    private readonly ILogger<TenantController> _logger;
+    private readonly ILogger<InquilinoController> _logger;
 
-    public TenantController(ILogger<TenantController> logger){
+    public InquilinoController(ILogger<InquilinoController> logger){
         _logger = logger;
     }
 public IActionResult Index()
 {
-    RepositorioTenant ru = new RepositorioTenant();
+    RepositorioInquilino ru = new RepositorioInquilino();
     var lista = ru.GetTenants();
 
     return View(lista);
@@ -26,8 +26,8 @@ public IActionResult Index()
         {
             return View();
         }
-        public IActionResult Crear(Tenant tenants){
-            RepositorioTenant ru= new RepositorioTenant();
+        public IActionResult Crear(Inquilino tenants){
+            RepositorioInquilino ru= new RepositorioInquilino();
             ru.High(tenants);
             return RedirectToAction(nameof(Index));
         }
@@ -35,7 +35,7 @@ public IActionResult Index()
 [HttpGet]
         public IActionResult Edit(int id){
 if(id > 0){
-RepositorioTenant ru= new RepositorioTenant ();
+RepositorioInquilino ru= new RepositorioInquilino ();
 var tenants = ru.GetTenantId(id);
 return View(tenants);
 }else{
@@ -48,23 +48,20 @@ return View(tenants);
 		//public ActionResult Edit(int id, IFormCollection collection)
         [HttpPost]
 	//[ValidateAntiForgeryToken]
-		public ActionResult Edit(int id, Tenant entidad)
+		public ActionResult Edit(int id, Inquilino entidad)
 		{
 		
 			// Si en lugar de IFormCollection ponemos Propietario, el enlace de datos lo hace el sistema
-			Tenant? p = null;
-            RepositorioTenant ru= new RepositorioTenant ();
+			Inquilino? p = null;
+            RepositorioInquilino ru= new RepositorioInquilino ();
 		 
 
 				p = ru.GetTenantId(id);
-				p.Name= entidad.Name;
-				p.Last_Name = entidad.Last_Name;
+				p.Nombre= entidad.Nombre;
+				p.Apellido = entidad.Apellido;
 				p.Dni = entidad.Dni;
-                p.Birthdate=entidad.Birthdate;
-                p.Sex=p.Sex;
-                p.Address=entidad.Address;
-				p.Phone = entidad.Phone;
-                p.Email = entidad.Email;
+               p.Email = entidad.Email;
+				p.Telefono = entidad.Telefono;
 				ru.Modification(p);
 				TempData["Mensaje"] = "Datos guardados correctamente";
 				return RedirectToAction(nameof(Index));
@@ -77,7 +74,7 @@ return View(tenants);
 try{
 if(id > 0){
 
-RepositorioTenant ru= new RepositorioTenant ();
+RepositorioInquilino ru= new RepositorioInquilino ();
 var tenants = ru.GetTenantId(id);
 return View(tenants);
 }else{
@@ -93,11 +90,11 @@ return View(tenants);
 
 		[HttpPost, ActionName("Delet")]
 		//[ValidateAntiForgeryToken]
-		public IActionResult Delet(int id, Tenant entidad)
+		public IActionResult Delet(int id, Inquilino entidad)
 		{
 			try
 			{
-				RepositorioTenant ru= new RepositorioTenant ();
+				RepositorioInquilino ru= new RepositorioInquilino ();
                  var proprietor = ru.Low(id);
 				TempData["Mensaje"] = "Eliminación realizada correctamente";
 				return RedirectToAction(nameof(Index));

@@ -1,0 +1,58 @@
+@model tpInmobliaria.Models.Propietario
+
+@{
+    ViewData["Title"] = "Inmobiliaria";
+}
+
+
+<div class="container">
+    <div class="row justify-content-center mt-2">
+        <div class="col-md-4" style="background-color: #c4ccc2; border-radius: 10px; padding: 20px;">
+        <h3 class="text-center">Formulario de Edición Propietario</h3>
+    <div class="col-md-12">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="id_Propietario" />
+
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label">Nombre:</label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+
+
+			<div class="form-group">
+				 <label asp-for="Apellido" class="control-label">Apellido:</label>
+        <input asp-for="Apellido" class="form-control"/>
+        <span asp-validation-for="Apellido" class="text-danger"></span>
+			</div>
+
+			<div class="form-group">
+				   <label asp-for="Dni" class="control-label">Documento:</label>
+        <input asp-for="Dni" class="form-control"/>
+        <span asp-validation-for="Dni" class="text-danger"></span>
+			</div>
+            
+             <div class="form-group">
+				  <label asp-for="Email" class="control-label">Correo:</label>
+        <input asp-for="Email" class="form-control"  />
+        <span asp-validation-for="Email" class="text-danger"></span>
+			</div>
+                  <div class="form-group">
+				  <label asp-for="Telefono" class="control-label">Teléfono:</label>
+        <input asp-for="Telefono" class="form-control"  />
+        <span asp-validation-for="Telefono" class="text-danger"></span>
+			</div>
+                   
+			    			<div class="form-group" style="padding: 5px;">
+				<input type="submit" value="Editar" class="btn btn-success" />
+			</div>
+		</form>
+        
+    </div>
+</div>
+
+<div class="text-center mt-3">
+    <button class="btn btn-primary" onclick="window.location.href='@Url.Action("Index")'">Back to List</button>
+</div>
+</div>

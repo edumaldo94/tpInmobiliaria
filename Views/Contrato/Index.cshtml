@@ -1,0 +1,77 @@
+@model IEnumerable<Contrato>
+
+    
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="dispaly-4"> Lista de contratos</h1>
+  
+
+<table class="table">
+    <tr>
+         <th>
+            @Html.DisplayNameFor(model => model.id_Contrato)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InmuebleId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InquilinoId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Fecha_Inicio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Fecha_Fin)
+        </th>
+        <th>
+             @Html.DisplayNameFor(model => model.Monto)
+            
+        </th>
+    
+        <th>
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+      
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.id_Contrato)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InmuebleId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InquilinoId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fecha_Inicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fecha_Fin)
+            </td>
+            <td>
+
+               @Html.DisplayFor(modelItem => item.Monto)
+            </td>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+       
+            <td>
+                <button class="btn btn-info" onclick="window.location.href='@Url.Action("Edit", new { id = item.id_Contrato })'">Modificar</button> |
+<button class="btn btn-danger" onclick="window.location.href='@Url.Action("Delet", new { id = item.id_Contrato })'">Baja</button>
+
+            </td>
+        </tr>
+    }
+</table>
+<button class="btn btn-warning" onclick="window.location.href='@Url.Action("Create")'">Alta</button>
+</div>

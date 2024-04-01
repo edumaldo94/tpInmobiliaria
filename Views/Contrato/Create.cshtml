@@ -1,0 +1,56 @@
+@model  tpInmobliaria.Models.Contrato
+@{
+    ViewData["Title"] = "Crear Contrato";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <label asp-for="InmuebleId" class="control-label">ID de Propiedad:</label>
+                <input asp-for="InmuebleId" class="form-control" />
+                <span asp-validation-for="InmuebleId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="InquilinoId" class="control-label">ID de Inquilino:</label>
+                <input asp-for="InquilinoId" class="form-control" />
+                <span asp-validation-for="InquilinoId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Fecha_Inicio" class="control-label">Fecha de Inicio:</label>
+                <input asp-for="Fecha_Inicio" class="form-control" />
+                <span asp-validation-for="Fecha_Inicio" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Fecha_Fin" class="control-label">Fecha de Finalización:</label>
+                <input asp-for="Fecha_Fin" class="form-control" />
+                <span asp-validation-for="Fecha_Fin" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Monto" class="control-label">Monto del Alquiler:</label>
+                <input asp-for="Monto" class="form-control" />
+                <span asp-validation-for="Monto" class="text-danger"></span>
+            </div>
+
+          
+            <div class="form-group">
+                <label asp-for="Estado" class="control-label">Estado:</label>
+                <input asp-for="Estado" class="form-control" />
+                <span asp-validation-for="Estado" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
