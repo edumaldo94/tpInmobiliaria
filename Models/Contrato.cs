@@ -21,5 +21,6 @@ public class Contrato
     public string? Estado { get; set; }
  public int? EstadoC { get; set; }
 
-  
+    public Inmueble Inmueble { get; set; }
+    public Inquilino Inquilino { get; set; }
 }

@@ -32,12 +32,22 @@ public class ContratoController : Controller{
             return RedirectToAction(nameof(Index));
         }
 
- public IActionResult Edit(int id)
-        {
-            RepositorioContrato c =new RepositorioContrato();
-            var contract= c.GetContractId(id);
-            return View(contract);
-        }
+public IActionResult Edit(int id)
+{
+ 
+    RepositorioContrato repositorioContrato = new RepositorioContrato();
+  
+    var contrato = repositorioContrato.GetContractId(id);
+    
+ 
+    RepositorioInmueble inmueble = new RepositorioInmueble();
+    RepositorioInquilino tenant = new RepositorioInquilino();
+    
+    ViewBag.Inmueble = inmueble.GetProperties();
+    ViewBag.Tenants =  tenant.GetTenants();
+
+    return View(contrato);
+}
 
         // POST: Contrato/Edit/5
         [HttpPost]
