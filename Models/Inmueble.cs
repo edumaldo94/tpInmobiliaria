@@ -7,7 +7,9 @@ public class Inmueble
 {
         public int id_Inmuebles { get; set; }
         public int PropietarioId { get; set; }
-
+        public double? Latitud { get; set; }
+        public double? Longitud { get; set; }
+        public string? Ubicacion { get; set; }
 
         [DisplayName("Direccion")]
         public string? Direccion { get; set; }

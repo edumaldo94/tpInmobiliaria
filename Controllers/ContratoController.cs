@@ -24,6 +24,12 @@ public class ContratoController : Controller{
 
  public IActionResult Create()
         {
+            
+    RepositorioInmueble inmueble = new RepositorioInmueble();
+    RepositorioInquilino tenant = new RepositorioInquilino();
+    
+    ViewBag.Inmueble = inmueble.GetProperties();
+    ViewBag.Tenants =  tenant.GetTenants();
             return View();
         }
         public IActionResult Crear(Contrato contract){

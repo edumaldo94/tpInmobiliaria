@@ -1,15 +1,12 @@
 @model tpInmobliaria.Models.Propietario
-
+<link rel="stylesheet" href="/css/Propietario/Edit.css" />
 @{
     ViewData["Title"] = "Inmobiliaria";
 }
 
 
 <div class="container">
-    <div class="row justify-content-center mt-2">
-        <div class="col-md-4" style="background-color: #c4ccc2; border-radius: 10px; padding: 20px;">
-        <h3 class="text-center">Formulario de Edición Propietario</h3>
-    <div class="col-md-12">
+    <div class="form-container">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="id_Propietario" />
@@ -48,11 +45,10 @@
 				<input type="submit" value="Editar" class="btn btn-success" />
 			</div>
 		</form>
-        
-    </div>
-</div>
+
 
 <div class="text-center mt-3">
-    <button class="btn btn-primary" onclick="window.location.href='@Url.Action("Index")'">Back to List</button>
+    <button class="btn btn-primary" onclick="window.location.href='@Url.Action("Index")'">Atras</button>
+</div>
 </div>
 </div>

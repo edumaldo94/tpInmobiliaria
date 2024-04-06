@@ -1,79 +1,90 @@
 @model tpInmobliaria.Models.Inmueble
+   <link rel="stylesheet" href="/css/Inmueble/Create.css" />
 @{
-    ViewData["Title"] = "Crear Propiedad";
+    ViewData["Title"] = "Inmmueble";
 }
 
-<h1>@ViewData["Title"]</h1>
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
+
+<div class="container">
+    <div class="form-container">
+        <h1>@ViewData["Title"]</h1>
         <form asp-action="Crear">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-<div class="form-group">
-    <label asp-for="PropietarioId" class="control-label">Propietario:</label>
-    <select asp-for="PropietarioId" class="form-control">
-        <option value="">Seleccione un propietario</option>
-        @foreach (var proprietor in ViewBag.Proprietors)
-        {
-            <option value="@proprietor.id_Propietario">@proprietor.Nombre</option>
-        }
-    </select>
-    <span asp-validation-for="PropietarioId" class="text-danger"></span>
-</div>
 
+            <div class="form-group">
+                <label asp-for="PropietarioId" class="control-label">Propietario:</label>
+                <select asp-for="PropietarioId" class="form-control">
+                    <option value="">Seleccione un propietario</option>
+                    @foreach (var proprietor in ViewBag.Proprietors)
+                    {
+                        <option value="@proprietor.id_Propietario">@proprietor.Nombre</option>
+                    }
+                </select>
+                <span asp-validation-for="PropietarioId" class="text-danger"></span>
+            </div>
 
+<div id="map" style="height: 300px;"></div>
 
+ <div class="form-group" >
+                <label class="control-label">Latitud:</label>
+             <input id="latitud" asp-for="Latitud" class="form-control" readonly />
+                        <span asp-validation-for="Latitud" class="text-danger"></span>
+            </div>
+            <div class="form-group" >
+                <label class="control-label">Longitud:</label>
+                 <input id="longitud" asp-for="Longitud" class="form-control" readonly />
+                        <span asp-validation-for="Longitud" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Ubicación:</label>
+                <input id="ubicacion" asp-for="Ubicacion" class="form-control" readonly />
+                <span asp-validation-for="Ubicacion" class="text-danger"></span>
+            </div>
 
- <div class="form-group">
+            <div class="form-group">
                 <label asp-for="Direccion" class="control-label">Dirección:</label>
                 <input asp-for="Direccion" class="form-control" />
                 <span asp-validation-for="Direccion" class="text-danger"></span>
             </div>
-             <div class="form-group">
+            <div class="form-group">
                 <label asp-for="Ambientes" class="control-label">Ambiente:</label>
                 <input asp-for="Ambientes" class="form-control" />
                 <span asp-validation-for="Ambientes" class="text-danger"></span>
             </div>
-  <div class="form-group">
-    <label asp-for="Uso" class="control-label">Tipo de Uso:</label>
-    <select asp-for="Uso" class="form-control">
-        <option value="Comercial">Comercial</option>
-        <option value="Residencial">Residencial</option>
-    </select>
-    <span asp-validation-for="Uso" class="text-danger"></span>
-</div>
             <div class="form-group">
-    <label asp-for="Tipo" class="control-label">Tipo:</label>
-    <select asp-for="Tipo" class="form-control">
-        <option value="deposito">Deposito</option>
-        <option value="casa">Casa</option>
-         <option value="departamento">Departamento</option>
-    </select>
-    <span asp-validation-for="Tipo" class="text-danger"></span>
-</div>
-
-           
-      
-
-
+                <label asp-for="Uso" class="control-label">Tipo de Uso:</label>
+                <select asp-for="Uso" class="form-control">
+                    <option value="comercial">Comercial</option>
+                    <option value="residencial">Residencial</option>
+                </select>
+                <span asp-validation-for="Uso" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tipo" class="control-label">Tipo:</label>
+                <select asp-for="Tipo" class="form-control">
+                    <option value="deposito">Deposito</option>
+                    <option value="casa">Casa</option>
+                    <option value="departamento">Departamento</option>
+                </select>
+                <span asp-validation-for="Tipo" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Precio" class="control-label">Precio:</label>
                 <input asp-for="Precio" class="form-control" />
                 <span asp-validation-for="Precio" class="text-danger"></span>
             </div>
 
-<div class="form-group">
-    <label asp-for="Disponible" class="control-label">Disponible:</label>
-    <select asp-for="Disponible" class="form-control">
-        <option value="Si">Si</option>
-        <option value="No">No</option>
-    </select>
-    <span asp-validation-for="Disponible" class="text-danger"></span>
-</div>
+            <div class="form-group">
+                <label asp-for="Disponible" class="control-label">Disponible:</label>
+                <select asp-for="Disponible" class="form-control">
+                    <option value="Si">Si</option>
+                    <option value="No">No</option>
+                </select>
+                <span asp-validation-for="Disponible" class="text-danger"></span>
+            </div>
 
-         
+
 
             <div class="form-group">
                 <input type="submit" value="Crear" class="btn btn-primary" />
@@ -81,3 +92,25 @@
         </form>
     </div>
 </div>
+
+ <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBbDwBH7Jnb431kImDXDhp_9cUuwXCJAeA&callback=initMap" async defer></script>
+
+<script>
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: -34.397, lng: 150.644 }, // Centro del mapa inicial
+            zoom: 8 // Nivel de zoom inicial
+        });
+
+        // Listener de evento de clic en el mapa
+        map.addListener('click', function(event) {
+            var latitude = event.latLng.lat(); // Latitud de la ubicación clicada
+            var longitude = event.latLng.lng(); // Longitud de la ubicación clicada
+
+            // Puedes utilizar las coordenadas como desees, por ejemplo, asignarlas a campos de tu formulario
+            document.getElementById('latitud').value = latitude;
+            document.getElementById('longitud').value = longitude;
+            document.getElementById('ubicacion').value =  latitude + ', ' + longitude ;
+        });
+    }
+</script>

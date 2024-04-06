@@ -1,5 +1,5 @@
 @model tpInmobliaria.Models.Inquilino
-
+<link rel="stylesheet" href="/css/Inquilino/Edit.css" />
 
 @{
     ViewData["Title"] = "Inmobiliaria";
@@ -7,10 +7,8 @@
 
 
 <div class="container">
-    <div class="row justify-content-center mt-2">
-        <div class="col-md-4" style="background-color: #c4ccc2; border-radius: 10px; padding: 20px;">
-        <h3 class="text-center">Formulario de Edición Inquilino</h3>
-    <div class="col-md-12">
+    <div class="form-container">
+         <h3 class="text-center">Inquilino</h3>
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="id_Inquilino" />
@@ -50,10 +48,11 @@
 			</div>
 		</form>
         
-    </div>
-</div>
+   
+
 
 <div class="text-center mt-3">
-    <button class="btn btn-primary" onclick="window.location.href='@Url.Action("Index")'">Back to List</button>
+    <button class="btn btn-primary" onclick="window.location.href='@Url.Action("Index")'">Atras</button>
+</div>
 </div>
 </div>

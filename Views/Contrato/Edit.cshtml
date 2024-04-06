@@ -1,15 +1,14 @@
 @model tpInmobliaria.Models.Contrato
-
+<link rel="stylesheet" href="/css/Contrato/Edit.css" />
 @{
     ViewData["Title"] = "Edit";
 }
 
 
 <div class="container">
-    <div class="row justify-content-center mt-2">
-        <div class="col-md-4" style="background-color: #c4ccc2; border-radius: 10px; padding: 20px;">
-        <h3 class="text-center">Formulario de Edición Contrato</h3>
-    <div class="col-md-12">
+    <div class="form-container">
+        <h3 class="text-center">Editar Contrato</h3>
+   
                             <!--Aca va el form -->
                             <form asp-action="Edit">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -70,13 +69,13 @@
                                     <input type="submit" value="Editar" class="btn btn-success" />
                                 </div>
                             </form>
-                        </div>
+                     
 
-                    </div>
+                   
               
            <div class="text-center mt-3">
                 
                     <a asp-action="Index">Regresar a la lista</a>
                 </div>
             </div>
-          
+           </div>

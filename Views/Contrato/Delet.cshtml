@@ -1,65 +1,66 @@
 
 @model tpInmobliaria.Models.Contrato
-
+<link rel="stylesheet" href="/css/Contrato/Delet.css" />
 @{
     ViewData["Title"] = "Inmobiliaria";
 }
 
+     <div class="form-container">
 <h1>Eliminar</h1>
 
 <h3>¿Seguro que desea eliminar el Contrato?</h3>
-<div>
 
-    
+
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-4">
             @Html.DisplayNameFor(model => model.id_Contrato)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-5">
             @Html.DisplayFor(model => model.id_Contrato)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-4">
             @Html.DisplayNameFor(model => model.InmuebleId)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-5">
             @Html.DisplayFor(model => model.InmuebleId)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-4">
             @Html.DisplayNameFor(model => model.InquilinoId)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-5">
             @Html.DisplayFor(model => model.InquilinoId)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-4">
             @Html.DisplayNameFor(model => model.Fecha_Inicio)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-5">
             @Html.DisplayFor(model => model.Fecha_Inicio)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-4">
             @Html.DisplayNameFor(model => model.Fecha_Fin)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-5">
             @Html.DisplayFor(model => model.Fecha_Fin)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-4">
             @Html.DisplayNameFor(model => model.Monto)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-5">
             @Html.DisplayFor(model => model.Monto)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-4">
             @Html.DisplayNameFor(model => model.Estado)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-5">
             @Html.DisplayFor(model => model.Estado)
         </dd>
       
     </dl>
     
     <form asp-action="Delet">
-        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
         <a asp-action="Index" class="btn btn-success" >Volver al listado</a>
     </form>
-</div>
-    
+
+
+    </div>

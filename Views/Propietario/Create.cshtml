@@ -1,13 +1,13 @@
 @model tpInmobliaria.Models.Propietario
-
+<link rel="stylesheet" href="/css/Propietario/Create.css" />
 @{
-    ViewData["Title"] = "Inmobiliaria";
+    ViewData["Title"] = "Propietario";
 }
 
 
-<div class="row">
-    <h3>Formulario de Propietario</h3>
-    <div class="col-md-4">
+<div class="container">
+    <div class="form-container">
+        <h1>@ViewData["Title"]</h1>
 		<form asp-action="Crear" enctype="multipart/form-data">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -45,9 +45,10 @@
 				<input type="submit" value="Crear" class="btn btn-warning" />
 			</div>
 		</form>
-    </div>
-</div>
+  
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="text-center mt-3">
+    <button class="btn btn-primary" onclick="window.location.href='@Url.Action("Index")'">Atras</button>
+</div>
+ </div>
 </div>

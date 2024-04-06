@@ -1,14 +1,14 @@
 @model tpInmobliaria.Models.Inquilino
-
+  <link rel="stylesheet" href="/css/Inquilino/Create.css" />
     
 @{
     ViewData["Title"] = "Inmobiliaria";
 }
 
 
-<div class="row">
-    <h3>Formulario de Inquilino</h3>
-    <div class="col-md-4">
+<div class="container">
+    <div class="form-container">
+        <h1>@ViewData["Title"]</h1>
 		<form asp-action="Crear" enctype="multipart/form-data">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -48,9 +48,9 @@
 				<input type="submit" value="Crear" class="btn btn-warning" />
 			</div>
 		</form>
-    </div>
+  
+<div class="text-center mt-3">
+    <button class="btn btn-primary" onclick="window.location.href='@Url.Action("Index")'">Atras</button>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+ </div>
 </div>
