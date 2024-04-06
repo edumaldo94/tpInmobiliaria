@@ -18,9 +18,9 @@
                                     <span asp-validation-for="id_Contrato" class="text-danger"></span>
                                 </div>
                          <div class="form-group">
-    <label asp-for="InmuebleId" class="control-label">Propiedad:</label>
+    <label asp-for="InmuebleId" class="control-label">Inmueble:</label>
     <select asp-for="InmuebleId" class="form-control">
-        <option value="">Seleccione una propiedad</option>
+        <option value="">Seleccione una Inmueble</option>
         @foreach (var property in ViewBag.Inmueble)
         {
             <option value="@property.id_Inmuebles">@property.Direccion - @property.ProprietorName</option>
