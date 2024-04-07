@@ -1,0 +1,66 @@
+@model IEnumerable<Pago>
+
+    <link rel="stylesheet" href="/css/Contrato/Index.css" />
+@{
+    ViewData["Title"] = "Pago";
+}
+
+<div class="text-center">
+    <h1 class="dispaly-4"> Lista de Pagos</h1>
+  
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.InquilinoApellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroPago)
+            </th>
+                  <th>
+                @Html.DisplayNameFor(model => model.Concepto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaPago)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Importe)
+            </th>
+             <th>
+                @Html.DisplayNameFor(model => model.EstadoPago)
+            </th>
+        
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.InquilinoApellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumeroPago)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Concepto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaPago)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Importe)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstadoPago)
+            </td>
+            <td>
+                <button class="btn btn-info" onclick="window.location.href='@Url.Action("Edit", new { id = item.PagoId })'">Modificar</button>
+<button class="btn btn-danger" onclick="window.location.href='@Url.Action("Delet", new { id = item.PagoId })'">Baja</button>
+
+            </td>
+        </tr>
+    }
+</table>
+<button class="btn btn-warning" onclick="window.location.href='@Url.Action("Create")'">Alta</button>
+</div>

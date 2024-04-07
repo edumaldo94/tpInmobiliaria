@@ -1,0 +1,74 @@
+@model  tpInmobliaria.Models.Pago
+<link rel="stylesheet" href="/css/Contrato/Create.css" />
+
+@{
+    ViewData["Title"] = "Pago";
+}
+
+
+
+
+<hr />
+<div class="container">
+    <div class="form-container">
+        <h4>Pago</h4>
+        <form asp-action="Crear">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+   
+            <div class="form-group">
+				<label class="control-label">Contrato</label>
+				<select class="form-control" name="ContratoId" id="contraId">
+                     <option value="">Seleccione un Contrato</option>
+					@foreach (var item in ViewBag.Contratos)
+					{
+						<option value="@item.id_Contrato">@("("+item.Inmueble.Direccion+") Precio:"+item.Monto)</option>
+					}
+				</select>
+				<span asp-validation-for="ContratoId" class="text-danger"></span>
+			</div>
+
+            <div class="form-group">
+                <label asp-for="NumeroPago" class="control-label"></label>
+                <input asp-for="NumeroPago" class="form-control" required/>
+                <span asp-validation-for="NumeroPago" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+    <label asp-for="Concepto" class="control-label"></label>
+    <select asp-for="Concepto" class="form-control" required>
+        <option value="">Seleccione un mes</option>
+        <option value="Enero">Enero</option>
+        <option value="Febrero">Febrero</option>
+        <option value="Marzo">Marzo</option>
+        <option value="Abril">Abril</option>
+        <option value="Mayo">Mayo</option>
+        <option value="Junio">Junio</option>
+        <option value="Julio">Julio</option>
+        <option value="Agosto">Agosto</option>
+        <option value="Septiembre">Septiembre</option>
+        <option value="Octubre">Octubre</option>
+        <option value="Noviembre">Noviembre</option>
+        <option value="Diciembre">Diciembre</option>
+    </select>
+    <span asp-validation-for="Concepto" class="text-danger"></span>
+</div>
+
+            <div class="form-group">
+                <label asp-for="FechaPago" class="control-label"></label>
+                <input asp-for="FechaPago" class="form-control" required/>
+                <span asp-validation-for="FechaPago" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Importe" class="control-label"></label>
+                <input asp-for="Importe" class="form-control" required/>
+                <span asp-validation-for="Importe" class="text-danger"></span>
+            </div>
+              <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+            
+                <a asp-action="Index">Volver</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+

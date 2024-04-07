@@ -51,6 +51,16 @@ public IList<Contrato> GetContracts()
                         connection.Close();
                     }
                 }
+                    // Consultar la información del inmueble para cada contrato
+        foreach (var contrato in res)
+        {
+RepositorioInmueble ru= new RepositorioInmueble ();
+            var inmueble = ru.ObtenerPorId(contrato.InmuebleId); // Función para obtener el inmueble por su ID
+            if (inmueble != null)
+            {
+                contrato.Inmueble = inmueble;
+            }
+        }
                 return res;
             
     }
@@ -73,7 +83,7 @@ public int High(Contrato contract)
             command.Parameters.AddWithValue($"@{nameof(Contrato.Fecha_Fin)}", contract.Fecha_Fin);
             command.Parameters.AddWithValue($"@{nameof(Contrato.Monto)}", contract.Monto);
             command.Parameters.AddWithValue($"@{nameof(Contrato.Estado)}", contract.Estado);
-             command.Parameters.AddWithValue($"@{nameof(Contrato.EstadoC)}", contract.EstadoC);
+           //  command.Parameters.AddWithValue($"@{nameof(Contrato.EstadoC)}", contract.EstadoC);
 
 
             connection.Open();
