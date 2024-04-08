@@ -1,0 +1,84 @@
+
+@model tpInmobliaria.Models.Pago
+<link rel="stylesheet" href="/css/Contrato/Delet.css" />
+@{
+    ViewData["Title"] = "Pago";
+}
+
+     <div class="form-container">
+<h1>Eliminar</h1>
+
+<h3>¿Seguro que desea eliminar el Pago?</h3>
+
+
+    <dl class="row">
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.PagoId)
+        </dt>
+        <dd class = "col-sm-5">
+            @Html.DisplayFor(model => model.PagoId)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.ContratoId)
+        </dt>
+        <dd class = "col-sm-5">
+            @Html.DisplayFor(model => model.ContratoId)
+        </dd>
+         <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.Contrato.Inquilino.Apellido)
+        </dt>
+        <dd class = "col-sm-5">
+            @Html.DisplayFor(model => model.Contrato.Inquilino.Apellido)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.Contrato.Inmueble.Direccion)
+        </dt>
+        <dd class = "col-sm-5">
+            @Html.DisplayFor(model => model.Contrato.Inmueble.Direccion)
+        </dd>
+             <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.Contrato.Inmueble.Tipo)
+        </dt>
+        <dd class = "col-sm-5">
+            @Html.DisplayFor(model => model.Contrato.Inmueble.Tipo)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.NumeroPago)
+        </dt>
+        <dd class = "col-sm-5">
+            @Html.DisplayFor(model => model.NumeroPago)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.Concepto)
+        </dt>
+        <dd class = "col-sm-5">
+            @Html.DisplayFor(model => model.Concepto)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.FechaPago)
+        </dt>
+        <dd class = "col-sm-5">
+            @Html.DisplayFor(model => model.FechaPago)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.Importe)
+        </dt>
+        <dd class = "col-sm-5">
+            @Html.DisplayFor(model => model.Importe)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.EstadoPago)
+        </dt>
+        <dd class = "col-sm-5">
+            @Html.DisplayFor(model => model.EstadoPago)
+        </dd>
+      
+    </dl>
+    
+    <form asp-action="Delet">
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-success" >Volver al listado</a>
+    </form>
+
+
+    </div>

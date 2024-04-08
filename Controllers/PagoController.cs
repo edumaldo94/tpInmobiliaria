@@ -5,106 +5,117 @@ using tpInmobliaria.Models;
 
 namespace tpInmobliaria.Controllers;
 
-public class PagoController : Controller{
+public class PagoController : Controller
+{
 
     private readonly ILogger<PagoController> _logger;
 
-    public PagoController(ILogger<PagoController> logger){
+    public PagoController(ILogger<PagoController> logger)
+    {
         _logger = logger;
     }
-    
-    public IActionResult Index(){
-    RepositorioPago ru= new RepositorioPago();
-     var lista= ru.GetTodosPagos();
-      
+
+    public IActionResult Index()
+    {
+        RepositorioPago ru = new RepositorioPago();
+        var lista = ru.GetTodosPagos();
+
         return View(lista);
     }
-    
-      
 
- public IActionResult Create()
+
+
+    public IActionResult Create()
+    {
+
+        RepositorioContrato contrato = new RepositorioContrato();
+        // RepositorioInmueble inmueble = new RepositorioInmueble();
+
+        ViewBag.Contratos = contrato.GetContracts();
+        // ViewBag.Inmueble =  inmueble.GetProperties();
+        return View();
+    }
+
+
+    public IActionResult Crear(Pago pago)
+    {
+        RepositorioPago rp = new RepositorioPago();
+        rp.High(pago);
+        return RedirectToAction(nameof(Index));
+    }
+
+    public IActionResult Edit(int id)
+    {
+
+        RepositorioContrato repositorioContrato = new RepositorioContrato();
+
+        var contrato = repositorioContrato.GetContractId(id);
+
+
+        RepositorioInmueble inmueble = new RepositorioInmueble();
+        RepositorioInquilino tenant = new RepositorioInquilino();
+
+        ViewBag.Inmueble = inmueble.GetProperties();
+        ViewBag.Tenants = tenant.GetTenants();
+
+        return View(contrato);
+    }
+
+    // POST: Contrato/Edit/5
+    [HttpPost]
+
+    public ActionResult Edit(int id, Contrato c)
+    {
+        try
         {
-            
-    RepositorioContrato contrato = new RepositorioContrato();
-   // RepositorioInmueble inmueble = new RepositorioInmueble();
-    
-    ViewBag.Contratos = contrato.GetContracts();
-   // ViewBag.Inmueble =  inmueble.GetProperties();
-            return View();
-        }
-
-
-        public IActionResult Crear(Pago pago){
-            RepositorioPago rp= new RepositorioPago();
-            rp.High(pago);
+            RepositorioContrato c2 = new RepositorioContrato();
+            c2.Modification(c);
             return RedirectToAction(nameof(Index));
         }
-
-public IActionResult Edit(int id)
-{
- 
-    RepositorioContrato repositorioContrato = new RepositorioContrato();
-  
-    var contrato = repositorioContrato.GetContractId(id);
-    
- 
-    RepositorioInmueble inmueble = new RepositorioInmueble();
-    RepositorioInquilino tenant = new RepositorioInquilino();
-    
-    ViewBag.Inmueble = inmueble.GetProperties();
-    ViewBag.Tenants =  tenant.GetTenants();
-
-    return View(contrato);
-}
-
-        // POST: Contrato/Edit/5
-        [HttpPost]
-     
-        public ActionResult Edit(int id, Contrato c)
+        catch (Exception e)
         {
-            try
+            return View();
+        }
+    }
+
+
+    public IActionResult Delet(int id)
+    {
+        try
+        {
+            if (id > 0)
             {
-RepositorioContrato c2 =new RepositorioContrato();
-                c2.Modification(c);
-                return RedirectToAction(nameof(Index));
+                
+                RepositorioPago ru = new RepositorioPago();
+                var pago = ru.GetPagoId(id);
+                return View(pago);
             }
-            catch (Exception e)
+            else
             {
+
                 return View();
             }
         }
-
-
-        public IActionResult Delet(int id){
-try{
-if(id > 0){
-
-RepositorioContrato ru= new RepositorioContrato ();
-var contract = ru.GetContractId(id);
-return View(contract);
-}else{
-    
-  return View();  
-}
-}catch(Exception exception){
-	throw;
-}
-        }
-  [HttpPost]
-       
-     
-        public IActionResult Delet(int id, Contrato c)
+        catch (Exception exception)
         {
-            try
-            {
-RepositorioContrato c2 =new RepositorioContrato();
-                c2.Low(id);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception e)
-            {
-                return View();
-            }
+            throw;
         }
+    }
 
-} 
+
+    [HttpPost, ActionName("Delet")]
+    public IActionResult Delet(int id, Pago c)
+    {
+        try
+        {
+            RepositorioPago P2 = new RepositorioPago();
+           var pago= P2.Low(id);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception e)
+        {
+            return View();
+        }
+    }
+
+}

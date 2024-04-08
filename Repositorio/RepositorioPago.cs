@@ -130,39 +130,64 @@ public int Modification(Pago pago)
 
 
 
-public Pago? GetPagoId(int id){
-    Pago? p= null;
-    using (var connection = new MySqlConnection(ConnectionString)){
+public Pago? GetPagoId(int id)
+{
+    Pago? p = null;
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        var sql = @$"SELECT p.{nameof(Pago.PagoId)}, p.{nameof(Pago.ContratoId)}, p.{nameof(Pago.NumeroPago)}, 
+                    p.{nameof(Pago.Concepto)}, p.{nameof(Pago.FechaPago)}, p.{nameof(Pago.Importe)}, 
+                    p.{nameof(Pago.EstadoPago)}, c.InmuebleId, i.Direccion,i.Tipo,i.Precio, c.InquilinoId, inq.apellido
+             FROM pagos p
+             INNER JOIN contratos c ON p.{nameof(Pago.ContratoId)} = c.id_Contrato
+             INNER JOIN inmuebles i ON c.InmuebleId = i.id_Inmuebles
+             INNER JOIN inquilinos inq ON c.InquilinoId = inq.id_Inquilino
+             WHERE p.{nameof(Pago.PagoId)} = @{nameof(Pago.PagoId)}";
 
-   var sql = @$"SELECT {nameof(Pago.PagoId)}, {nameof(Pago.ContratoId)}, {nameof(Pago.NumeroPago)}, {nameof(Pago.Concepto)}, {nameof(Pago.FechaPago)}, {nameof(Pago.Importe)}, {nameof(Pago.EstadoPago)}
-        FROM pagos
-        WHERE {nameof(Pago.PagoId)} = @{nameof(Pago.PagoId)}";
 
-        using (var command = new MySqlCommand(sql,connection)){
+        using (var command = new MySqlCommand(sql, connection))
+        {
             command.Parameters.AddWithValue($"@{nameof(Pago.PagoId)}", id);
             connection.Open();
-            using (var reader= command.ExecuteReader()){
-if (reader.Read())
-{
-     p = new Pago{
-        PagoId = reader.GetInt32(nameof(Pago.PagoId)),
-        ContratoId = reader.GetInt32(nameof(Pago.ContratoId)),
-        NumeroPago = reader.GetInt32(nameof(Pago.NumeroPago)),
-        Concepto = reader.GetString(nameof(Pago.Concepto)),
-        FechaPago = reader.GetDateTime(nameof(Pago.FechaPago)),
-        Importe = reader.GetDouble(nameof(Pago.Importe)),
-        EstadoPago = reader.GetString(nameof(Pago.EstadoPago)),
-  
-    };
-}
-
+            using (var reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    p = new Pago
+                    {
+                        PagoId = reader.GetInt32(nameof(Pago.PagoId)),
+                        ContratoId = reader.GetInt32(nameof(Pago.ContratoId)),
+                        NumeroPago = reader.GetInt32(nameof(Pago.NumeroPago)),
+                        Concepto = reader.GetString(nameof(Pago.Concepto)),
+                        FechaPago = reader.GetDateTime(nameof(Pago.FechaPago)),
+                        Importe = reader.GetDouble(nameof(Pago.Importe)),
+                        EstadoPago = reader.GetString(nameof(Pago.EstadoPago)),
+                        Contrato = new Contrato
+                        {
+                            InmuebleId = reader.GetInt32("InmuebleId"),
+                            Inmueble = new Inmueble
+                            {
+                               
+                                Direccion = reader.GetString("Direccion"),
+                                Tipo=reader.GetString("Tipo"),
+                                Precio=reader.GetDouble("Precio")
+                            },
+                              InquilinoId = reader.GetInt32("InquilinoId"),
+                            Inquilino = new Inquilino
+                            {
+                                Apellido=reader.GetString("Apellido"),
+                            
+                            }
+                        }
+                    };
+                }
             }
         }
     }
 
-
-return p;
+    return p;
 }
+
 
 public int Low(int id)
 {
@@ -170,8 +195,8 @@ public int Low(int id)
     using (var connection = new MySqlConnection(ConnectionString))
     {
         string sql = @$"UPDATE pagos
-                        SET EstadoPago = Anulado
-                        WHERE {nameof(Contrato.id_Contrato)} = @id";
+                        SET EstadoPago = 'Anulado'
+                        WHERE {nameof(Pago.PagoId)} = @id";
         
         using (var command = new MySqlCommand(sql, connection))
         {
