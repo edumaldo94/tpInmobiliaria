@@ -1,0 +1,71 @@
+@model  tpInmobliaria.Models.Pago
+<link rel="stylesheet" href="/css/Pago/Edit.css" />
+
+@{
+    ViewData["Title"] = "Pago";
+}
+
+
+
+
+
+<div class="container">
+    <div class="form-container">
+        <h4>Pago</h4>
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+ 
+            <div class="form-group">
+                <label asp-for="PagoId" class="control-label"></label>
+                <input asp-for="PagoId" class="form-control" readonly/>
+                <span asp-validation-for="PagoId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NumeroPago" class="control-label"></label>
+                <input asp-for="NumeroPago" class="form-control" required/>
+                <span asp-validation-for="NumeroPago" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+    <label asp-for="Concepto" class="control-label"></label>
+    <select asp-for="Concepto" class="form-control" required>
+        <option value="">Seleccione un mes</option>
+        <option value="Enero">Enero</option>
+        <option value="Febrero">Febrero</option>
+        <option value="Marzo">Marzo</option>
+        <option value="Abril">Abril</option>
+        <option value="Mayo">Mayo</option>
+        <option value="Junio">Junio</option>
+        <option value="Julio">Julio</option>
+        <option value="Agosto">Agosto</option>
+        <option value="Septiembre">Septiembre</option>
+        <option value="Octubre">Octubre</option>
+        <option value="Noviembre">Noviembre</option>
+        <option value="Diciembre">Diciembre</option>
+    </select>
+    <span asp-validation-for="Concepto" class="text-danger"></span>
+</div>
+
+            <div class="form-group">
+                <label asp-for="FechaPago" class="control-label"></label>
+                <input asp-for="FechaPago" class="form-control" required/>
+                <span asp-validation-for="FechaPago" class="text-danger"></span>
+            </div>
+                <div class="form-group">
+    <label asp-for="EstadoPago" class="control-label"></label>
+    <select asp-for="EstadoPago" class="form-control" required>
+        <option value="">Seleccione un Estado</option>
+        <option value="Activo">Activo</option>
+        <option value="Anulado">Anulado</option>
+    </select>
+    <span asp-validation-for="EstadoPago" class="text-danger"></span>
+</div>
+
+              <div class="form-group">
+                <input type="submit" value="Editar" class="btn btn-primary" />
+            
+                <a asp-action="Index">Volver</a>
+            </div>
+        </form>
+    </div>
+</div>

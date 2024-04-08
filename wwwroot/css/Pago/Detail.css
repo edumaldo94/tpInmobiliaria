@@ -1,0 +1,27 @@
+body {
+    background: linear-gradient(to bottom right, #aa7503c9, #af074dee); 
+    
+}
+
+
+.container {
+    display: flex;
+    flex-direction: column; /* Alinear los elementos verticalmente */
+    align-items: center; /* Centrar los elementos horizontalmente */
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-around; /* Espacio igual entre los elementos */
+    margin-bottom: 20px; /* Espacio entre filas */
+}
+
+.form-container {
+    width: 45%; /* Ancho de cada contenedor */
+    background: linear-gradient(to bottom right, #e0d3d3, #9b7378); /* Color de fondo para el formulario */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.76);
+
+    color: #292929e7;
+}

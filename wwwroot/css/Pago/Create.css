@@ -1,6 +1,6 @@
 /* Estilos para el formulario */
 body {
-    background: linear-gradient(to bottom right, #b19fff, #02285a9f); 
+    background: linear-gradient(to bottom right, #131010, #149e49); 
     
 }
 /* Estilos para el contenedor del formulario */
@@ -15,12 +15,12 @@ body {
 .form-container {
   width: 400px; /* Ajusta el ancho máximo según tu preferencia */
     margin: 0 auto; /* Centra el formulario horizontalmente */
-    background: linear-gradient(to bottom right, #ce94f5, #8840a5); /* Color de fondo para el formulario */
+    background: linear-gradient(to bottom right, #051a01, #075217); /* Color de fondo para el formulario */
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.76);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-    color: #292929e7;
+    color: #e0e0e0e7;
 }
 .form-group {
     margin-bottom: 10px;
@@ -56,3 +56,7 @@ input[type="submit"]:hover {
     color: #dc3545;
 }
 
+
+
+
+/* Estilos adicionales según tus necesidades */

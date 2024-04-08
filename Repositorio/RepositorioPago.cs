@@ -99,21 +99,19 @@ public int Modification(Pago pago)
     using (var connection = new MySqlConnection(ConnectionString))
     {
         var sql = @$"UPDATE pagos
-                    SET {nameof(Pago.ContratoId)} = @{nameof(Pago.ContratoId)},
-                        {nameof(Pago.NumeroPago)} = @{nameof(Pago.NumeroPago)},
+                    SET {nameof(Pago.NumeroPago)} = @{nameof(Pago.NumeroPago)},
                         {nameof(Pago.Concepto)} = @{nameof(Pago.Concepto)},
                         {nameof(Pago.FechaPago)} = @{nameof(Pago.FechaPago)},
-                        {nameof(Pago.Importe)} = @{nameof(Pago.Importe)},
-                        {nameof(Pago.EstadoPago)} = @{nameof(Pago.EstadoPago)}
+                          {nameof(Pago.EstadoPago)} = @{nameof(Pago.EstadoPago)}
                     WHERE {nameof(Pago.PagoId)} = @{nameof(Pago.PagoId)}";
 
         using (var command = new MySqlCommand(sql, connection))
         {
-                   command.Parameters.AddWithValue($"@{nameof(Pago.ContratoId)}", pago.ContratoId);
+               //    command.Parameters.AddWithValue($"@{nameof(Pago.ContratoId)}", pago.ContratoId);
             command.Parameters.AddWithValue($"@{nameof(Pago.NumeroPago)}", pago.NumeroPago);
             command.Parameters.AddWithValue($"@{nameof(Pago.Concepto)}", pago.Concepto);
             command.Parameters.AddWithValue($"@{nameof(Pago.FechaPago)}", pago.FechaPago);
-            command.Parameters.AddWithValue($"@{nameof(Pago.Importe)}", pago.Importe);
+          //  command.Parameters.AddWithValue($"@{nameof(Pago.Importe)}", pago.Importe);
             command.Parameters.AddWithValue($"@{nameof(Pago.EstadoPago)}", pago.EstadoPago);
             command.Parameters.AddWithValue($"@{nameof(Pago.PagoId)}", pago.PagoId);
 
@@ -137,7 +135,9 @@ public Pago? GetPagoId(int id)
     {
         var sql = @$"SELECT p.{nameof(Pago.PagoId)}, p.{nameof(Pago.ContratoId)}, p.{nameof(Pago.NumeroPago)}, 
                     p.{nameof(Pago.Concepto)}, p.{nameof(Pago.FechaPago)}, p.{nameof(Pago.Importe)}, 
-                    p.{nameof(Pago.EstadoPago)}, c.InmuebleId, i.Direccion,i.Tipo,i.Precio, c.InquilinoId, inq.apellido
+                    p.{nameof(Pago.EstadoPago)}, c.InmuebleId, i.Ubicacion, i.Direccion, i.Ambientes, i.Uso, i.Tipo, i.Precio,
+                    c.InquilinoId, inq.nombre, inq.apellido, inq.dni, inq.telefono, inq.email,
+                    c.Fecha_Inicio, c.Fecha_Fin, c.Monto, c.Estado
              FROM pagos p
              INNER JOIN contratos c ON p.{nameof(Pago.ContratoId)} = c.id_Contrato
              INNER JOIN inmuebles i ON c.InmuebleId = i.id_Inmuebles
@@ -167,17 +167,27 @@ public Pago? GetPagoId(int id)
                             InmuebleId = reader.GetInt32("InmuebleId"),
                             Inmueble = new Inmueble
                             {
-                               
+                               Ubicacion=reader.GetString("Ubicacion"),
                                 Direccion = reader.GetString("Direccion"),
+                                Ambientes=reader.GetInt32("Ambientes"),
+                                Uso=reader.GetString("Uso"),
                                 Tipo=reader.GetString("Tipo"),
                                 Precio=reader.GetDouble("Precio")
                             },
                               InquilinoId = reader.GetInt32("InquilinoId"),
                             Inquilino = new Inquilino
                             {
+                                Nombre=reader.GetString("Nombre"),
                                 Apellido=reader.GetString("Apellido"),
-                            
-                            }
+                                Dni=reader.GetString("Dni"),
+                             Telefono=reader.GetString("Telefono"),
+                             Email=reader.GetString("Email")
+                             
+                            },
+                            Fecha_Inicio = reader.GetDateTime("Fecha_Inicio"),
+                            Fecha_Fin =reader.GetDateTime("Fecha_Fin"),
+                            Monto = reader.GetDouble("Monto"),
+                            Estado = reader.GetString("Estado")
                         }
                     };
                 }

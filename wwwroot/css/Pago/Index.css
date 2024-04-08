@@ -1,0 +1,67 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom right, #800000, #f89393); 
+}
+
+
+.text-center {
+    text-align: center;
+}
+
+/* Estilos para la tabla */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+    padding: 8px;
+   /* border: 1px solid #dee2e60c;  */
+   
+}
+
+.table th {
+    background: linear-gradient(to bottom right, #f83030, #d6d5d5); 
+    font-weight: bold;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.76);
+}
+
+/* Estilos para los botones */
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 4px 2px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-info {
+    background: linear-gradient(to bottom right, #08b61f, #154602); 
+    color: rgb(196, 196, 196);
+}
+
+.btn-info:hover {
+    background-color: #0056b3; /* Color de fondo del botón Modificar al pasar el mouse */
+}
+
+.btn-danger {
+    background: linear-gradient(to bottom right, #b60808, #7e0303); 
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Color de fondo del botón Baja al pasar el mouse */
+}
+
+.btn-warning {
+    background: linear-gradient(to bottom right, #d5e403, #7e6c03); 
+    color: black;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800; /* Color de fondo del botón Alta al pasar el mouse */
+}

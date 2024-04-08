@@ -1,6 +1,6 @@
 @model IEnumerable<Pago>
 
-    <link rel="stylesheet" href="/css/Contrato/Index.css" />
+    <link rel="stylesheet" href="/css/Pago/Index.css" />
 @{
     ViewData["Title"] = "Pago";
 }
@@ -57,7 +57,7 @@
             <td>
                 <button class="btn btn-info" onclick="window.location.href='@Url.Action("Edit", new { id = item.PagoId })'">Modificar</button>
 <button class="btn btn-danger" onclick="window.location.href='@Url.Action("Delet", new { id = item.PagoId })'">Baja</button>
-
+<button class="btn btn-info" onclick="window.location.href='@Url.Action("Detail", new { id = item.PagoId })'">Detalles</button>
             </td>
         </tr>
     }

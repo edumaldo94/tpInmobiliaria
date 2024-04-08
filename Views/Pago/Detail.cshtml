@@ -1,0 +1,89 @@
+@model tpInmobliaria.Models.Pago
+<link rel="stylesheet" href="/css/Pago/Detail.css" />
+@{
+    ViewData["Title"] = "Detalle de Pago";
+}
+<div class="container">
+      <h1>Detalle de Pago</h1>
+    <div class="form-row">
+        
+<div class="form-container">
+  
+
+    <h2>Pago</h2>
+    <dl class="row">
+        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.PagoId)</dt>
+        <dd class="col-sm-5">@Html.DisplayFor(model => model.PagoId)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Concepto)</dt>
+        <dd class="col-sm-5">@Html.DisplayFor(model => model.Concepto)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.FechaPago)</dt>
+        <dd class="col-sm-5">@Html.DisplayFor(model => model.FechaPago)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Importe)</dt>
+        <dd class="col-sm-5">@Html.DisplayFor(model => model.Importe)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.EstadoPago)</dt>
+        <dd class="col-sm-5">@Html.DisplayFor(model => model.EstadoPago)</dd>
+    </dl>
+    
+    </div>
+
+<div class="form-container">
+    <h2>Inmueble</h2>
+    <dl class="row">
+        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Contrato.Inmueble.Ubicacion)</dt>
+        <dd class="col-sm-5">@Html.DisplayFor(model => model.Contrato.Inmueble.Ubicacion)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Contrato.Inmueble.Direccion)</dt>
+        <dd class="col-sm-5">@Html.DisplayFor(model => model.Contrato.Inmueble.Direccion)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Contrato.Inmueble.Ambientes)</dt>
+        <dd class="col-sm-5">@Html.DisplayFor(model => model.Contrato.Inmueble.Ambientes)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Contrato.Inmueble.Uso)</dt>
+        <dd class="col-sm-5">@Html.DisplayFor(model => model.Contrato.Inmueble.Uso)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Contrato.Inmueble.Tipo)</dt>
+        <dd class="col-sm-5">@Html.DisplayFor(model => model.Contrato.Inmueble.Tipo)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Contrato.Inmueble.Precio)</dt>
+        <dd class="col-sm-5">@Html.DisplayFor(model => model.Contrato.Inmueble.Precio)</dd>
+    </dl>
+    </div>
+    </div>
+      <div class="form-row">
+<div class="form-container">
+    <h2>Inquilino</h2>
+    <dl class="row">
+        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Contrato.Inquilino.Nombre)</dt>
+        <dd class="col-sm-5">@Html.DisplayFor(model => model.Contrato.Inquilino.Nombre)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Contrato.Inquilino.Apellido)</dt>
+        <dd class="col-sm-5">@Html.DisplayFor(model => model.Contrato.Inquilino.Apellido)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Contrato.Inquilino.Dni)</dt>
+        <dd class="col-sm-5">@Html.DisplayFor(model => model.Contrato.Inquilino.Dni)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Contrato.Inquilino.Telefono)</dt>
+        <dd class="col-sm-5">@Html.DisplayFor(model => model.Contrato.Inquilino.Telefono)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Contrato.Inquilino.Email)</dt>
+        <dd class="col-sm-5">@Html.DisplayFor(model => model.Contrato.Inquilino.Email)</dd>
+        <!-- Agrega aquí los demás elementos del inquilino -->
+    </dl>
+    </div>
+<div class="form-container">
+    <h2>Contrato</h2>
+    <dl class="row">
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Contrato.Fecha_Inicio)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => model.Contrato.Fecha_Inicio)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Contrato.Fecha_Fin)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => model.Contrato.Fecha_Fin)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Contrato.Monto)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => model.Contrato.Monto)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Contrato.Estado)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => model.Contrato.Estado)</dd>
+</dl>
+</div>
+
+</div>
+
+
+    
+       <form asp-action="Detail">
+     
+        <a asp-action="Index" class="btn btn-success" >Volver al listado</a>
+    </form>
+
+</div>
+
+

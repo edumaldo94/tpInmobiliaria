@@ -16,7 +16,7 @@ namespace tpInmobliaria.Models;
         public string? Apellido { get; set; }
 
 
-        [DisplayName("Nombre")]
+        [DisplayName("Documento")]
         public string? Dni { get; set; }
 
 

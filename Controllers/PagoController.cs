@@ -47,28 +47,27 @@ public class PagoController : Controller
     public IActionResult Edit(int id)
     {
 
-        RepositorioContrato repositorioContrato = new RepositorioContrato();
+        RepositorioPago rep = new RepositorioPago();
 
-        var contrato = repositorioContrato.GetContractId(id);
+        var pago = rep.GetPagoId(id);
 
 
-        RepositorioInmueble inmueble = new RepositorioInmueble();
-        RepositorioInquilino tenant = new RepositorioInquilino();
+        RepositorioContrato contrato = new RepositorioContrato();
+        // RepositorioInmueble inmueble = new RepositorioInmueble();
 
-        ViewBag.Inmueble = inmueble.GetProperties();
-        ViewBag.Tenants = tenant.GetTenants();
+        ViewBag.Contratos = contrato.GetContracts();
 
-        return View(contrato);
+        return View(pago);
     }
 
     // POST: Contrato/Edit/5
     [HttpPost]
 
-    public ActionResult Edit(int id, Contrato c)
+    public ActionResult Edit(int id, Pago c)
     {
         try
         {
-            RepositorioContrato c2 = new RepositorioContrato();
+            RepositorioPago c2 = new RepositorioPago();
             c2.Modification(c);
             return RedirectToAction(nameof(Index));
         }
@@ -118,4 +117,19 @@ public class PagoController : Controller
         }
     }
 
+public IActionResult Detail(int id){
+
+try
+{
+    RepositorioPago P2 = new RepositorioPago();
+    var pago= P2.GetPagoId(id);
+    return View(pago);
+}
+catch (System.Exception)
+{
+    
+    throw;
+}
+
+}
 }
