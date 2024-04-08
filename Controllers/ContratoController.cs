@@ -15,6 +15,7 @@ public class ContratoController : Controller{
     
     public IActionResult Index(){
     RepositorioContrato ru= new RepositorioContrato();
+   
         var lista= ru.GetContracts();
         
         return View(lista);
