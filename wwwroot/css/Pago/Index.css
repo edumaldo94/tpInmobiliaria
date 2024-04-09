@@ -49,7 +49,7 @@ body {
 }
 
 .btn-danger {
-    background: linear-gradient(to bottom right, #b60808, #7e0303); 
+    background: linear-gradient(to bottom right, #bb5454, #7e0303); 
     color: white;
 }
 
@@ -64,4 +64,12 @@ body {
 
 .btn-warning:hover {
     background-color: #e0a800; /* Color de fondo del botón Alta al pasar el mouse */
+}
+.btn-dark {
+    background: linear-gradient(to bottom right, #3b3b3b, #000000); 
+    color: rgb(255, 255, 255);
+}
+
+.btn-dark:hover {
+    background-color: #000000; /* Color de fondo del botón Alta al pasar el mouse */
 }
