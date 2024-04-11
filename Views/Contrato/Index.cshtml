@@ -66,8 +66,10 @@
             </td>
        
             <td>
-                <button class="btn btn-info" onclick="window.location.href='@Url.Action("Edit", new { id = item.id_Contrato })'">Modificar</button> |
+                <button class="btn btn-info" onclick="window.location.href='@Url.Action("Edit", new { id = item.id_Contrato })'">Modificar</button> 
 <button class="btn btn-danger" onclick="window.location.href='@Url.Action("Delet", new { id = item.id_Contrato })'">Baja</button>
+<button class="btn btn-dark" onclick="window.location.href='@Url.Action("PagosDeCont", "Pago", new { ContratoId = item.id_Contrato })'">Pago</button>
+
 
             </td>
         </tr>

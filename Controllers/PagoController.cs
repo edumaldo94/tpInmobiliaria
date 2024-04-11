@@ -132,4 +132,24 @@ catch (System.Exception)
 }
 
 }
+public IActionResult PagosDeCont(int ContratoId){
+
+try
+{
+  if (ContratoId == 0)
+        {
+            // Manejar el caso en el que ContratoId es cero
+            return BadRequest("ContratoId no puede ser cero");
+        }
+    RepositorioPago P2 = new RepositorioPago();
+     IList<Pago>  pago= P2.GetPagosPorContratoId(ContratoId);
+    return View(pago);
+}
+catch (System.Exception)
+{
+    
+    throw;
+}
+
+}
 }

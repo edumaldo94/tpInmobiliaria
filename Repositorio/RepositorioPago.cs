@@ -70,7 +70,7 @@ public int High(Pago pago)
     using(var connection = new MySqlConnection(ConnectionString))
     {
         var sql = @$"INSERT INTO pagos ({nameof(Pago.ContratoId)}, {nameof(Pago.NumeroPago)}, {nameof(Pago.Concepto)}, {nameof(Pago.FechaPago)}, {nameof(Pago.Importe)}, {nameof(Pago.EstadoPago)})
-                     VALUES (@{nameof(Pago.ContratoId)}, @{nameof(Pago.NumeroPago)}, @{nameof(Pago.Concepto)}, @{nameof(Pago.FechaPago)}, @{nameof(Pago.Importe)}, 'Activo');
+                     VALUES (@{nameof(Pago.ContratoId)}, @{nameof(Pago.NumeroPago)}, @{nameof(Pago.Concepto)}, @{nameof(Pago.FechaPago)}, @{nameof(Pago.Importe)}, @{nameof(Pago.EstadoPago)});
                      SELECT LAST_INSERT_ID();";
 
         using (var command = new MySqlCommand(sql, connection))
@@ -205,7 +205,7 @@ public int Low(int id)
     using (var connection = new MySqlConnection(ConnectionString))
     {
         string sql = @$"UPDATE pagos
-                        SET EstadoPago = 'Anulado'
+                        SET EstadoPago = 'No Abono'
                         WHERE {nameof(Pago.PagoId)} = @id";
         
         using (var command = new MySqlCommand(sql, connection))
@@ -219,5 +219,43 @@ public int Low(int id)
     }
     return res;
 }
+public List<Pago> GetPagosPorContratoId(int contratoId)
+{
+    List<Pago> pagos = new List<Pago>();
+
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        var sql = @"SELECT * FROM pagos WHERE ContratoId = @contratoId";
+
+        using (var command = new MySqlCommand(sql, connection))
+        {
+            command.Parameters.AddWithValue("@contratoId", contratoId);
+
+            connection.Open();
+            
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Pago pago = new Pago
+                    {
+                        PagoId = reader.GetInt32(nameof(Pago.PagoId)),
+                        ContratoId = reader.GetInt32(nameof(Pago.ContratoId)),
+                        NumeroPago = reader.GetInt32(nameof(Pago.NumeroPago)),
+                        Concepto = reader.GetString(nameof(Pago.Concepto)),
+                        FechaPago = reader.GetDateTime(nameof(Pago.FechaPago)),
+                        Importe = reader.GetDouble(nameof(Pago.Importe)),
+                        EstadoPago = reader.GetString(nameof(Pago.EstadoPago))
+                    };
+
+                    pagos.Add(pago);
+                }
+            }
+        }
+    }
+
+    return pagos;
+}
+
 
 }

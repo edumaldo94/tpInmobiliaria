@@ -62,6 +62,15 @@
                 <input asp-for="Importe" class="form-control" required/>
                 <span asp-validation-for="Importe" class="text-danger"></span>
             </div>
+                  <div class="form-group">
+    <label asp-for="EstadoPago" class="control-label"></label>
+    <select asp-for="EstadoPago" class="form-control" required>
+        <option value="">Seleccione un Estado</option>
+        <option value="Abono">Abono</option>
+        <option value="No Abono">No Abono</option>
+    </select>
+    <span asp-validation-for="EstadoPago" class="text-danger"></span>
+</div>
               <div class="form-group">
                 <input type="submit" value="Crear" class="btn btn-primary" />
             
