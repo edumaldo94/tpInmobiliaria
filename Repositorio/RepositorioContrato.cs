@@ -169,10 +169,26 @@ public class RepositorioContrato
                             Estado = reader.GetString(nameof(Contrato.Estado)),
                             EstadoC = reader.GetInt32(nameof(Contrato.EstadoC)),
                         };
+                          RepositorioInmueble ru = new RepositorioInmueble();
+                    var inmueble = ru.ObtenerPorId(c.InmuebleId);
+                    if (inmueble != null)
+                    {
+                        c.Inmueble = inmueble;
+                    }
+
+                    // Obtener el inquilino correspondiente
+                    RepositorioInquilino ri = new RepositorioInquilino();
+                    var inquilino = ri.GetTenantId(c.InquilinoId);
+                    if (inquilino != null)
+                    {
+                        c.Inquilino = inquilino;
+                    }
                     }
 
                 }
+                
             }
+            
         }
 
 

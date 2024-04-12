@@ -1,5 +1,5 @@
 @model IEnumerable<tpInmobliaria.Models.Pago>
-    <link rel="stylesheet" href="/css/Pago/Index.css" />
+    <link rel="stylesheet" href="/css/Pago/PagoDeCont.css" />
 
 
 @{
@@ -23,6 +23,7 @@
         <tbody>
             @foreach (var pago in Model)
             {
+                 var contratoId = pago.ContratoId;
                 <tr>
              
                     <td>@pago.NumeroPago</td>
@@ -30,6 +31,7 @@
                     <td>@pago.FechaPago.ToString()</td>
                     <td>@pago.Importe</td>
                     <td>@pago.EstadoPago</td>
+                    <td> <a asp-action="Edit" asp-route-id="@pago.PagoId" class="btn btn-black">Modificar Pago</a></td>
                 </tr>
             }
         </tbody>
@@ -39,9 +41,20 @@
 
     <div class="form-row"></div>
       
-            <form asp-action="Detail">
-                <a asp-action="Create" class="btn btn-success">Nuevo Pago</a>
-                <a asp-action="Edit" class="btn btn-success">Modificar Pago</a>
+            <form asp-action="Create">
+       @if (Model != null && Model.Any())
+    {
+        foreach (var pago in Model)
+        {
+            <a asp-action="NuevoPago" asp-route-ContratoId="@pago.ContratoId" class="btn btn-success">Nuevo Pago</a>
+        break;
+        }
+    }
+    else
+    {
+        <p>No hay datos disponibles.</p>
+    }
+           
             </form>
         
     </div>

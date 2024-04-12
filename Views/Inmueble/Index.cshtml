@@ -11,9 +11,7 @@
 
 <table class="table">
     <tr>
-         <th>
-            @Html.DisplayNameFor(model => model.PropietarioId)
-        </th>
+        
         <th>
             @Html.DisplayNameFor(model => model.Direccion)
         </th>
@@ -40,15 +38,13 @@
        <th>
             @Html.DisplayNameFor(model => model.ProprietorLastName)
         </th>
-        <th></th>
+     
     </tr>
 
     @foreach (var item in Model)
     {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PropietarioId)
-            </td>
+            
             <td>
                 @Html.DisplayFor(modelItem => item.Direccion)
             </td>
@@ -75,7 +71,7 @@
                 @Html.DisplayFor(modelItem => item.ProprietorLastName)
             </td>
             <td>
-                <button class="btn btn-info" onclick="window.location.href='@Url.Action("Edit", new { id = item.id_Inmuebles })'">Modificar</button> |
+                <button class="btn btn-info" onclick="window.location.href='@Url.Action("Edit", new { id = item.id_Inmuebles })'">Modificar</button>
 <button class="btn btn-danger" onclick="window.location.href='@Url.Action("Delet", new { id = item.id_Inmuebles })'">Baja</button>
 
             </td>

@@ -24,9 +24,9 @@ public class Pago
     [DisplayName("Estado de Pago")]
     public string? EstadoPago { get; set; }
 
-       public string InquilinoNombre { get; set; }
+       public string? InquilinoNombre { get; set; }
            [DisplayName("Apellido Inquilino")]
-    public string InquilinoApellido { get; set; }
+    public string? InquilinoApellido { get; set; }
 
     public Inmueble? inmueble{get;set;}
 

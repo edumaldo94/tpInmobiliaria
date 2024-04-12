@@ -5,6 +5,7 @@ namespace tpInmobliaria.Models;
 
 public class Contrato
 {
+    [DisplayName("N°")]
     public int id_Contrato { get; set; }
     public int InmuebleId { get; set; }
     public int InquilinoId { get; set; }
@@ -21,6 +22,6 @@ public class Contrato
     public string? Estado { get; set; }
  public int? EstadoC { get; set; }
 
-    public Inmueble Inmueble { get; set; }
-    public Inquilino Inquilino { get; set; }
+    public Inmueble? Inmueble { get; set; }
+    public Inquilino? Inquilino { get; set; }
 }

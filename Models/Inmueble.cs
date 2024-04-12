@@ -26,10 +26,10 @@ public class Inmueble
         public double? Precio { get; set; }
         public string? Disponible { get; set; }
         public int? EstadoIn { get; set; }
-        [DisplayName("Nombre")]
-        public string ProprietorName { get; set; }
-        [DisplayName("Apellido")]
-        public string ProprietorLastName { get; set; }
+        [DisplayName("Nombre Propietario")]
+        public string? ProprietorName { get; set; }
+        [DisplayName("Apellido Propietario")]
+        public string? ProprietorLastName { get; set; }
 
-          public Propietario Propietario;
+          public Propietario? Propietario;
 }

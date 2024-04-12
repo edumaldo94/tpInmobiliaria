@@ -22,27 +22,35 @@
                     -->
                      <label asp-for="ContratoId" class="control-label">Contrato:</label>
                 <select asp-for="ContratoId" class="form-control">
-                     <option value="">Seleccione un Contrato</option>
+                  
                         @if (ViewBag.Contratos != null)
                     {
-					@foreach (var item in ViewBag.Contratos)
-					{
-						<option value="@item.id_Contrato">@("("+item.Inmueble.Direccion+") Precio:"+item.Monto)</option>
-					}
+					
+						<option value="@ViewBag.Contratos.id_Contrato">@("("+ViewBag.Contratos.Inmueble.Direccion+") Precio:"+ViewBag.Contratos.Monto)</option>
+					
                     }
 				</select>
 				<span asp-validation-for="ContratoId" class="text-danger"></span>
 			</div>
 
-            <div class="form-group">
-                <label asp-for="NumeroPago" class="control-label"></label>
-                <input asp-for="NumeroPago" class="form-control" required/>
-                <span asp-validation-for="NumeroPago" class="text-danger"></span>
-            </div>
+           <div class="form-group">
+         @if (ViewBag.pagos != null && ViewBag.pagos.Count > 0)
+        {    
+            var ultimoPago = ViewBag.pagos[ViewBag.pagos.Count - 1];
+    <label asp-for="NumeroPago" class="control-label">Número de Pago (Pago Anterior: @ultimoPago.NumeroPago)</label>
+            <input asp-for="NumeroPago" class="form-control" required/>
+    <span asp-validation-for="NumeroPago" class="text-danger"></span>
+      }
+</div>
+
             <div class="form-group">
     <label asp-for="Concepto" class="control-label"></label>
     <select asp-for="Concepto" class="form-control" required>
-        <option value="">Seleccione un mes</option>
+      @if (ViewBag.pagos != null && ViewBag.pagos.Count > 0)
+    {
+        var ultimoPago = ViewBag.pagos[ViewBag.pagos.Count - 1];
+        <option value="">Mes Anterior: @ultimoPago.Concepto</option>
+    }
         <option value="Enero">Enero</option>
         <option value="Febrero">Febrero</option>
         <option value="Marzo">Marzo</option>
