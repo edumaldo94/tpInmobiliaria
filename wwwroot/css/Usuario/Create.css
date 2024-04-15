@@ -1,0 +1,37 @@
+body{
+
+    background: linear-gradient(to bottom right, #410c3c, #36110a); 
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.form-container {
+    width: 400px; /* Ajusta el ancho máximo según tu preferencia */
+      margin: 0 auto; /* Centra el formulario horizontalmente */
+      background: linear-gradient(to bottom right, #414040, #151335); /* Color de fondo para el formulario */
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      color: #e0e0e0e7;
+  }
+.row{
+    width: 700px;
+}
+.form-group>label{
+text-align: center;
+    font-family: 'DM Serif Display', serif;
+    margin-bottom: 10px;
+}
+.form-group2>input{
+    background-color: #b041be;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid purple;
+}
+a{
+    color: #31ccf3;
+}

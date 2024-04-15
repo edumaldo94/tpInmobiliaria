@@ -1,7 +1,29 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using tpInmobliaria.Models;
 var builder = WebApplication.CreateBuilder(args);
-
+var configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+	.AddCookie(options =>
+	{
+		options.LoginPath = "/Usuarios/Login";
+		options.LogoutPath = "/Usuarios/Logout";
+		options.AccessDeniedPath = "/Home/Restringido";
+	});
+    
+builder.Services.AddAuthorization(options =>
+{
+	options.AddPolicy("Administrador", policy => policy.RequireRole("Administrador"));
+});
+builder.Services.AddTransient<RepositorioUsuario>();
+builder.Services.AddTransient<RepositorioPropietario>();
+builder.Services.AddTransient<RepositorioInmueble>();
+builder.Services.AddTransient<RepositorioContrato>();
+builder.Services.AddTransient<RepositorioPago>();
+builder.Services.AddTransient<RepositorioInquilino>();
 
 var app = builder.Build();
 
@@ -17,7 +39,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

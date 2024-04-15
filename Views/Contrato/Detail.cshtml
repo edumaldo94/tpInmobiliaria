@@ -1,0 +1,62 @@
+@model tpInmobliaria.Models.Contrato
+<link rel="stylesheet" href="/css/Pago/Detail.css" />
+
+
+
+  <div class="form-row">
+    
+<div class="form-container">
+   <h2 style="text-align: center;">Contrato</h2>
+    <dl class="row">
+     <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.id_Contrato)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.id_Contrato)</dd>    
+
+<dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Inmueble.Direccion)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Inmueble.Direccion)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Inquilino.Apellido)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Inquilino.Apellido)</dd>
+
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Fecha_Inicio)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Fecha_Inicio)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Fecha_Fin)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Fecha_Fin)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Monto)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Monto)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Estado)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Estado)</dd>
+    
+</dl>
+</div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="RenewView" asp-controller="Contrato" method="post">
+            <input type="hidden" name="contratoId" value="@Model.id_Contrato" />
+            <button type="submit" class="btn btn-primary btn-block">Renovar Contrato</button>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <form id="terminateForm" asp-action="TerminateEarly" asp-controller="Contrato" method="post">
+            <input type="hidden" name="contratoId" value="@Model.id_Contrato" />
+            <div class="input-group">
+                <input type="date" name="fechaTerminacion" class="form-control" />
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-danger" onclick="confirmTermination()">Finalizar Contrato</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <button class="btn btn-dark btn-block" onclick="window.location.href='@Url.Action("PagosDeCont", "Pago", new { ContratoId = Model.id_Contrato })'">Pago</button>
+    </div>
+</div>
+
+<script>
+    function confirmTermination() {
+        if (confirm("¿Estás seguro de que quieres finalizar este contrato anticipadamente?")) {
+            document.getElementById("terminateForm").submit();
+        }
+    }
+</script>
+
+

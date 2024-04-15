@@ -19,6 +19,56 @@ public class RepositorioContrato
 
     }
 
+public IList<Contrato> ObtenerContratosSuperpuestos(int inmuebleId, DateTime fechaInicio, DateTime fechaFin)
+{
+    IList<Contrato> contratosSuperpuestos = new List<Contrato>();
+
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        string sql = @"
+            SELECT *
+            FROM contratos
+            WHERE InmuebleId = @InmuebleId
+            AND (
+                (Fecha_Inicio <= @FechaInicio AND Fecha_Fin >= @FechaInicio) OR
+                (Fecha_Inicio <= @FechaFin AND Fecha_Fin >= @FechaFin) OR
+                (Fecha_Inicio >= @FechaInicio AND Fecha_Fin <= @FechaFin)
+            )";
+
+        using (var command = new MySqlCommand(sql, connection))
+        {
+            command.Parameters.AddWithValue("@InmuebleId", inmuebleId);
+            command.Parameters.AddWithValue("@FechaInicio", fechaInicio);
+            command.Parameters.AddWithValue("@FechaFin", fechaFin);
+
+            connection.Open();
+
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Contrato contrato = new Contrato
+                    {
+                        id_Contrato = reader.GetInt32("id_Contrato"),
+                        InmuebleId = reader.GetInt32("InmuebleId"),
+                        InquilinoId = reader.GetInt32("InquilinoId"),
+                        Fecha_Inicio = reader.GetDateTime("Fecha_Inicio"),
+                        Fecha_Fin = reader.GetDateTime("Fecha_Fin"),
+                        Monto = reader.GetDouble("Monto"),
+                        Estado = reader.GetString("Estado"),
+                        EstadoC = reader.GetInt32("EstadoC")
+                    };
+
+                    contratosSuperpuestos.Add(contrato);
+                }
+            }
+        }
+    }
+
+    return contratosSuperpuestos;
+}
+
+
     public IList<Contrato> GetContracts()
     {
         IList<Contrato> res = new List<Contrato>();
@@ -216,4 +266,49 @@ public class RepositorioContrato
         return res;
     }
 
+ public bool InmuebleDisponible(int inmuebleId, DateTime fechaInicio, DateTime fechaFin)
+        {
+            using (var connection = new MySqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                var sql = "SELECT COUNT(*) FROM contratos WHERE estadoC = 1 AND InmuebleId = @inmuebleId " +
+                          "AND ((@fechaInicio BETWEEN Fecha_Inicio AND Fecha_Fin) OR " +
+                          "(@fechaFin BETWEEN Fecha_Inicio AND Fecha_Fin))";
+
+                using (var command = new MySqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@inmuebleId", inmuebleId);
+                    command.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+                    command.Parameters.AddWithValue("@fechaFin", fechaFin);
+
+                    int count = Convert.ToInt32(command.ExecuteScalar());
+
+                    return count == 0;
+                }
+            }
+        }
+
+       
+
+        // Verificar si el inquilino debe meses de alquiler
+        public bool InquilinoDebeMesesAlquiler(int inquilinoId)
+        {
+            using (var connection = new MySqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                var sql = "SELECT COUNT(*) FROM contratos WHERE estadoC = 1 AND InquilinoId = @inquilinoId";
+
+                using (var command = new MySqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@inquilinoId", inquilinoId);
+
+                    int count = Convert.ToInt32(command.ExecuteScalar());
+
+                    return count > 0;
+                }
+            }
+        }
+    
 }

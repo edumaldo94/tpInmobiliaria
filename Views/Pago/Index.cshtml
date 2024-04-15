@@ -8,7 +8,7 @@
 <div class="text-center">
     <h1 class="dispaly-4"> Lista de Pagos</h1>
   
-<table class="table">
+<table id="contratoTable"  class="table">
     <thead>
         <tr>
             <th>
@@ -29,7 +29,7 @@
              <th>
                 @Html.DisplayNameFor(model => model.EstadoPago)
             </th>
-        
+        <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -58,9 +58,11 @@
                 <button class="btn btn-info" onclick="window.location.href='@Url.Action("Edit", new { id = item.PagoId })'">Modificar</button>
 <button class="btn btn-danger" onclick="window.location.href='@Url.Action("Delet", new { id = item.PagoId })'">Baja</button>
 <button class="btn btn-dark" onclick="window.location.href='@Url.Action("Detail", new { id = item.PagoId })'">Detalles</button>
+            <button class="btn btn-dark btn-block" onclick="window.location.href='@Url.Action("PagosDeCont", new { ContratoId = item.ContratoId })'">Pagar</button>
             </td>
         </tr>
     }
+    </tbody>
 </table>
 <button class="btn btn-warning" onclick="window.location.href='@Url.Action("Create")'">Alta</button>
 </div>

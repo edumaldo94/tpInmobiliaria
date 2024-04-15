@@ -73,3 +73,7 @@ p {
     color: #555;
     font-style: italic;
 }
+.fila-pendiente {
+    background-color: red; /* Cambia el color de fondo a rojo */
+    color: white; /* Cambia el color del texto a blanco para que se vea mejor */
+}

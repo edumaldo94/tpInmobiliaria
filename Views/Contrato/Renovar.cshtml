@@ -1,16 +1,16 @@
 @model tpInmobliaria.Models.Contrato
 <link rel="stylesheet" href="/css/Contrato/Edit.css" />
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Renovar";
 }
 
 
 <div class="container">
     <div class="form-container">
-        <h3 class="text-center">Editar Contrato</h3>
+        <h3 class="text-center">Renovar Contrato</h3>
 
         <!--Aca va el form -->
-        <form asp-action="Edit">
+        <form asp-action="Renew">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="id_Contrato" class="control-label"></label>
@@ -19,7 +19,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="InmuebleId" class="control-label">Inmueble:</label>
-                <select asp-for="InmuebleId" class="form-control">
+                <select asp-for="InmuebleId" class="form-control" readonly>
                     <option value="">Seleccione una Inmueble</option>
                     @foreach (var property in ViewBag.Inmueble)
                     {
@@ -31,7 +31,7 @@
 
             <div class="form-group">
                 <label asp-for="InquilinoId" class="control-label">Inquilino:</label>
-                <select asp-for="InquilinoId" class="form-control">
+                <select asp-for="InquilinoId" class="form-control" readonly>
                     <option value="">Seleccione un inquilino</option>
                     @foreach (var tenant in ViewBag.Tenants)
                     {
@@ -62,7 +62,7 @@
 
             <div class="form-group">
                 <label asp-for="Estado" class="control-label">Estado:</label>
-                 <select asp-for="Estado" class="form-control" required>
+                   <select asp-for="Estado" class="form-control" required>
         <option value="">Seleccione un Estado</option>
         <option value="Activo">Activo</option>
         <option value="No Activo">No Activo</option>
@@ -70,7 +70,7 @@
     <span asp-validation-for="Estado" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Editar" class="btn btn-success" />
+                <input type="submit" value="Renovar" class="btn btn-success" />
             </div>
         </form>
 

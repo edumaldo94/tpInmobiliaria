@@ -258,4 +258,46 @@ public List<Pago> GetPagosPorContratoId(int contratoId)
 }
 
 
+ public void AgregarPago(Pago pago)
+    {
+        using (var connection = new MySqlConnection(ConnectionString))
+        {
+            var sql = @"INSERT INTO pagos (ContratoId, NumeroPago, Concepto, FechaPago, Importe, EstadoPago) 
+                        VALUES (@ContratoId, @NumeroPago, @Concepto, @FechaPago, @Importe, @EstadoPago)";
+
+            using (var command = new MySqlCommand(sql, connection))
+            {
+                command.Parameters.AddWithValue("@ContratoId", pago.ContratoId);
+                command.Parameters.AddWithValue("@NumeroPago", pago.NumeroPago);
+                command.Parameters.AddWithValue("@Concepto", pago.Concepto);
+                command.Parameters.AddWithValue("@FechaPago", pago.FechaPago);
+                command.Parameters.AddWithValue("@Importe", pago.Importe);
+                command.Parameters.AddWithValue("@EstadoPago", pago.EstadoPago);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+    }
+
+public bool InquilinoTienePagosPendientes(int ContratoId)
+{
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        connection.Open();
+
+        var sql = "SELECT COUNT(*) FROM pagos WHERE EstadoPago = 'No Abono' AND ContratoId = @ContratoId";
+
+        using (var command = new MySqlCommand(sql, connection))
+        {
+            command.Parameters.AddWithValue("@ContratoId", ContratoId);
+
+            int count = Convert.ToInt32(command.ExecuteScalar());
+
+            return count > 0;
+        }
+    }
+}
+
 }

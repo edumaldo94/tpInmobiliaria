@@ -27,7 +27,7 @@ public class PagoController : Controller
 
     public IActionResult Create(int? contId)
     {
-  Debug.WriteLine($"Se recibió un valor en contId: {contId}");
+
        RepositorioContrato contrato = new RepositorioContrato();
 
 
@@ -41,7 +41,7 @@ if (contId == null)
     }
     else
     {
-         Debug.WriteLine("No se recibió ningún valor en contId.");
+         
         // Si contratoId no es null, obtener el contrato correspondiente
         ViewBag.Contratos = contrato.GetContractId(contId.Value);
         return View(ViewBag.Contratos);
@@ -159,6 +159,10 @@ try
         }
     RepositorioPago P2 = new RepositorioPago();
      IList<Pago>  pago= P2.GetPagosPorContratoId(ContratoId);
+ bool inquilinoTienePagosPendientes = P2.InquilinoTienePagosPendientes(ContratoId);
+
+        ViewBag.PagoPendientes = inquilinoTienePagosPendientes;
+
     return View(pago);
 }
 catch (System.Exception)
@@ -175,6 +179,10 @@ public ActionResult NuevoPago(int ContratoId)
   ViewBag.Contratos = contrato.GetContractId(ContratoId);
   RepositorioPago pago = new RepositorioPago();
   ViewBag.pagos = pago.GetPagosPorContratoId(ContratoId);
+ bool inquilinoTienePagosPendientes = pago.InquilinoTienePagosPendientes(ContratoId);
+
+
+
                 return View();
             }catch(Exception ex){
                 throw;

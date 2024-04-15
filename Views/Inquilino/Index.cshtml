@@ -9,7 +9,8 @@
     <h1 class="dispaly-4"> Lista de Inquilinos</h1>
   
 
-<table class="table">
+<table id="contratoTable"  class="table">
+    <thead>
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Nombre)
@@ -28,9 +29,10 @@
         </th>
       
        
-        <th></th>
+        <th>Acciones</th>
     </tr>
-
+ </thead>
+ <tbody>
     @foreach (var item in Model)
     {
         <tr>
@@ -54,10 +56,12 @@
             <td>
                 <button class="btn btn-info" onclick="window.location.href='@Url.Action("Edit", new { id = item.id_Inquilino })'">Modificar</button> |
 <button class="btn btn-danger" onclick="window.location.href='@Url.Action("Delet", new { id = item.id_Inquilino })'">Baja</button>
-
+<button class="btn btn-dark" onclick="window.location.href='@Url.Action("Detail", new { id = item.id_Inquilino })'">Detalle</button>
+<button class="btn btn-danger" onclick="window.location.href='@Url.Action("MisContratos", new { id = item.id_Inquilino })'">Contratos</button>
             </td>
         </tr>
     }
+    </tbody>
 </table>
 <button class="btn btn-warning" onclick="window.location.href='@Url.Action("Create")'">Alta</button>
 </div>

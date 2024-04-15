@@ -9,7 +9,8 @@
     <h1 class="dispaly-4"> Lista de Inmuebles</h1>
   
 
-<table class="table">
+<table id="contratoTable"  class="table">
+     <thead>
     <tr>
         
         <th>
@@ -38,9 +39,10 @@
        <th>
             @Html.DisplayNameFor(model => model.ProprietorLastName)
         </th>
-     
+     <th>Acciones</th>
     </tr>
-
+ </thead>
+ <tbody>
     @foreach (var item in Model)
     {
         <tr>
@@ -73,10 +75,14 @@
             <td>
                 <button class="btn btn-info" onclick="window.location.href='@Url.Action("Edit", new { id = item.id_Inmuebles })'">Modificar</button>
 <button class="btn btn-danger" onclick="window.location.href='@Url.Action("Delet", new { id = item.id_Inmuebles })'">Baja</button>
-
+<button class="btn btn-dark" onclick="window.location.href='@Url.Action("Detail", new { id = item.id_Inmuebles })'">Detalles</button>
+<!--<button class="btn btn-danger" onclick="window.location.href='@Url.Action("MisContratos", new { id = item.id_Inmuebles })'">Contratos</button>
+Este boton tiene que esta en detail de inmueble
+-->
             </td>
         </tr>
     }
+    
 </table>
 <button class="btn btn-warning" onclick="window.location.href='@Url.Action("Create")'">Alta</button>
 </div>

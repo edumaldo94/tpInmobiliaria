@@ -1,0 +1,130 @@
+@model tpInmobliaria.Models.Usuario
+<link rel="stylesheet" href="/css/Usuario/Edit.css">
+@{
+    ViewData["Title"] = "Edit";
+    var rol=ViewBag.Rol;
+}
+
+
+<div class="container">
+     
+     <div class="col-md-10">
+   <div class="form-container">
+        <h1>Editar</h1>
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UsuarioId" class="control-label"></label>
+                <input asp-for="UsuarioId" class="form-control" readonly/>
+                <span asp-validation-for="UsuarioId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" required/>
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Apellido" class="control-label"></label>
+                <input asp-for="Apellido" class="form-control"required />
+                <span asp-validation-for="Apellido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Correo" class="control-label"></label>
+                <input asp-for="Correo" class="form-control" required type="email"/>
+                <span asp-validation-for="Correo" class="text-danger"></span>
+            </div>
+            @if(rol=="Empleado"){
+                <div class="form-group">
+                    <label asp-for="Rol" class="control-label"></label>
+                    <input asp-for="Rol" hidden>
+                    <input asp-for="RolNombre" class="form-control"  readonly/>
+                    <span asp-validation-for="RolNombre" class="text-danger"></span>
+                </div>
+            }else{
+                <input value="@Model.Rol" id="rol" hidden readonly>
+                <div class="form-group">
+                    <label class="control-label" >Rol</label>
+                    <select class="form-control" id="select" name="Rol" onchange="cambiar()">
+                        <option value="2">Empleado</option>
+                        <option value="1">Administrador</option>
+                    </select>
+                    <span asp-validation-for="Rol" class="text-danger"></span>
+                </div>
+            }
+            <div class="form-group" id="boton">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+                @if(rol!="Empleado"){
+                    <a asp-action="Index">Volver</a>
+                }
+            </div>
+        </form>
+    </div>
+    </div>
+    
+
+
+    
+        <div class="col-md-6">
+    <div class="form-container">
+        <form asp-action="Edit2" enctype="multipart/form-data">
+            <div class="form-group">
+                <label asp-for="UsuarioId" class="control-label" hidden></label>
+                <input asp-for="UsuarioId" class="form-control" hidden readonly/>
+                <span asp-validation-for="UsuarioId" class="text-danger"></span>
+            </div> 
+            <div class="form-group" id="avatar">
+				<label asp-for="Avatar" class="control-label"></label>
+				@if (!Model.Avatar.Equals("sin avatar")&& Model.Avatar!=null)
+				{
+					<img class="foto" src="@Model.Avatar" />
+				}
+				else
+				{
+					<h2>Sin avatar</h2>
+				}
+			</div>
+            <div class="form-group">
+                <div class="form-group" id="imgA">
+                    <label asp-for="ImgAvatar" class="control-label">Nuevo Avatar</label>
+                    <input type="file" name="ImgAvatar" required/>
+                    <span asp-validation-for="ImgAvatar" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+  
+
+        @if (TempData.ContainsKey("Error"))
+            {
+                <div class="alert alert-danger">@TempData["Error"]</div>
+            }
+            @if (TempData.ContainsKey("Valido"))
+            {
+                <div class="alert alert-success">@TempData["Valido"]</div>
+            }
+        <form asp-action="Edit3"> 
+            <div class="form-group">
+                <label asp-for="UsuarioId" class="control-label" hidden></label>
+                <input asp-for="UsuarioId" class="form-control" hidden readonly/>
+                <span asp-validation-for="UsuarioId" class="text-danger"></span>
+            </div> 
+            <div class="form-group" id="">
+                <label class="control-label" >Contrasena Anterior</label>
+                <input asp-for="PasswordAnterior" type="password" required class="form-control"  />
+                <span asp-validation-for="PasswordAnterior" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label" >Contrasena Nueva</label>
+                <input asp-for="Password" type="password" required value="" class="form-control"  />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="boton">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    </div>
+
+</div>

@@ -24,4 +24,6 @@ public class Contrato
 
     public Inmueble? Inmueble { get; set; }
     public Inquilino? Inquilino { get; set; }
+    
+
 }

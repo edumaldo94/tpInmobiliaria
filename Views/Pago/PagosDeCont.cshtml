@@ -11,6 +11,7 @@
 
     <table class="table">
         <thead>
+            
             <tr>
                
                 <th>Número de Pago</th>
@@ -23,36 +24,55 @@
         <tbody>
             @foreach (var pago in Model)
             {
-                 var contratoId = pago.ContratoId;
+
+    var rowStyle = ViewBag.PagoPendientes ? "background-color: red;":"" ;
+
                 <tr>
              
                     <td>@pago.NumeroPago</td>
                     <td>@pago.Concepto</td>
                     <td>@pago.FechaPago.ToString()</td>
                     <td>@pago.Importe</td>
-                    <td>@pago.EstadoPago</td>
+                    <td  style="@rowStyle">@pago.EstadoPago</td>
                     <td> <a asp-action="Edit" asp-route-id="@pago.PagoId" class="btn btn-black">Modificar Pago</a></td>
                 </tr>
-            }
+                }
         </tbody>
     </table>
+    
 </div>
 
-
-    <div class="form-row"></div>
+    <div class="form-row">
       
             <form asp-action="Create">
        @if (Model != null && Model.Any())
     {
+
         foreach (var pago in Model)
         {
+            @if (ViewBag.PagoPendientes)
+{
+    <div class="alert alert-danger" role="alert">
+        ¡Regularice su situación!
+    </div>
+}else{
             <a asp-action="NuevoPago" asp-route-ContratoId="@pago.ContratoId" class="btn btn-success">Nuevo Pago</a>
+}
+
         break;
         }
     }
     else
     {
-        <p>No hay datos disponibles.</p>
+      
+   <p>No hay datos disponibles.</p>
+     
+       
+          <form asp-action="Create" asp-controller="Pago" method="get">
+        <input type="hidden" name="contId" value="@Model.FirstOrDefault()?.ContratoId" />
+        <button type="submit" class="btn btn-success">Nuevo Pago</button>
+    </form>
+        
     }
            
             </form>

@@ -1,0 +1,63 @@
+@model IEnumerable<Usuario>
+
+<link rel="stylesheet" href="/css/Usuario/Index.css">
+    @{
+    ViewData["Title"] = "Usuarios";
+}
+
+<h1>Usuarios</h1>
+
+
+    
+
+<table id="contratoTable" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Correo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RolNombre)
+            </th>
+             <th>
+                @Html.DisplayNameFor(model => model.Avatar)
+            </th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Correo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RolNombre)
+            </td>
+               <td>
+                @Html.DisplayFor(modelItem => item.ImgAvatar)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-UsuarioId="@item.UsuarioId" class="btn btn-success">Modificar</a>
+                <a asp-action="Detail" asp-route-UsuarioId="@item.UsuarioId" class="btn btn-black">Detalles(NO anda)</a>
+                <a asp-action="Delet" asp-route-UsuarioId="@item.UsuarioId" class="btn btn-black">Borrar</a>
+               
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-success">Registar Usuario</a>
