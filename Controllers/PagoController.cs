@@ -57,8 +57,12 @@ if (contId == null)
     {
         RepositorioPago rp = new RepositorioPago();
         rp.High(pago);
+
+
         return RedirectToAction(nameof(Index));
     }
+
+
 
     public IActionResult Edit(int id)
     {
@@ -149,6 +153,7 @@ catch (System.Exception)
 
 }
 public IActionResult PagosDeCont(int ContratoId){
+ 
 
 try
 {
@@ -159,18 +164,59 @@ try
         }
     RepositorioPago P2 = new RepositorioPago();
      IList<Pago>  pago= P2.GetPagosPorContratoId(ContratoId);
+      ViewBag.Pagos = pago;
  bool inquilinoTienePagosPendientes = P2.InquilinoTienePagosPendientes(ContratoId);
 
         ViewBag.PagoPendientes = inquilinoTienePagosPendientes;
+  RepositorioContrato cont = new RepositorioContrato();
+      ViewBag.Contrato  = cont.GetContractId(ContratoId);
+        
+        // Iterar sobre la lista de pagos para aplicar las validaciones
+        foreach (var pagos in pago)
+        {
+            // Obtener el PagoId de cada pago
+            int pagoId = pagos.PagoId.Value;
 
-    return View(pago);
-}
-catch (System.Exception)
-{
-    
-    throw;
-}
+            // Obtener la fecha de inicio y fin del contrato
+            DateTime fechaInicioContrato = ViewBag.Contrato.Fecha_Inicio;
+            DateTime fechaFinContrato = ViewBag.Contrato.Fecha_Fin;
+            
+            // Obtener la fecha de pago del pago actual
+            DateTime fechaPago = pagos.FechaPago.Value;
 
+
+            // Verificar si la fecha de pago excede la fecha de fin del contrato
+            if (fechaPago.AddMonths(-1) > fechaFinContrato)
+            {
+                // Agregar un mensaje de error al ModelState
+                ModelState.AddModelError(string.Empty, $"El pago con PagoId {pagoId} excede la fecha de fin del contrato.");
+            }
+
+  var ultimoPago = pago.LastOrDefault();
+        if (fechaPago != null &&  fechaPago.Month == ViewBag.Contrato.Fecha_Fin.Month &&
+    fechaPago.Year == ViewBag.Contrato.Fecha_Fin.Year)
+        {
+            ViewBag.MostrarNuevoPago = true; // No mostrar el botón "Nuevo Pago"
+cont.FinalizarContrato(ViewBag.Contrato.id_Contrato);
+
+        }
+        else
+        {
+            ViewBag.MostrarNuevoPago = false; // Mostrar el botón "Nuevo Pago"
+        }
+       
+         
+        }
+
+   
+        // Si no hay errores de validación, retornar la vista con la lista de pagos
+        return View(pago);
+    }
+    catch (System.Exception)
+    {
+        // Manejar la excepción adecuadamente
+        throw;
+    }
 }
 public ActionResult NuevoPago(int ContratoId)
         {
@@ -181,11 +227,48 @@ public ActionResult NuevoPago(int ContratoId)
   ViewBag.pagos = pago.GetPagosPorContratoId(ContratoId);
  bool inquilinoTienePagosPendientes = pago.InquilinoTienePagosPendientes(ContratoId);
 
+ DateTime ultimaFechaPago = pago.ObtenerUltimaFechaPago( ViewBag.Contratos.id_Contrato);
 
+        // Calcular la fecha del siguiente pago
+        DateTime siguienteFechaPago = ultimaFechaPago.AddMonths(1); // Por ejemplo, se genera un pago mensualmente
+
+        // Verificar si la fecha actual está cerca de la fecha límite de pago
+        if (DateTime.Today > ultimaFechaPago.AddDays(5))
+        {
+            TempData["AlertaPagoAtrasado"] = true; // Mostrar alerta de pago atrasado en la vista
+        }
+//double montoDelPago =  ViewBag.Contratos.Monto;
+        // Crear el nuevo pago
+    //    contrato.CrearPago(ViewBag.Contratos.contratoId, siguienteFechaPago,montoDelPago);
 
                 return View();
             }catch(Exception ex){
                 throw;
             }
         }
+
+/*
+        public IActionResult GenerarNuevoPago(int contratoId)
+    {
+        RepositorioPago pago = new RepositorioPago();
+          RepositorioContrato contratoC = new RepositorioContrato();
+        // Obtener la fecha del último pago del contrato
+        DateTime ultimaFechaPago = pago.ObtenerUltimaFechaPago(contratoId);
+
+        // Calcular la fecha del siguiente pago
+        DateTime siguienteFechaPago = ultimaFechaPago.AddMonths(1); // Por ejemplo, se genera un pago mensualmente
+
+        // Verificar si la fecha actual está cerca de la fecha límite de pago
+        if (DateTime.Today > ultimaFechaPago.AddDays(5))
+        {
+            TempData["AlertaPagoAtrasado"] = true; // Mostrar alerta de pago atrasado en la vista
+        }
+
+        // Crear el nuevo pago
+        contratoC.CrearPago(contratoId, siguienteFechaPago);
+
+        return RedirectToAction("Detalles", "Contrato", new { id = contratoId });
+    }
+}
+*/
 }

@@ -56,7 +56,23 @@
         ¡Regularice su situación!
     </div>
 }else{
-            <a asp-action="NuevoPago" asp-route-ContratoId="@pago.ContratoId" class="btn btn-success">Nuevo Pago</a>
+
+         
+            
+            if (ViewBag.MostrarNuevoPago)
+            {
+                // El último pago coincide con la fecha de fin del contrato, deshabilitar el botón de "Nuevo Pago"
+                <button type="button" class="btn btn-success" disabled>Nuevo Pago</button>
+                 
+                <p>Vuelva a Detalles de Contrato para renovar o finalizar.</p>
+
+           
+            }
+            else
+            {
+                // El último pago no coincide con la fecha de fin del contrato, mostrar el botón de "Nuevo Pago"
+                <a asp-action="NuevoPago" asp-route-ContratoId="@pago.ContratoId" class="btn btn-success">Nuevo Pago</a>
+            }
 }
 
         break;

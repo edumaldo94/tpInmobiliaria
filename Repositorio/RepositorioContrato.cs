@@ -265,7 +265,26 @@ public IList<Contrato> ObtenerContratosSuperpuestos(int inmuebleId, DateTime fec
         }
         return res;
     }
+public int FinalizarContrato(int id)
+    {
+        int res = -1;
+        using (var connection = new MySqlConnection(ConnectionString))
+        {
+            string sql = @$"UPDATE contratos
+                        SET estado = 'No Activo'
+                        WHERE {nameof(Contrato.id_Contrato)} = @id";
 
+            using (var command = new MySqlCommand(sql, connection))
+            {
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue("@id", id);
+                connection.Open();
+                res = command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+        return res;
+    }
  public bool InmuebleDisponible(int inmuebleId, DateTime fechaInicio, DateTime fechaFin)
         {
             using (var connection = new MySqlConnection(ConnectionString))
@@ -311,4 +330,36 @@ public IList<Contrato> ObtenerContratosSuperpuestos(int inmuebleId, DateTime fec
             }
         }
     
+     public void CrearPago(int contratoId, DateTime fechaPago, double Monto)
+{
+   // Obtener el nombre completo del mes actual en letras
+string nombreMesActual = fechaPago.ToString("MMMM");
+
+// Obtener el nombre completo del mes anterior en letras
+DateTime fechaMesAnterior = fechaPago.AddMonths(-1);
+string nombreMesAnterior = fechaMesAnterior.ToString("MMMM");
+
+// Agregar los nombres de los meses como valores para el concepto del pago
+
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        var sql = "INSERT INTO pagos (ContratoId, NumeroPago, Concepto, FechaPago, Importe, EstadoPago) " +
+                  "VALUES (@ContratoId, @NumeroPago, @Concepto, @FechaPago, @Importe, @EstadoPago)";
+
+        using (var command = new MySqlCommand(sql, connection))
+        {
+            command.Parameters.AddWithValue("@ContratoId", contratoId);
+            command.Parameters.AddWithValue("@NumeroPago", 1); // Valor predeterminado para el primer pago
+            command.Parameters.AddWithValue("@Concepto", nombreMesActual); // Valor predeterminado para el concepto del pago
+            command.Parameters.AddWithValue("@FechaPago", fechaPago);
+            command.Parameters.AddWithValue("@Importe", Monto);
+            command.Parameters.AddWithValue("@EstadoPago", "Abono"); // Valor predeterminado para el estado del pago
+
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+    }
+}
+
 }

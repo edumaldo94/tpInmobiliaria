@@ -300,4 +300,32 @@ public bool InquilinoTienePagosPendientes(int ContratoId)
     }
 }
 
+public DateTime ObtenerUltimaFechaPago(int contratoId)
+{
+    DateTime ultimaFechaPago = DateTime.MinValue; // Por defecto, se inicializa con el valor mínimo de DateTime
+
+    // Aquí realizamos la consulta SQL para obtener la última fecha de pago del contrato con el ID especificado
+    string query = "SELECT MAX(FechaPago) FROM pagos WHERE ContratoId = @ContratoId";
+
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        using (var command = new MySqlCommand(query, connection))
+        {
+            command.Parameters.AddWithValue("@ContratoId", contratoId);
+
+            connection.Open();
+            var result = command.ExecuteScalar();
+            connection.Close();
+
+            if (result != null && result != DBNull.Value)
+            {
+                ultimaFechaPago = Convert.ToDateTime(result);
+            }
+        }
+    }
+
+    return ultimaFechaPago;
+}
+
+
 }

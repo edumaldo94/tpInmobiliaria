@@ -36,7 +36,7 @@ public class ContratoController : Controller
         ViewBag.Tenants = tenant.GetTenants();
         return View();
     }
-    public IActionResult Crear(Contrato contract)
+    public IActionResult PPCrear(Contrato contract)
     {
         RepositorioContrato ru = new RepositorioContrato();
           if (!ru.InmuebleDisponible(contract.InmuebleId, contract.Fecha_Inicio.Value, contract.Fecha_Fin.Value))
@@ -52,6 +52,36 @@ public class ContratoController : Controller
         ru.High(contract);
         return RedirectToAction(nameof(Index));
     }
+
+public IActionResult Crear(Contrato contract)
+{
+    RepositorioContrato ru = new RepositorioContrato();
+
+    if (!ru.InmuebleDisponible(contract.InmuebleId, contract.Fecha_Inicio.Value, contract.Fecha_Fin.Value))
+    {
+        ModelState.AddModelError(string.Empty, "El inmueble no está disponible para el período de tiempo especificado.");
+        RepositorioInmueble inmueble = new RepositorioInmueble();
+        RepositorioInquilino tenant = new RepositorioInquilino();
+
+        ViewBag.Inmueble = inmueble.GetProperties();
+        ViewBag.Tenants = tenant.GetTenants();
+        return View("Create", contract); // Mostrar la vista de creación de contrato con el mensaje de error
+    }
+
+    // Guardar el contrato en la base de datos
+   int Ccc= ru.High(contract);
+//int buscarElNuevoContr= ru.GetContractId(Ccc);
+    // Calcular la fecha del primer pago
+    DateTime fechaInicio = contract.Fecha_Inicio.Value;
+    DateTime fechaPrimerPago = fechaInicio; // Por ejemplo, se genera un pago mensualmente
+    Double Monto= contract.Monto.Value; 
+    // Crear el primer pago
+
+    ru.CrearPago(Ccc, fechaPrimerPago, Monto);
+
+    return RedirectToAction(nameof(Index));
+}
+
 
     public IActionResult Edit(int id)
     {
@@ -269,6 +299,12 @@ TimeSpan duracionReal = (fechaTerminacion) - (contrato.Fecha_Inicio ?? DateTime.
             RepositorioContrato repositorioContrato = new RepositorioContrato();
             int nuevoContratoId = repositorioContrato.High(contrato);
             var cont = repositorioContrato.GetContractId(nuevoContratoId);
+              DateTime fechaInicio = contrato.Fecha_Inicio.Value;
+    DateTime fechaPrimerPago = fechaInicio; // Por ejemplo, se genera un pago mensualmente
+    Double Monto= contrato.Monto.Value; 
+    // Crear el primer pago
+
+    repositorioContrato.CrearPago(nuevoContratoId, fechaPrimerPago, Monto);
             // Redireccionar a la vista de detalles del nuevo contrato
             //   return RedirectToAction("Detail", "Contrato", cont);
             return View("Detail", cont);

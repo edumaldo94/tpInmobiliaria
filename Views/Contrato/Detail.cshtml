@@ -28,8 +28,20 @@
 </dl>
 </div>
 </div>
-<div class="row">
-    <div class="col-md-4">
+
+ 
+        @if (Model.Estado == "No Activo"){
+
+<div class="form-row">
+  <form asp-action="RenewView" asp-controller="Contrato" method="post">
+            <input type="hidden" name="contratoId" value="@Model.id_Contrato" />
+            <button type="submit" class="btn btn-primary btn-block">Renovar Contrato</button>
+        </form>
+  </div>
+
+        }else{
+            <div class="row">
+               <div class="col-md-4">
         <form asp-action="RenewView" asp-controller="Contrato" method="post">
             <input type="hidden" name="contratoId" value="@Model.id_Contrato" />
             <button type="submit" class="btn btn-primary btn-block">Renovar Contrato</button>
@@ -49,7 +61,9 @@
     <div class="col-md-4">
         <button class="btn btn-dark btn-block" onclick="window.location.href='@Url.Action("PagosDeCont", "Pago", new { ContratoId = Model.id_Contrato })'">Pago</button>
     </div>
-</div>
+  </div>  
+}
+
 
 <script>
     function confirmTermination() {
