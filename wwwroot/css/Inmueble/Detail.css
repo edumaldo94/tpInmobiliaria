@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(to bottom right, #034346c9, #dfd7ddee); 
+    background: linear-gradient(to bottom right, #ffb923c9, #0b07e7ee); 
    
    
 }
@@ -19,23 +19,10 @@ body {
 
 .form-container {
     width: 45%; /* Ancho de cada contenedor */
-    background: linear-gradient(to bottom right, #7e649b77, #0c91a867); /* Color de fondo para el formulario */
+    background: linear-gradient(to bottom right, #7e649b, #0c91a8b7); /* Color de fondo para el formulario */
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.76);
 
     color: #292929e7;
-}
-.btn-info {
-    background: linear-gradient(to bottom right, #08b61f, #154602); 
-    color: rgb(196, 196, 196);
-}
-.btn-1 {
-    background: linear-gradient(to bottom right, #0876b6, #1a346d); 
-    color: rgb(196, 196, 196);
-}
-.foto{
-    width: 100px;
-    height: 100px;
-    
 }

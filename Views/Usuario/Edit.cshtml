@@ -72,8 +72,9 @@
                 <input asp-for="UsuarioId" class="form-control" hidden readonly/>
                 <span asp-validation-for="UsuarioId" class="text-danger"></span>
             </div> 
-            <div class="form-group" id="avatar">
-				<label asp-for="Avatar" class="control-label"></label>
+          
+                 <div class="form-group"> <!-- id="avatar"-->
+			 <label asp-for="Avatar" class="control-label" style="display: block; text-align: center;">Avatar</label>
 				@if (!Model.Avatar.Equals("sin avatar")&& Model.Avatar!=null)
 				{
 					<img class="foto" src="@Model.Avatar" />
@@ -82,6 +83,7 @@
 				{
 					<h2>Sin avatar</h2>
 				}
+                
 			</div>
             <div class="form-group">
                 <div class="form-group" id="imgA">
@@ -128,3 +130,14 @@
     </div>
 
 </div>
+<script>
+    function inicio(){
+    let rol=document.querySelector("#rol").value;
+    document.querySelector("select").value=rol;
+}
+window.onload=inicio();
+function cambio(){
+    let rol=document.querySelector("#select").value;
+    document.querySelector("rol").value=rol;
+}
+</script>

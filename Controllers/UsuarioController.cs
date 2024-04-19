@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Linq.Expressions;
+
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
@@ -23,6 +24,7 @@ public class UsuarioController : Controller{
 
 
     public UsuarioController(ILogger<UsuarioController> logger,IConfiguration configuracion,IWebHostEnvironment environment){
+     
         _logger = logger;
          _configuracion = configuracion;
          _environment= environment;
@@ -32,15 +34,15 @@ public class UsuarioController : Controller{
 
 
         // GET: Usuarios
-       // [Authorize(Policy = "Administrador")]
+       [Authorize(Policy = "Administrador")]
         public ActionResult Index()
         {
            try{
-            /*
+           
                 var claims =User.Claims;
                 string Rol = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
                 ViewBag.Rol=Rol;
-                */
+                /* */
                 RepositorioUsuario repoU= new RepositorioUsuario();
                 IList<Usuario> users=repoU.GetObtenerTodos();
                 return View(users);
@@ -48,17 +50,17 @@ public class UsuarioController : Controller{
                 throw;
            }
         }
-       // [Authorize(Policy = "Administrador")]
+        [Authorize(Policy = "Administrador")]
         // GET: Usuarios/Details/5
         public ActionResult Detail(int UsuarioId)
         {  
             try{
                
-                /*
+               
                 var claims =User.Claims;
                 string Rol = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
                 ViewBag.Rol=Rol;
-                */
+                /* */
     RepositorioUsuario repoU= new RepositorioUsuario();
                 Usuario user=repoU.Obtener(UsuarioId);
                 return View(user);
@@ -69,15 +71,15 @@ public class UsuarioController : Controller{
 
 
         // GET: Usuarios/Create
-        //[Authorize(Policy = "Administrador")]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Create()
         {
             try{
-                /*
+                
             var claims =User.Claims;
             string Rol = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
             ViewBag.Rol=Rol;
-            */              
+            /**/              
                 return View();
             }catch(Exception ex){
                 throw;
@@ -89,7 +91,7 @@ public class UsuarioController : Controller{
 
         // POST: Usuarios/Create
         [HttpPost]
-      //  [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(Usuario usuario)
         {
             try
@@ -131,13 +133,13 @@ public class UsuarioController : Controller{
                 throw;
             }
         }
-       // [Authorize]
+        [Authorize]
         // GET: Usuarios/Edit/5
         public ActionResult Edit(int UsuarioId)
         {
             try{
                     RepositorioUsuario repoU= new RepositorioUsuario();
-                /*
+                
                 var claims =User.Claims;
                 string Rol = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
                 ViewBag.Rol=Rol;          
@@ -147,7 +149,7 @@ public class UsuarioController : Controller{
                     Usuario user1=repoU.ObtenerCorreo(correo);
                     return View(user1);
                 }
-                 */
+                /* */
                  
                 Usuario user=repoU.Obtener(UsuarioId);
                 return View(user);
@@ -161,17 +163,17 @@ public class UsuarioController : Controller{
 
         // POST: Usuarios/Edit/5
         [HttpPost]
-       // [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Usuario user)
         {
             try
             {  
                     RepositorioUsuario repoU= new RepositorioUsuario();
-                /*
+                
                 var claims =User.Claims;
                 string Rol = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
                 ViewBag.Rol=Rol;    
-                */    
+                   
                 Usuario usuario=repoU.Obtener(Convert.ToInt32(user.UsuarioId));
                 user.Password=usuario.Password;
                 user.Avatar=usuario.Avatar;
@@ -186,7 +188,7 @@ public class UsuarioController : Controller{
 
 
         [HttpPost]
-     //   [ValidateAntiForgeryToken]
+       [ValidateAntiForgeryToken]
         public ActionResult Edit2(int id, Usuario user)
         {
             try
@@ -229,7 +231,7 @@ public class UsuarioController : Controller{
 
         // POST: Usuarios/Edit
         [HttpPost]
-       // [ValidateAntiForgeryToken]
+       [ValidateAntiForgeryToken]
         public ActionResult Edit3(int id, Usuario user)
         {
             try
@@ -262,17 +264,17 @@ public class UsuarioController : Controller{
                 throw;
             }
         }
-       // [Authorize(Policy = "Administrador")]
+        [Authorize(Policy = "Administrador")]
         // GET: Usuarios/Delete/5
         public ActionResult Delet(int UsuarioId)
         {
             try{
                     RepositorioUsuario repoU= new RepositorioUsuario();
-                /*
+               
             var claims =User.Claims;
             string Rol = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
             ViewBag.Rol=Rol;
-            */
+            
             Usuario user=repoU.Obtener(UsuarioId);
             return View(user);
             }catch(Exception ex){
@@ -285,7 +287,7 @@ public class UsuarioController : Controller{
 
         // POST: Usuarios/Delete/5
         [HttpPost]
-      //  [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public ActionResult Delet(int id, Usuario user)
         {
             try
@@ -310,7 +312,7 @@ public class UsuarioController : Controller{
                 throw;
             }
         }
-        //[AllowAnonymous]
+        [AllowAnonymous]
         // GET: Usuarios/Login/
         public ActionResult Login(string returnUrl)
         {
@@ -321,8 +323,8 @@ public class UsuarioController : Controller{
 
         // POST: Usuarios/Login/
         [HttpPost]
-    //  [AllowAnonymous]
-        //[ValidateAntiForgeryToken]
+    [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(Usuario user)
         {
             try

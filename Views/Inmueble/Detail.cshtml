@@ -1,3 +1,43 @@
+  @model tpInmobliaria.Models.Inmueble
+   <link rel="stylesheet" href="/css/Inmueble/Detail.css" />
+    
 
 
+  <div class="form-row">
+    
+<div class="form-container">
+   <h2 style="text-align: center;">Inmueble</h2>
+    <dl class="row">
+     <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.id_Inmuebles)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.id_Inmuebles)</dd>    
+<dt class="col-sm-4">@Html.DisplayNameFor(model => Model.ProprietorLastName)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.ProprietorLastName)</dd>
+<dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Longitud)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Longitud)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Latitud)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Latitud)</dd>
 
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Ubicacion)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Ubicacion)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Direccion)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Direccion)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Ambientes)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Ambientes)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Uso)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Uso)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Tipo)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Tipo)</dd>
+     <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Precio)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Precio)</dd>
+     <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Disponible)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Disponible)</dd>
+
+
+</dl>
+ <a asp-action="Index" class="btn btn-success" >Volver al listado</a>
+</div>
+
+</div>
+
+ 
+    

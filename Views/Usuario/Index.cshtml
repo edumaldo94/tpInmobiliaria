@@ -5,10 +5,9 @@
     ViewData["Title"] = "Usuarios";
 }
 
+
+<div class="text-center">
 <h1>Usuarios</h1>
-
-
-    
 
 <table id="contratoTable" class="table">
     <thead>
@@ -47,11 +46,11 @@
                 @Html.DisplayFor(modelItem => item.RolNombre)
             </td>
                <td>
-                @Html.DisplayFor(modelItem => item.ImgAvatar)
+               		<img class="foto" src="@item.Avatar" />
             </td>
             <td>
-                <a asp-action="Edit" asp-route-UsuarioId="@item.UsuarioId" class="btn btn-success">Modificar</a>
-                <a asp-action="Detail" asp-route-UsuarioId="@item.UsuarioId" class="btn btn-black">Detalles(NO anda)</a>
+                <a asp-action="Edit" asp-route-UsuarioId="@item.UsuarioId" class="btn btn-2">Modificar</a>
+                <a asp-action="Detail" asp-route-UsuarioId="@item.UsuarioId" class="btn btn-3">Detalles</a>
                 <a asp-action="Delet" asp-route-UsuarioId="@item.UsuarioId" class="btn btn-black">Borrar</a>
                
             </td>
@@ -60,4 +59,5 @@
     </tbody>
 </table>
 
-<a asp-action="Create" class="btn btn-success">Registar Usuario</a>
+<a asp-action="Create" class="btn btn-success">Alta</a>
+</div>

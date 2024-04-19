@@ -362,4 +362,64 @@ string nombreMesAnterior = fechaMesAnterior.ToString("MMMM");
     }
 }
 
+public List<Contrato> ObtenerContratosPorInquilino(int inquilinoId)
+{
+    List<Contrato> contratos = new List<Contrato>();
+
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        connection.Open();
+
+        var sql = @"SELECT c.id_Contrato, c.InmuebleId, c.InquilinoId, c.Fecha_Inicio, c.Fecha_Fin, 
+                           c.Monto, c.Estado, i.PropietarioId, i.Latitud, i.Longitud, i.Ubicacion, 
+                           i.Direccion, i.Ambientes, i.Uso, i.Tipo, i.Precio, i.Disponible, 
+                           i.EstadoIn
+                    FROM Contratos c
+                    INNER JOIN Inmuebles i ON c.InmuebleId = i.id_Inmuebles
+                    WHERE c.InquilinoId = @inquilinoId";
+
+        using (var command = new MySqlCommand(sql, connection))
+        {
+            command.Parameters.AddWithValue("@inquilinoId", inquilinoId);
+
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Contrato contrato = new Contrato
+                    {
+                        id_Contrato = reader.GetInt32(0),
+                        InmuebleId = reader.GetInt32(1),
+                        InquilinoId = reader.GetInt32(2),
+                        Fecha_Inicio = reader.GetDateTime(3),
+                        Fecha_Fin =reader.GetDateTime(4),
+                        Monto = reader.GetDouble(5),
+                        Estado = reader.GetString(6),
+                        Inmueble = new Inmueble
+                        {
+                            id_Inmuebles = reader.GetInt32(1), // Mismo valor que c.InmuebleId
+                            PropietarioId = reader.GetInt32(7),
+                            Latitud = reader.GetDouble(8),
+                            Longitud = reader.GetDouble(9),
+                            Ubicacion = reader.GetString(10),
+                            Direccion = reader.GetString(11),
+                            Ambientes = reader.GetInt32(12),
+                            Uso = reader.GetString(13),
+                            Tipo = reader.GetString(14),
+                            Precio = reader.GetDouble(15),
+                            Disponible = reader.GetString(16),
+                            EstadoIn =reader.GetInt32(17),
+                  
+                        }
+                    };
+                    contratos.Add(contrato);
+                }
+            }
+        }
+    }
+
+    return contratos;
+}
+
+
 }

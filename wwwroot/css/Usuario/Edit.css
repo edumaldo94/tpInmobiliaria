@@ -63,7 +63,7 @@ input[type="submit"]:hover {
   
 }
 #avatar{
-    display: flex;
+   display: flex;
 }
 #imgA{
     margin-top: 20px;

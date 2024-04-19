@@ -1,0 +1,70 @@
+@model tpInmobliaria.Models.Propietario
+<link rel="stylesheet" href="/css/Propietario/Detail.css" />
+
+
+
+  <div class="form-row">
+    
+<div class="form-container">
+   <h2 style="text-align: center;">Propietario</h2>
+    <dl class="row">
+     <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.id_Propietario)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.id_Propietario)</dd>    
+
+<dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Nombre)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Nombre)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Apellido)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Apellido)</dd>
+
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Dni)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Dni)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Email)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Email)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Telefono)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Telefono)</dd>
+    
+    
+</dl>
+</div>
+</div>
+
+
+    
+
+
+  
+<div class="text-center">
+    <h1 class="display-4">Lista de Inmuebles</h1>
+
+    <table id="contratoTable" class="table">
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>Ubicacion</th>
+                <th>Direccion</th>
+                <th>Ambientes</th>
+                <th>Uso</th>
+                <th>Tipo</th>
+                    <th>Precio</th>
+                        <th>Disponible</th>
+                                <th>Modificar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var inmueble in ViewBag.Inmuebles)
+            {
+                <tr>
+                    <td>@inmueble.id_Inmuebles</td>
+                    <td>@inmueble.Ubicacion</td>
+                    <td>@inmueble.Direccion</td>
+                    <td>@inmueble.Ambientes</td>
+                    <td>@inmueble.Uso</td>
+                    <td>@inmueble.Tipo</td>
+                    <td>@inmueble.Precio</td>
+                    <td>@inmueble.Disponible</td>
+                   <td>  <button class="btn btn-info" onclick="window.location.href='@Url.Action("Edit","Inmueble", new { id = inmueble.id_Inmuebles })'">Modificar</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

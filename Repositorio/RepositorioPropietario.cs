@@ -157,4 +157,48 @@ public int Low(int id)
     return res;
 }
 
+     public List<Inmueble> ObtenerInmueblesPorPropietario(int propietarioId)
+        {
+            List<Inmueble> inmuebles = new List<Inmueble>();
+
+            using (var connection = new MySqlConnection(ConnectionString))
+            {
+                // Consulta para obtener los inmuebles del propietario específico
+                var sql = "SELECT * FROM inmuebles WHERE propietarioId = @propietarioId";
+
+                using (var command = new MySqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@propietarioId", propietarioId);
+
+                    connection.Open();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                          
+                            Inmueble inmueble = new Inmueble
+                            {
+                                id_Inmuebles = reader.GetInt32(0),
+                                Ubicacion= reader.GetString(4),
+                                Direccion= reader.GetString(5),
+                                Ambientes = reader.GetInt32(6),
+                                Uso = reader.GetString(7),
+                                Tipo = reader.GetString(8),
+                                Precio = reader.GetDouble(9),
+                                Disponible = reader.GetString(10),
+
+                           
+                            };
+                            inmuebles.Add(inmueble);
+                        }
+                    }
+                }
+            }
+
+            return inmuebles;
+        }
+
+    
+
 }

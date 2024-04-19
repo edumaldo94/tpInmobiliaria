@@ -17,7 +17,7 @@
         <option value="">Seleccione un Inmueble</option>
         @foreach (var property in ViewBag.Inmueble)
         {
-            <option value="@property.id_Inmuebles">@property.Direccion - @property.ProprietorName</option>
+            <option value="@property.id_Inmuebles">@property.Direccion -Dueño: @property.ProprietorName - $@property.Precio</option>
         }
     </select>
     <span asp-validation-for="InmuebleId" class="text-danger"></span>

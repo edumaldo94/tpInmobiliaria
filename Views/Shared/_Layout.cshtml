@@ -8,11 +8,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/tpInmobliaria.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBbDwBH7Jnb431kImDXDhp_9cUuwXCJAeA&callback=initMap" async defer></script>
-      <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/tpInmobliaria.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <style>
@@ -23,6 +19,12 @@
     </style>
 </head>
 <body>
+     @{
+        var usuario=(string)ViewBag.Rol;
+        
+    }
+
+
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
         <div class="container-fluid">
@@ -31,8 +33,10 @@
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1" style="font-size: 18px;">
+                <ul class="navbar-nav flex-grow-1" style="font-size: 18px;" id="menu">
+                    @if(usuario!=null){
                     <li class="nav-item">
                         <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
                     </li>
@@ -51,10 +55,34 @@
                       <li class="nav-item">
                         <a class="nav-link text-white" asp-area="" asp-controller="Pago" asp-action="Index">Pago</a>
                     </li>
+                    <!--
                      <li class="nav-item">
                         <a class="nav-link text-white" asp-area="" asp-controller="Usuario" asp-action="Index">Usuario</a>
-                    </li>
+                    </li>-->
+                  
+                                @if (usuario!=null && usuario.Equals("Administrador"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" asp-area="" asp-controller="Usuario" asp-action="Index">Usuarios</a>
+                                    </li>
+                                }
+                            
+}
                 </ul>
+                 <div class="list">
+                    @if(usuario != null){
+                    <!-- Elemento que muestra la lista desplegable -->
+                    <button class="button" onclick="desplegar()"><img src="/img/perfil.png" alt=""> Perfil</button>
+                    <!-- Lista desplegable oculta por defecto -->
+                        <ul class="menu">
+                        <!-- Elementos de la lista desplegable -->
+                        
+                        <a class="nav-link text-white"  asp-controller="Usuario" asp-action="Edit">Editar Perfil</a>
+                        
+                        <a class="nav-link text-white"  asp-controller="Usuario" asp-action="logout">Salir</a>
+                        </ul>
+                        }
+                    </div>
             </div>
         </div>
     </nav>
@@ -79,7 +107,14 @@
 <script>
     $(document).ready(function() {
         $('#contratoTable').DataTable();
+        
     });
+    function desplegar() {
+    var dropdownMenu = document.querySelector('.list .menu');
+    dropdownMenu.style.display = (dropdownMenu.style.display === 'block') ? 'none' : 'block';
+  };
+
+
 </script>
 
       @await RenderSectionAsync("Scripts", required: false)

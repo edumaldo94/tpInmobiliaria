@@ -1,0 +1,74 @@
+@model tpInmobliaria.Models.Inquilino
+<link rel="stylesheet" href="/css/Inquilino/Detail.css" />
+
+
+
+  <div class="form-row">
+    
+<div class="form-container">
+   <h2 style="text-align: center;">Inquilino</h2>
+    <dl class="row">
+     <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.id_Inquilino)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.id_Inquilino)</dd>    
+
+<dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Nombre)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Nombre)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Apellido)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Apellido)</dd>
+
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Dni)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Dni)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Email)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Email)</dd>
+    <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Telefono)</dt>
+    <dd class="col-sm-5">@Html.DisplayFor(model => Model.Telefono)</dd>
+    
+    
+</dl>
+</div>
+</div>
+
+
+    
+
+
+  
+<div class="text-center">
+    <h1 class="display-4">Contratos</h1>
+
+    <table id="contratoTable" class="table">
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Monto $</th>
+                <th>Estado</th>
+                 <th>Ambientes</th>
+                      <th>Tipo</th>
+                  <th>Dirección</th>
+<th>Pagos</th>
+           
+                       
+                                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var contratos in ViewBag.Contratos)
+            {
+                <tr>
+                    <td>@contratos.id_Contrato</td>
+                    <td>@contratos.Fecha_Inicio</td>
+                    <td>@contratos.Fecha_Fin</td>
+                    <td>@contratos.Monto</td>
+                    <td>@contratos.Estado</td>
+                           <td>@contratos.Inmueble.Ambientes</td>
+                           <td>@contratos.Inmueble.Tipo</td>
+                    <td>@contratos.Inmueble.Direccion</td>
+                   <td> <button class="btn btn-dark btn-block" onclick="window.location.href='@Url.Action("PagosDeCont", "Pago", new { ContratoId = contratos.id_Contrato })'">Pagos</button></td>
+                   
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

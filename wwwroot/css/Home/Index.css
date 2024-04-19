@@ -1,0 +1,11 @@
+body{
+
+ 
+            background: linear-gradient(to bottom right, #000000c9, #435374a9), url("/img/agente-inmobiliario.jpg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover; /* Esto asegura que la imagen de fondo cubra todo el cuerpo */
+        color: white;
+        
+ 
+}

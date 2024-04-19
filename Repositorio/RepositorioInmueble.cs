@@ -202,4 +202,85 @@ public class RepositorioInmueble
         }
         return res;
     }
+public int DisponibleInmuNo(int id)
+    {
+        int res = -1;
+        using (var connection = new MySqlConnection(ConnectionString))
+        {
+            string sql = @$"UPDATE inmuebles
+                        SET disponible = 'No'
+                        WHERE {nameof(Inmueble.id_Inmuebles)} = @id";
+
+            using (var command = new MySqlCommand(sql, connection))
+            {
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue("@id", id);
+                connection.Open();
+                res = command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+        return res;
+    }
+public int DisponibleInmuSi(int id)
+    {
+        int res = -1;
+        using (var connection = new MySqlConnection(ConnectionString))
+        {
+            string sql = @$"UPDATE inmuebles
+                        SET disponible = 'Si'
+                        WHERE {nameof(Inmueble.id_Inmuebles)} = @id";
+
+            using (var command = new MySqlCommand(sql, connection))
+            {
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue("@id", id);
+                connection.Open();
+                res = command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+        return res;
+    }
+    public List<Inmueble> ObtenerInmueblesPorInquilino(int inquilinoId)
+{
+    List<Inmueble> inmuebles = new List<Inmueble>();
+
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        connection.Open();
+
+        var sql = @"SELECT i.*
+                    FROM inmuebles i
+                    INNER JOIN contratos c ON i.id_Inmuebles = c.InmuebleId
+                    WHERE c.InquilinoId = @inquilinoId";
+
+        using (var command = new MySqlCommand(sql, connection))
+        {
+            command.Parameters.AddWithValue("@inquilinoId", inquilinoId);
+
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Inmueble inmueble = new Inmueble
+                    {
+                         id_Inmuebles = reader.GetInt32(0),
+                                Ubicacion= reader.GetString(4),
+                                Direccion= reader.GetString(5),
+                                Ambientes = reader.GetInt32(6),
+                                Uso = reader.GetString(7),
+                                Tipo = reader.GetString(8),
+                                Precio = reader.GetDouble(9),
+                                Disponible = reader.GetString(10),
+                    };
+                    inmuebles.Add(inmueble);
+                }
+            }
+        }
+    }
+
+    return inmuebles;
+}
+
 }

@@ -26,16 +26,24 @@ body {
 
     color: #292929e7;
 }
-.btn-info {
-    background: linear-gradient(to bottom right, #08b61f, #154602); 
-    color: rgb(196, 196, 196);
+/* Estilos para la tabla */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.76);
 }
-.btn-1 {
-    background: linear-gradient(to bottom right, #0876b6, #1a346d); 
-    color: rgb(196, 196, 196);
+
+.table td {
+    padding: 8px;
+   /* border: 1px solid #dee2e60c;  */
+   background: linear-gradient(to bottom right, hsl(188, 59%, 84%), #c5e7e7); 
+
 }
-.foto{
-    width: 100px;
-    height: 100px;
-    
+
+.table th {
+    padding: 8px;
+    background: linear-gradient(to bottom right, #abe2d8, #dfd7ddee); 
+    font-weight: bold;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.76);
 }

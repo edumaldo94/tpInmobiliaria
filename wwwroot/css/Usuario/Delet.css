@@ -1,9 +1,40 @@
-body{
-    background-color: #A97C14;
-   
+/* Estilos para el formulario de eliminación */
+body {
+    background: linear-gradient(to bottom right, #aa0303c9, #500505ee); 
+    
 }
+
+
+.form-container {
+    margin: 0 auto;
+    padding: 20px;
+width: 700px;
+     background: linear-gradient(to bottom right, #62b9a9, #66c9ba); /* Color de fondo para el formulario */
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.76);
+
+      color: #292929e7;
+      /* Centra el formulario horizontalmente */
+     
+  }
+h1 {
+  text-align: center;
+    color: #801414;
+}
+
+h3 {
+    text-align: center;
+    color: #000000;
+}
+
+
 .foto{
     width: 100px;
     height: 100px;
     border-radius: 100%;
+}
+.btn-text-info{
+    background: linear-gradient(to bottom right, #0876b6, #1a346d); 
+    color: rgb(196, 196, 196);
 }

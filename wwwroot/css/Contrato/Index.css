@@ -1,7 +1,7 @@
 /* Estilos generales */
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom right, #cacaca, #478d8f); 
+    background: linear-gradient(to bottom right, #dddbdb, #875cb9); 
     font-size: 15px;
 }
 
@@ -25,7 +25,7 @@ body {
 }
 
 .table th {
-    background: linear-gradient(to bottom right, #cacaca, #4e7d7e); 
+    background: linear-gradient(to bottom right, #dddada, #a29bb4); 
     font-weight: bold;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.76);
 }
