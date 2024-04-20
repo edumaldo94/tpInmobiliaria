@@ -130,6 +130,7 @@ public class UsuarioController : Controller{
             }
             catch(Exception ex)
             {
+                    ViewBag.Roles = Usuario.ObtenerRoles();
                 throw;
             }
         }
@@ -227,6 +228,36 @@ public class UsuarioController : Controller{
                 throw;
             }
         }
+[HttpPost]
+[ValidateAntiForgeryToken]
+public ActionResult DeleteAvatar(int UsuarioId)
+{
+    try
+    {
+        RepositorioUsuario repoU = new RepositorioUsuario();
+        Usuario usuario = repoU.Obtener(UsuarioId);
+        
+        if (usuario.Avatar != null && !string.IsNullOrEmpty(usuario.Avatar))
+        {
+            string wwwPath = _environment.WebRootPath;
+            string path2 = Path.Combine(wwwPath, "Uploads");
+            string img = Path.Combine(path2, Path.GetFileName(usuario.Avatar));
+            if (System.IO.File.Exists(img))
+            {
+                System.IO.File.Delete(img);
+            }
+            
+            usuario.Avatar = "sin avatar";
+            repoU.Edit(usuario);
+        }
+        
+        return RedirectToAction(nameof(Edit), new { UsuarioId = UsuarioId });
+    }
+    catch (Exception ex)
+    {
+        throw;
+    }
+}
 
 
         // POST: Usuarios/Edit

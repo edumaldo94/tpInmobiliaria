@@ -34,4 +34,5 @@ public class Usuario{
 			}
 			return roles;
 		}
+		
 }

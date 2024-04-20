@@ -6,134 +6,136 @@ using tpInmobliaria.Models;
 
 namespace tpInmobliaria.Models;
 
-public class RepositorioPago {
-
-readonly string ConnectionString = "Server=localhost;Database=inmo;User=root;Password=;";
-
-
-
-public RepositorioPago(){
-
-
-}
-
-public IList<Pago> GetTodosPagos()
+public class RepositorioPago
 {
-      IList<Pago> res = new List<Pago>();
-    using (var connection = new MySqlConnection(ConnectionString))
+
+    readonly string ConnectionString = "Server=localhost;Database=inmo;User=root;Password=;";
+
+
+
+    public RepositorioPago()
     {
-        var sql =@"SELECT p.*, c.InquilinoId, i.Nombre, i.Apellido
+
+
+    }
+
+    public IList<Pago> GetTodosPagos()
+    {
+        IList<Pago> res = new List<Pago>();
+        using (var connection = new MySqlConnection(ConnectionString))
+        {
+            var sql = @"SELECT p.*, c.InquilinoId, i.Nombre, i.Apellido
                     FROM pagos p
                     INNER JOIN contratos c ON p.ContratoId = c.id_Contrato
                     INNER JOIN inquilinos i ON c.InquilinoId = i.id_Inquilino";
 
- 
-        using (var command = new MySqlCommand(sql, connection))
-        {
-            connection.Open();
-            using (var reader = command.ExecuteReader())
+
+            using (var command = new MySqlCommand(sql, connection))
             {
-              while (reader.Read())
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Pago c = new Pago
                         {
-                            Pago c = new Pago
+                            PagoId = reader.GetInt32(0),
+                            ContratoId = reader.GetInt32(1),
+                            NumeroPago = reader.GetInt32(2),
+                            Concepto = reader.GetString(3),
+                            FechaPago = reader.GetDateTime(4),
+                            Importe = reader.GetDouble(5),
+                            EstadoPago = reader.GetString(6),
+                            Contrato = new Contrato
                             {
-                                PagoId = reader.GetInt32(0),
-                                ContratoId = reader.GetInt32(1),
-                                NumeroPago = reader.GetInt32(2),
-                                Concepto = reader.GetString(3),
-                                FechaPago = reader.GetDateTime(4),
-                                Importe = reader.GetDouble(5),
-                                EstadoPago = reader.GetString(6),
-                               Contrato = new Contrato
-                        {
-                            InquilinoId = reader.GetInt32(7) // Suponiendo que el id del inquilino se encuentra en la columna 7
-                        },
+                                InquilinoId = reader.GetInt32(7) // Suponiendo que el id del inquilino se encuentra en la columna 7
+                            },
                             InquilinoNombre = reader.GetString(8), // Suponiendo que el nombre del inquilino se encuentra en la columna 8
-                        InquilinoApellido = reader.GetString(9)
-                            };
+                            InquilinoApellido = reader.GetString(9)
+                        };
 
-                        
 
-                            res.Add(c);
-                        }
-                        connection.Close();
+
+                        res.Add(c);
                     }
+                    connection.Close();
                 }
-                return res;
-            
-    }
-}
+            }
+            return res;
 
-public int High(Pago pago)
-{
-    int id = 0;
-    using(var connection = new MySqlConnection(ConnectionString))
+        }
+    }
+
+    public int High(Pago pago)
     {
-        var sql = @$"INSERT INTO pagos ({nameof(Pago.ContratoId)}, {nameof(Pago.NumeroPago)}, {nameof(Pago.Concepto)}, {nameof(Pago.FechaPago)}, {nameof(Pago.Importe)}, {nameof(Pago.EstadoPago)})
+        int id = 0;
+        using (var connection = new MySqlConnection(ConnectionString))
+        {
+            var sql = @$"INSERT INTO pagos ({nameof(Pago.ContratoId)}, {nameof(Pago.NumeroPago)}, {nameof(Pago.Concepto)}, {nameof(Pago.FechaPago)}, {nameof(Pago.Importe)}, {nameof(Pago.EstadoPago)})
                      VALUES (@{nameof(Pago.ContratoId)}, @{nameof(Pago.NumeroPago)}, @{nameof(Pago.Concepto)}, @{nameof(Pago.FechaPago)}, @{nameof(Pago.Importe)}, @{nameof(Pago.EstadoPago)});
                      SELECT LAST_INSERT_ID();";
 
-        using (var command = new MySqlCommand(sql, connection))
-        {
-            command.Parameters.AddWithValue($"@{nameof(Pago.ContratoId)}", pago.ContratoId);
-            command.Parameters.AddWithValue($"@{nameof(Pago.NumeroPago)}", pago.NumeroPago);
-            command.Parameters.AddWithValue($"@{nameof(Pago.Concepto)}", pago.Concepto);
-            command.Parameters.AddWithValue($"@{nameof(Pago.FechaPago)}", pago.FechaPago);
-            command.Parameters.AddWithValue($"@{nameof(Pago.Importe)}", pago.Importe);
-            command.Parameters.AddWithValue($"@{nameof(Pago.EstadoPago)}", pago.EstadoPago);
-           
+            using (var command = new MySqlCommand(sql, connection))
+            {
+                command.Parameters.AddWithValue($"@{nameof(Pago.ContratoId)}", pago.ContratoId);
+                command.Parameters.AddWithValue($"@{nameof(Pago.NumeroPago)}", pago.NumeroPago);
+                command.Parameters.AddWithValue($"@{nameof(Pago.Concepto)}", pago.Concepto);
+                command.Parameters.AddWithValue($"@{nameof(Pago.FechaPago)}", pago.FechaPago);
+                command.Parameters.AddWithValue($"@{nameof(Pago.Importe)}", pago.Importe);
+                command.Parameters.AddWithValue($"@{nameof(Pago.EstadoPago)}", pago.EstadoPago);
 
 
-            connection.Open();
-            id = Convert.ToInt32(command.ExecuteScalar());
-            connection.Close();
+
+                connection.Open();
+                id = Convert.ToInt32(command.ExecuteScalar());
+                connection.Close();
+            }
         }
+        return id;
     }
-    return id;
-}
 
-public int Modification(Pago pago)
-{
-    int res = -1;
-    
-    using (var connection = new MySqlConnection(ConnectionString))
+    public int Modification(Pago pago)
     {
-        var sql = @$"UPDATE pagos
+        int res = -1;
+
+        using (var connection = new MySqlConnection(ConnectionString))
+        {
+            var sql = @$"UPDATE pagos
                     SET {nameof(Pago.NumeroPago)} = @{nameof(Pago.NumeroPago)},
                         {nameof(Pago.Concepto)} = @{nameof(Pago.Concepto)},
                         {nameof(Pago.FechaPago)} = @{nameof(Pago.FechaPago)},
                           {nameof(Pago.EstadoPago)} = @{nameof(Pago.EstadoPago)}
                     WHERE {nameof(Pago.PagoId)} = @{nameof(Pago.PagoId)}";
 
-        using (var command = new MySqlCommand(sql, connection))
-        {
-               //    command.Parameters.AddWithValue($"@{nameof(Pago.ContratoId)}", pago.ContratoId);
-            command.Parameters.AddWithValue($"@{nameof(Pago.NumeroPago)}", pago.NumeroPago);
-            command.Parameters.AddWithValue($"@{nameof(Pago.Concepto)}", pago.Concepto);
-            command.Parameters.AddWithValue($"@{nameof(Pago.FechaPago)}", pago.FechaPago);
-          //  command.Parameters.AddWithValue($"@{nameof(Pago.Importe)}", pago.Importe);
-            command.Parameters.AddWithValue($"@{nameof(Pago.EstadoPago)}", pago.EstadoPago);
-            command.Parameters.AddWithValue($"@{nameof(Pago.PagoId)}", pago.PagoId);
+            using (var command = new MySqlCommand(sql, connection))
+            {
+                //    command.Parameters.AddWithValue($"@{nameof(Pago.ContratoId)}", pago.ContratoId);
+                command.Parameters.AddWithValue($"@{nameof(Pago.NumeroPago)}", pago.NumeroPago);
+                command.Parameters.AddWithValue($"@{nameof(Pago.Concepto)}", pago.Concepto);
+                command.Parameters.AddWithValue($"@{nameof(Pago.FechaPago)}", pago.FechaPago);
+                //  command.Parameters.AddWithValue($"@{nameof(Pago.Importe)}", pago.Importe);
+                command.Parameters.AddWithValue($"@{nameof(Pago.EstadoPago)}", pago.EstadoPago);
+                command.Parameters.AddWithValue($"@{nameof(Pago.PagoId)}", pago.PagoId);
 
-            connection.Open();
+                connection.Open();
 
-            res = command.ExecuteNonQuery();
+                res = command.ExecuteNonQuery();
 
-            connection.Close();
+                connection.Close();
+            }
         }
+
+        return res;
     }
 
-    return res;
-}
 
 
-
-public Pago? GetPagoId(int id)
-{
-    Pago? p = null;
-    using (var connection = new MySqlConnection(ConnectionString))
+    public Pago? GetPagoId(int id)
     {
-        var sql = @$"SELECT p.{nameof(Pago.PagoId)}, p.{nameof(Pago.ContratoId)}, p.{nameof(Pago.NumeroPago)}, 
+        Pago? p = null;
+        using (var connection = new MySqlConnection(ConnectionString))
+        {
+            var sql = @$"SELECT p.{nameof(Pago.PagoId)}, p.{nameof(Pago.ContratoId)}, p.{nameof(Pago.NumeroPago)}, 
                     p.{nameof(Pago.Concepto)}, p.{nameof(Pago.FechaPago)}, p.{nameof(Pago.Importe)}, 
                     p.{nameof(Pago.EstadoPago)}, c.InmuebleId, i.Ubicacion, i.Direccion, i.Ambientes, i.Uso, i.Tipo, i.Precio,
                     c.InquilinoId, inq.nombre, inq.apellido, inq.dni, inq.telefono, inq.email,
@@ -145,120 +147,120 @@ public Pago? GetPagoId(int id)
              WHERE p.{nameof(Pago.PagoId)} = @{nameof(Pago.PagoId)}";
 
 
-        using (var command = new MySqlCommand(sql, connection))
-        {
-            command.Parameters.AddWithValue($"@{nameof(Pago.PagoId)}", id);
-            connection.Open();
-            using (var reader = command.ExecuteReader())
+            using (var command = new MySqlCommand(sql, connection))
             {
-                if (reader.Read())
+                command.Parameters.AddWithValue($"@{nameof(Pago.PagoId)}", id);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
                 {
-                    p = new Pago
+                    if (reader.Read())
                     {
-                        PagoId = reader.GetInt32(nameof(Pago.PagoId)),
-                        ContratoId = reader.GetInt32(nameof(Pago.ContratoId)),
-                        NumeroPago = reader.GetInt32(nameof(Pago.NumeroPago)),
-                        Concepto = reader.GetString(nameof(Pago.Concepto)),
-                        FechaPago = reader.GetDateTime(nameof(Pago.FechaPago)),
-                        Importe = reader.GetDouble(nameof(Pago.Importe)),
-                        EstadoPago = reader.GetString(nameof(Pago.EstadoPago)),
-                        Contrato = new Contrato
+                        p = new Pago
                         {
-                            InmuebleId = reader.GetInt32("InmuebleId"),
-                            Inmueble = new Inmueble
+                            PagoId = reader.GetInt32(nameof(Pago.PagoId)),
+                            ContratoId = reader.GetInt32(nameof(Pago.ContratoId)),
+                            NumeroPago = reader.GetInt32(nameof(Pago.NumeroPago)),
+                            Concepto = reader.GetString(nameof(Pago.Concepto)),
+                            FechaPago = reader.GetDateTime(nameof(Pago.FechaPago)),
+                            Importe = reader.GetDouble(nameof(Pago.Importe)),
+                            EstadoPago = reader.GetString(nameof(Pago.EstadoPago)),
+                            Contrato = new Contrato
                             {
-                               Ubicacion=reader.GetString("Ubicacion"),
-                                Direccion = reader.GetString("Direccion"),
-                                Ambientes=reader.GetInt32("Ambientes"),
-                                Uso=reader.GetString("Uso"),
-                                Tipo=reader.GetString("Tipo"),
-                                Precio=reader.GetDouble("Precio")
-                            },
-                              InquilinoId = reader.GetInt32("InquilinoId"),
-                            Inquilino = new Inquilino
-                            {
-                                Nombre=reader.GetString("Nombre"),
-                                Apellido=reader.GetString("Apellido"),
-                                Dni=reader.GetString("Dni"),
-                             Telefono=reader.GetString("Telefono"),
-                             Email=reader.GetString("Email")
-                             
-                            },
-                            Fecha_Inicio = reader.GetDateTime("Fecha_Inicio"),
-                            Fecha_Fin =reader.GetDateTime("Fecha_Fin"),
-                            Monto = reader.GetDouble("Monto"),
-                            Estado = reader.GetString("Estado")
-                        }
-                    };
+                                InmuebleId = reader.GetInt32("InmuebleId"),
+                                Inmueble = new Inmueble
+                                {
+                                    Ubicacion = reader.GetString("Ubicacion"),
+                                    Direccion = reader.GetString("Direccion"),
+                                    Ambientes = reader.GetInt32("Ambientes"),
+                                    Uso = reader.GetString("Uso"),
+                                    Tipo = reader.GetString("Tipo"),
+                                    Precio = reader.GetDouble("Precio")
+                                },
+                                InquilinoId = reader.GetInt32("InquilinoId"),
+                                Inquilino = new Inquilino
+                                {
+                                    Nombre = reader.GetString("Nombre"),
+                                    Apellido = reader.GetString("Apellido"),
+                                    Dni = reader.GetString("Dni"),
+                                    Telefono = reader.GetString("Telefono"),
+                                    Email = reader.GetString("Email")
+
+                                },
+                                Fecha_Inicio = reader.GetDateTime("Fecha_Inicio"),
+                                Fecha_Fin = reader.GetDateTime("Fecha_Fin"),
+                                Monto = reader.GetDouble("Monto"),
+                                Estado = reader.GetString("Estado")
+                            }
+                        };
+                    }
                 }
             }
         }
+
+        return p;
     }
 
-    return p;
-}
 
-
-public int Low(int id)
-{
-    int res = -1;
-    using (var connection = new MySqlConnection(ConnectionString))
+    public int Low(int id)
     {
-        string sql = @$"UPDATE pagos
+        int res = -1;
+        using (var connection = new MySqlConnection(ConnectionString))
+        {
+            string sql = @$"UPDATE pagos
                         SET EstadoPago = 'No Abono'
                         WHERE {nameof(Pago.PagoId)} = @id";
-        
-        using (var command = new MySqlCommand(sql, connection))
-        {
-            command.CommandType = CommandType.Text;
-            command.Parameters.AddWithValue("@id", id);
-            connection.Open();
-            res = command.ExecuteNonQuery();
-            connection.Close();
-        }
-    }
-    return res;
-}
-public List<Pago> GetPagosPorContratoId(int contratoId)
-{
-    List<Pago> pagos = new List<Pago>();
 
-    using (var connection = new MySqlConnection(ConnectionString))
-    {
-        var sql = @"SELECT * FROM pagos WHERE ContratoId = @contratoId";
-
-        using (var command = new MySqlCommand(sql, connection))
-        {
-            command.Parameters.AddWithValue("@contratoId", contratoId);
-
-            connection.Open();
-            
-            using (var reader = command.ExecuteReader())
+            using (var command = new MySqlCommand(sql, connection))
             {
-                while (reader.Read())
-                {
-                    Pago pago = new Pago
-                    {
-                        PagoId = reader.GetInt32(nameof(Pago.PagoId)),
-                        ContratoId = reader.GetInt32(nameof(Pago.ContratoId)),
-                        NumeroPago = reader.GetInt32(nameof(Pago.NumeroPago)),
-                        Concepto = reader.GetString(nameof(Pago.Concepto)),
-                        FechaPago = reader.GetDateTime(nameof(Pago.FechaPago)),
-                        Importe = reader.GetDouble(nameof(Pago.Importe)),
-                        EstadoPago = reader.GetString(nameof(Pago.EstadoPago))
-                    };
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue("@id", id);
+                connection.Open();
+                res = command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+        return res;
+    }
+    public List<Pago> GetPagosPorContratoId(int contratoId)
+    {
+        List<Pago> pagos = new List<Pago>();
 
-                    pagos.Add(pago);
+        using (var connection = new MySqlConnection(ConnectionString))
+        {
+            var sql = @"SELECT * FROM pagos WHERE ContratoId = @contratoId";
+
+            using (var command = new MySqlCommand(sql, connection))
+            {
+                command.Parameters.AddWithValue("@contratoId", contratoId);
+
+                connection.Open();
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Pago pago = new Pago
+                        {
+                            PagoId = reader.GetInt32(nameof(Pago.PagoId)),
+                            ContratoId = reader.GetInt32(nameof(Pago.ContratoId)),
+                            NumeroPago = reader.GetInt32(nameof(Pago.NumeroPago)),
+                            Concepto = reader.GetString(nameof(Pago.Concepto)),
+                            FechaPago = reader.GetDateTime(nameof(Pago.FechaPago)),
+                            Importe = reader.GetDouble(nameof(Pago.Importe)),
+                            EstadoPago = reader.GetString(nameof(Pago.EstadoPago))
+                        };
+
+                        pagos.Add(pago);
+                    }
                 }
             }
         }
+
+        return pagos;
     }
 
-    return pagos;
-}
 
-
- public void AgregarPago(Pago pago)
+    public void AgregarPago(Pago pago)
     {
         using (var connection = new MySqlConnection(ConnectionString))
         {
@@ -281,51 +283,96 @@ public List<Pago> GetPagosPorContratoId(int contratoId)
         }
     }
 
-public bool InquilinoTienePagosPendientes(int ContratoId)
-{
-    using (var connection = new MySqlConnection(ConnectionString))
+    public bool InquilinoTienePagosPendientes(int ContratoId)
     {
-        connection.Open();
-
-        var sql = "SELECT COUNT(*) FROM pagos WHERE EstadoPago = 'No Abono' AND ContratoId = @ContratoId";
-
-        using (var command = new MySqlCommand(sql, connection))
+        using (var connection = new MySqlConnection(ConnectionString))
         {
-            command.Parameters.AddWithValue("@ContratoId", ContratoId);
-
-            int count = Convert.ToInt32(command.ExecuteScalar());
-
-            return count > 0;
-        }
-    }
-}
-
-public DateTime ObtenerUltimaFechaPago(int contratoId)
-{
-    DateTime ultimaFechaPago = DateTime.MinValue; // Por defecto, se inicializa con el valor mínimo de DateTime
-
-    // Aquí realizamos la consulta SQL para obtener la última fecha de pago del contrato con el ID especificado
-    string query = "SELECT MAX(FechaPago) FROM pagos WHERE ContratoId = @ContratoId";
-
-    using (var connection = new MySqlConnection(ConnectionString))
-    {
-        using (var command = new MySqlCommand(query, connection))
-        {
-            command.Parameters.AddWithValue("@ContratoId", contratoId);
-
             connection.Open();
-            var result = command.ExecuteScalar();
-            connection.Close();
 
-            if (result != null && result != DBNull.Value)
+            var sql = "SELECT COUNT(*) FROM pagos WHERE EstadoPago = 'No Abono' AND ContratoId = @ContratoId";
+
+            using (var command = new MySqlCommand(sql, connection))
             {
-                ultimaFechaPago = Convert.ToDateTime(result);
+                command.Parameters.AddWithValue("@ContratoId", ContratoId);
+
+                int count = Convert.ToInt32(command.ExecuteScalar());
+
+                return count > 0;
             }
         }
     }
 
-    return ultimaFechaPago;
-}
+    public DateTime ObtenerUltimaFechaPago(int contratoId)
+    {
+        DateTime ultimaFechaPago = DateTime.MinValue; // Por defecto, se inicializa con el valor mínimo de DateTime
+
+        // Aquí realizamos la consulta SQL para obtener la última fecha de pago del contrato con el ID especificado
+        string query = "SELECT MAX(FechaPago) FROM pagos WHERE ContratoId = @ContratoId";
+
+        using (var connection = new MySqlConnection(ConnectionString))
+        {
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@ContratoId", contratoId);
+
+                connection.Open();
+                var result = command.ExecuteScalar();
+                connection.Close();
+
+                if (result != null && result != DBNull.Value)
+                {
+                    ultimaFechaPago = Convert.ToDateTime(result);
+                }
+            }
+        }
+
+        return ultimaFechaPago;
+    }
+    public Pago GetUltimoPagoPorContratoId(int contratoId)
+    {
+        Pago ultimoPago = null;
+
+        // Aquí realizamos la consulta SQL para obtener el último pago del contrato con el ID especificado
+        string query = "SELECT * FROM pagos WHERE ContratoId = @ContratoId ORDER BY FechaPago DESC LIMIT 1";
+
+        using (var connection = new MySqlConnection(ConnectionString))
+        {
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@ContratoId", contratoId);
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        // Construir el objeto Pago a partir de los datos del resultado de la consulta
+                        ultimoPago = new Pago
+                        {
+                            /*   PagoId = Convert.ToInt32(reader["PagoId"]),
+                               ContratoId = contratoId,
+                               NumeroPago = Convert.ToInt32(reader["NumeroPago"]),
+                               Concepto = Convert.ToString(reader["Concepto"]),
+                               FechaPago = Convert.ToDateTime(reader["FechaPago"]),
+                               Importe = Convert.ToDouble(reader["Importe"]),
+                               EstadoPago = Convert.ToString(reader["EstadoPago"])
+       */
+                            PagoId = reader.GetInt32(0),
+                            ContratoId = reader.GetInt32(1),
+                            NumeroPago = reader.GetInt32(2),
+                            Concepto = reader.GetString(3),
+                            FechaPago = reader.GetDateTime(4),
+                            Importe = reader.GetDouble(5),
+                            EstadoPago = reader.GetString(6),
+                            // Otras propiedades si es necesario
+                        };
+                    }
+                }
+            }
+        }
+
+        return ultimoPago;
+    }
 
 
 }

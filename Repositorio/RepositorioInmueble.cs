@@ -71,6 +71,57 @@ public class RepositorioInmueble
         return properties;
     }
 
+ public IList<Inmueble> GetPropertiesDisponibles()
+    {
+        var properties = new List<Inmueble>();
+        using (var connection = new MySqlConnection(ConnectionString))
+        {
+            var sql = @"SELECT 
+                        prop.id_Inmuebles, 
+                        prop.propietarioId, 
+                        prop.direccion, 
+                        prop.ambientes, 
+                        prop.uso, 
+                        prop.tipo, 
+                        prop.precio, 
+                        prop.disponible,
+                        prop.estadoIn,
+                        pro.nombre AS ProprietorName,
+                        pro.apellido AS ProprietorLastName
+                    FROM 
+                        inmuebles prop
+                    INNER JOIN 
+                        propietarios pro ON prop.propietarioId = pro.id_Propietario
+                        WHERE prop.estadoIn = 1 and prop.disponible= 'Si'";
+
+            using (var command = new MySqlCommand(sql, connection))
+            {
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        properties.Add(new Inmueble
+                        {
+                            id_Inmuebles = reader.GetInt32(0),
+                            PropietarioId = reader.GetInt32(1),
+                            Direccion = reader.GetString(2),
+                            Ambientes = reader.GetInt32(3),
+                            Uso = reader.GetString(4),
+                            Tipo = reader.GetString(5),
+                            Precio = reader.GetFloat(6),
+                            Disponible = reader.GetString(7),
+                            EstadoIn = reader.GetInt32(8),
+                            ProprietorName = reader.IsDBNull(reader.GetOrdinal("ProprietorName")) ? null : reader.GetString("ProprietorName"),
+                            ProprietorLastName = reader.IsDBNull(reader.GetOrdinal("ProprietorLastName")) ? null : reader.GetString("ProprietorLastName")
+                        });
+                    }
+                }
+            }
+        }
+
+        return properties;
+    }
 
     public int Create(Inmueble property)
     {

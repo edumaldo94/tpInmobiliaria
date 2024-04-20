@@ -286,6 +286,7 @@ public class PagoController : Controller
         }
     }
 
+
     /*
             public IActionResult GenerarNuevoPago(int contratoId)
         {

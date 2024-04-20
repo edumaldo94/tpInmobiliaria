@@ -93,10 +93,24 @@
                 </div>
                 <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-primary" />
+                
                 </div>
             </div>
+            
         </form>
-  
+  @if (!Model.Avatar.Equals("sin avatar") && Model.Avatar != null)
+{
+    
+    <form asp-action="DeleteAvatar" method="post">
+        <input type="hidden" asp-for="UsuarioId" />
+        <button type="submit" class="btn btn-danger"onclick="confirmarEliminarAvatar()">Eliminar Avatar</button>
+    </form>
+}
+else
+{
+    <h2>Sin avatar</h2>
+}
+
 
         @if (TempData.ContainsKey("Error"))
             {
@@ -140,4 +154,5 @@ function cambio(){
     let rol=document.querySelector("#select").value;
     document.querySelector("rol").value=rol;
 }
+
 </script>

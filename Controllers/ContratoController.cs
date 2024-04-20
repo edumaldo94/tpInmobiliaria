@@ -40,7 +40,7 @@ public class ContratoController : Controller
         RepositorioInmueble inmueble = new RepositorioInmueble();
         RepositorioInquilino tenant = new RepositorioInquilino();
 
-        ViewBag.Inmueble = inmueble.GetProperties();
+        ViewBag.Inmueble = inmueble.GetPropertiesDisponibles();
         ViewBag.Tenants = tenant.GetTenants();
         return View();
     }
@@ -208,12 +208,17 @@ public class ContratoController : Controller
 
     */
     [HttpPost]
-    [Authorize(Policy = "Administrador")]
+   // [Authorize(Policy = "Administrador")]
+    [Authorize]
     public IActionResult TerminateEarly(int contratoId, DateTime fechaTerminacion)
     {
+         var claims =User.Claims;
+            string Rol = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+            ViewBag.Rol=Rol;
         RepositorioContrato repositorioContrato = new RepositorioContrato();
         RepositorioPago rPago = new RepositorioPago();
         RepositorioInmueble inmueble = new RepositorioInmueble();
+       
         // Obtener el contrato a terminar anticipadamente
         var contrato = repositorioContrato.GetContractId(contratoId);
         if (fechaTerminacion < contrato.Fecha_Inicio || fechaTerminacion > contrato.Fecha_Fin)
@@ -222,24 +227,32 @@ public class ContratoController : Controller
             // Si la fecha de terminación no está dentro del rango, redireccionar a alguna vista de error o mostrar un mensaje al usuario
             return View("Detail", contrato);
         }
-        TimeSpan duracionContrato = (contrato.Fecha_Fin ?? DateTime.MinValue) - (contrato.Fecha_Inicio ?? DateTime.MinValue);
+          var ultimoPago = rPago.GetUltimoPagoPorContratoId(contratoId);
+DateTime FechaUltimoP= ultimoPago.FechaPago.Value;
+    // Verificar si el inquilino ha pagado el mes anterior
+    if (FechaUltimoP.Month != fechaTerminacion.AddMonths(-1).Month)
+    {
+        TempData["ErrorMessage"] = "No puedes terminar el contrato anticipadamente porque no has pagado el mes anterior.";
+        // Redireccionar a alguna vista de error o mostrar un mensaje al usuario
+        return View("Detail", contrato);
+    }
+     TimeSpan duracionContrato = contrato.Fecha_Fin.Value - contrato.Fecha_Inicio.Value;
+        TimeSpan duracionReal = fechaTerminacion - contrato.Fecha_Inicio.Value;
 
-        //    TimeSpan duracionReal = fechaTerminacion - contrato.Fecha_Inicio;
-        TimeSpan duracionReal = (fechaTerminacion) - (contrato.Fecha_Inicio ?? DateTime.MinValue);
-
-        double mesesContrato = duracionContrato.TotalDays / 30;
-        double mesesReal = duracionReal.TotalDays / 30;
+        double mesesContrato = duracionContrato.TotalDays;
+        double mesesReal = duracionReal.TotalDays;
         double multa = 0;
+
+
         if ((mesesContrato / 2) < mesesReal)
         {
-            multa = (contrato.Monto ?? 0) * 2;
+           multa = contrato.Monto.Value * 2;
 
+        }else{
+            multa = contrato.Monto.Value ;
         }
+    
 
-        // Calcular la multa por terminación anticipada
-        //  double multa = CalcularMultaTerminacionAnticipada(contrato.Fecha_Fin.Value, contrato.Fecha_Inicio.Value, contrato.Monto.Value);
-        //  double multa = repositorioContrato.CalcularMulta(contratoId, fechaTerminacion);
-        // Crear un nuevo pago para registrar la multa
         Pago multaPago = new Pago
         {
             ContratoId = contrato.id_Contrato,
@@ -257,10 +270,28 @@ public class ContratoController : Controller
         // Redireccionar a la vista de detalles del contrato
         //  return RedirectToAction("Detail", "Contrato", new { contratoId = contrato.id_Contrato });
         //     return RedirectToAction(nameof(Detail), "Contrato", new { contratoId = contrato});
-        return View("Detail", contrato);
+      //  return View("Detail", contrato);
+       return RedirectToAction(nameof(Index));
     }
 
+private bool PagosEstanAlDia(int contratoId)
+{
+    RepositorioPago rPago = new RepositorioPago();
 
+    // Obtener todos los pagos asociados al contrato
+    var pagos = rPago.GetPagosPorContratoId(contratoId);
+
+    // Verificar si hay algún pago pendiente
+    foreach (var pago in pagos)
+    {
+        if (pago.FechaPago > DateTime.Today)
+        {
+            // Si hay algún pago con fecha posterior a hoy, significa que no está al día
+            return false;
+        }
+    }
+     return true;
+}
     public IActionResult RenewView(int contratoId)
     {
       var claims =User.Claims;
@@ -284,6 +315,9 @@ public class ContratoController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Renew(Contrato contrato)
     {
+         var claims =User.Claims;
+            string Rol = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+            ViewBag.Rol=Rol;
         if (ModelState.IsValid) // Verificar si el modelo es válido
         {
 
