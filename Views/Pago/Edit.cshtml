@@ -20,7 +20,11 @@
                 <input asp-for="PagoId" class="form-control" readonly/>
                 <span asp-validation-for="PagoId" class="text-danger"></span>
             </div>
-
+ <div class="form-group" hidden>
+                <label asp-for="ContratoId" class="control-label"></label>
+                <input asp-for="ContratoId" class="form-control" readonly/>
+                <span asp-validation-for="ContratoId" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="NumeroPago" class="control-label"></label>
                 <input asp-for="NumeroPago" class="form-control" required/>

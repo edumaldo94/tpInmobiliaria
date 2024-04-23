@@ -17,11 +17,7 @@ body {
     margin-bottom: 20px; /* Espacio entre filas */
     
 }
-#form22{
-    padding: 25px;
-    margin: 3px;
-    top: 28px;
-}
+
 .form-container {
     width: 45%; /* Ancho de cada contenedor */
     background: linear-gradient(to bottom right, #e0d3d3, #9b7378); /* Color de fondo para el formulario */
@@ -30,24 +26,4 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.76);
 
     color: #292929e7;
-}
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.76);
-}
-
-.table td {
-    padding: 8px;
-   /* border: 1px solid #dee2e60c;  */
-   background: linear-gradient(to bottom right, #f8f5f5, #c5e7e7); 
-
-}
-
-.table th {
-    padding: 8px;
-    background: linear-gradient(to bottom right, #cde9e4, #c0c5bc); 
-    font-weight: bold;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.76);
 }

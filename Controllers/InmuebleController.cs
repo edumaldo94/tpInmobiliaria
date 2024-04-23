@@ -161,6 +161,16 @@ public class InmuebleController : Controller
         }
     }
 
+   [Authorize]
+    public IActionResult Disponible()
+    {
+              var claims =User.Claims;
+            string Rol = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+            ViewBag.Rol=Rol;
+        RepositorioInmueble ru = new RepositorioInmueble();
+        var lista = ru.GetPropertiesDisponibles();
 
+        return View(lista);
+    }
 
 }

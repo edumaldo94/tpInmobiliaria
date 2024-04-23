@@ -3,6 +3,10 @@
 @{
     ViewData["Title"] = "Detalle de Pago";
 }
+@{
+    var isAdmin = ViewBag.Rol == "Administrador";
+}
+
 <div class="container">
       <h1>Detalle de Pago</h1>
     <div class="form-row">
@@ -77,8 +81,61 @@
 
 </div>
 
-
-
+@if (isAdmin)
+{
+  <div class="form-container">
+    <h2>Pagos Realizados</h2>
+<table id="contratoTable" class="table">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Usuario</th>
+                <th>Acción</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+             @if (ViewBag.Auditorias != null)
+{
+              foreach(var item in ViewBag.Auditorias)
+            {
+                <tr>
+                    <td>@item.FechaHora</td>
+                    <td>@item.UsuarioNombre</td>
+                    <td>@item.Accion</td>
+                    
+                      </tr>
+            }
+            }
+        </tbody>
+    </table>
+<h2>Pagos Finalizados</h2>
+  <table id="contratoTable" class="table">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Usuario</th>
+                <th>Acción</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+             @if (ViewBag.AuditoriaB != null)
+{
+              foreach(var item in ViewBag.AuditoriaB)
+            {
+                <tr>
+                    <td>@item.FechaHora</td>
+                    <td>@item.UsuarioNombre</td>
+                    <td>@item.Accion</td>
+                    
+                      </tr>
+            }
+            }
+        </tbody>
+    </table>
+</div>
+}
     <div class="form-row">
       
             <form asp-action="Detail">

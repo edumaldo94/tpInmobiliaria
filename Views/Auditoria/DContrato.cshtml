@@ -1,0 +1,17 @@
+@model tpInmobliaria.Models.Auditoria
+
+<div class="form-container">
+   <h2 style="text-align: center;">Auditoria</h2>
+    <dl class="row">
+    @if (ViewBag.Auditoria != null)
+{
+   <dt class="col-sm-4">Fecha</dt>
+    <dd class="col-sm-5">@ViewBag.Auditoria.FechaHora</dd>
+    <dt class="col-sm-4">Usuario</dt>
+    <dd class="col-sm-5">@ViewBag.Auditoria.UsuarioNombre</dd>
+    <dt class="col-sm-4">Acción</dt>
+    <dd class="col-sm-5">@ViewBag.Auditoria.Accion</dd>
+    }
+</dl>
+
+</div>

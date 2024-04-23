@@ -66,3 +66,12 @@ body {
 .btn-warning:hover {
     background-color: #e0a800; /* Color de fondo del botón Alta al pasar el mouse */
 }
+.btn-23 {
+    background: linear-gradient(to bottom right, #b1c4cf, #03617e); 
+    color: black;
+}
+
+.btn-24 {
+    background: linear-gradient(to bottom right, #b1c4cf, #047a9e); 
+    color: black;
+}

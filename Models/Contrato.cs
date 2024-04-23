@@ -21,8 +21,7 @@ public class Contrato
     [DisplayName("Estado")]
     public string? Estado { get; set; }
  public int? EstadoC { get; set; }
-
-    public Inmueble? Inmueble { get; set; }
+      public Inmueble? Inmueble { get; set; }
     public Inquilino? Inquilino { get; set; }
       public List<Pago> Pagos { get; set; }
 

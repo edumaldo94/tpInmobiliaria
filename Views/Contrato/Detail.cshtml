@@ -1,11 +1,14 @@
 @model tpInmobliaria.Models.Contrato
-<link rel="stylesheet" href="/css/Pago/Detail.css" />
+<link rel="stylesheet" href="/css/Contrato/Detail.css" />
 
+@{
+    var isAdmin = ViewBag.Rol == "Administrador";
+}
 
-
+<div class="container">
   <div class="form-row">
     
-<div class="form-container">
+<div class="form-container col-md-6">
    <h2 style="text-align: center;">Contrato</h2>
     <dl class="row">
      <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.id_Contrato)</dt>
@@ -24,11 +27,42 @@
     <dd class="col-sm-5">@Html.DisplayFor(model => Model.Monto)</dd>
     <dt class="col-sm-4">@Html.DisplayNameFor(model => Model.Estado)</dt>
     <dd class="col-sm-5">@Html.DisplayFor(model => Model.Estado)</dd>
-    
+   
+
 </dl>
 <p style="color: rgb(255, 255, 255); font-size: 16px; background-color: red;">@TempData["ErrorMessage"]</p>
 </div>
+@if (isAdmin)
+{
+<div class="form-container col-md-6">
+   <h2 style="text-align: center;">Contrato Creado</h2>
+    <dl class="row">
+    @if (ViewBag.Auditoria != null)
+{
+   <dt class="col-sm-4">Fecha</dt>
+    <dd class="col-sm-5">@ViewBag.Auditoria.FechaHora</dd>
+    <dt class="col-sm-4">Usuario</dt>
+    <dd class="col-sm-5">@ViewBag.Auditoria.UsuarioNombre</dd>
+    <dt class="col-sm-4">Acción</dt>
+    <dd class="col-sm-5">@ViewBag.Auditoria.Accion</dd>
+    }
+     <h2 style="text-align: center;">Contrato Finalizado</h2>
+        @if (ViewBag.AuditoriaB != null)
+{
+   <dt class="col-sm-4">Fecha</dt>
+    <dd class="col-sm-5">@ViewBag.AuditoriaB.FechaHora</dd>
+    <dt class="col-sm-4">Usuario</dt>
+    <dd class="col-sm-5">@ViewBag.AuditoriaB.UsuarioNombre</dd>
+    <dt class="col-sm-4">Acción</dt>
+    <dd class="col-sm-5">@ViewBag.AuditoriaB.Accion</dd>
+    }else{
+        <h2>Sin Datos</h2>
+    }
+</dl>
 </div>
+}
+</div>
+ </div>
 
  
         @if (Model.Estado == "No Activo"){

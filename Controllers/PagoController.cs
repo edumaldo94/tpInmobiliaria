@@ -65,8 +65,12 @@ public class PagoController : Controller
     public IActionResult Crear(Pago pago)
     {
         RepositorioPago rp = new RepositorioPago();
-        rp.High(pago);
-
+        RepositorioAuditoria auditoria = new RepositorioAuditoria();
+ var userName = User.Identity.Name;
+       
+       int obj= rp.High(pago);
+         var objeto=rp.GetPagoId(obj);
+ auditoria.RegistrarAccionAuditoria(objeto.ContratoId, objeto.PagoId,userName, "Abono");
 
         return RedirectToAction(nameof(Index));
     }
@@ -100,7 +104,25 @@ public class PagoController : Controller
         try
         {
             RepositorioPago c2 = new RepositorioPago();
-            c2.Modification(c);
+            RepositorioAuditoria auditoria = new RepositorioAuditoria();
+           // Obtener el pago antes de la modificación
+        Pago pagoAntes = c2.GetPagoId(id);
+
+        // Realizar la modificación
+        c2.Modification(c);
+
+    
+        Pago pagoDespues = c2.GetPagoId(id);
+
+
+        if (pagoAntes.EstadoPago != pagoDespues.EstadoPago)
+        {
+            var userName = User.Identity.Name;
+
+      
+            auditoria.RegistrarAccionAuditoria(c.ContratoId, c.PagoId, userName, c.EstadoPago);
+        }
+
             return RedirectToAction(nameof(Index));
         }
         catch (Exception e)
@@ -165,6 +187,18 @@ public class PagoController : Controller
             string Rol = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
             ViewBag.Rol = Rol;
             RepositorioPago P2 = new RepositorioPago();
+            RepositorioAuditoria auditor = new RepositorioAuditoria();
+    
+    
+            var auditorias = auditor.ObtenerAuditoriaPorPagoId(id);
+        
+        // Pasar el pago y las auditorías a la vista
+    
+        ViewBag.Auditorias = auditorias;
+            
+           
+            var auditoriasb=auditor.ObtenerAuditoriaPorBajaPagoId(id);
+ ViewBag.AuditoriaB = auditoriasb;
             var pago = P2.GetPagoId(id);
             return View(pago);
         }
@@ -187,6 +221,7 @@ public class PagoController : Controller
             RepositorioInmueble inmueble = new RepositorioInmueble();
             RepositorioPago P2 = new RepositorioPago();
             RepositorioContrato cont = new RepositorioContrato();
+            RepositorioAuditoria auditoria = new RepositorioAuditoria();
             IList<Pago> pago = P2.GetPagosPorContratoId(ContratoId);
             if (ContratoId == 0)
             {
@@ -194,20 +229,23 @@ public class PagoController : Controller
                 return BadRequest("ContratoId no puede ser cero");
             }
 
+    
+    
+            
 
             ViewBag.Pagos = pago;
             bool inquilinoTienePagosPendientes = P2.InquilinoTienePagosPendientes(ContratoId);
 
             ViewBag.PagoPendientes = inquilinoTienePagosPendientes;
 
-            ViewBag.Contrato = cont.GetContractId(ContratoId);
-
+          List<int> pagoIds = new List<int>();
             // Iterar sobre la lista de pagos para aplicar las validaciones
             foreach (var pagos in pago)
             {
                 // Obtener el PagoId de cada pago
                 int pagoId = pagos.PagoId.Value;
-
+  ViewBag.Contrato = cont.GetContractId(ContratoId);
+ pagoIds.Add(pagoId);
                 // Obtener la fecha de inicio y fin del contrato
                 DateTime fechaInicioContrato = ViewBag.Contrato.Fecha_Inicio;
                 DateTime fechaFinContrato = ViewBag.Contrato.Fecha_Fin;
@@ -230,17 +268,34 @@ public class PagoController : Controller
                     ViewBag.MostrarNuevoPago = true; // No mostrar el botón "Nuevo Pago"
                     cont.FinalizarContrato(ViewBag.Contrato.id_Contrato);
                     inmueble.DisponibleInmuSi(ViewBag.Contrato.InmuebleId);
-
+        
+ var userName = User.Identity.Name;
+       
+       
+ auditoria.RegistrarAccionAuditoria(ViewBag.Contrato.id_Contrato, pagoId,userName, "Abono");
+ 
                 }
                 else
                 {
+                    
                     ViewBag.MostrarNuevoPago = false; // Mostrar el botón "Nuevo Pago"
                 }
 
 
             }
+List<Auditoria> todasAuditorias = new List<Auditoria>();
+List<Auditoria> todasAuditoriasB = new List<Auditoria>();
 
+foreach (int pagoId in pagoIds)
+{
+       var auditorias = auditoria.ObtenerAuditoriaPorPagoId(pagoId);
+    todasAuditorias.AddRange(auditorias);
 
+    var auditoriasB = auditoria.ObtenerAuditoriaPorBajaPagoId(pagoId);
+    todasAuditoriasB.AddRange(auditoriasB);
+}
+ViewBag.Auditorias = todasAuditorias;
+ViewBag.AuditoriaB = todasAuditoriasB;
             // Si no hay errores de validación, retornar la vista con la lista de pagos
             return View(pago);
         }
@@ -286,29 +341,4 @@ public class PagoController : Controller
         }
     }
 
-
-    /*
-            public IActionResult GenerarNuevoPago(int contratoId)
-        {
-            RepositorioPago pago = new RepositorioPago();
-              RepositorioContrato contratoC = new RepositorioContrato();
-            // Obtener la fecha del último pago del contrato
-            DateTime ultimaFechaPago = pago.ObtenerUltimaFechaPago(contratoId);
-
-            // Calcular la fecha del siguiente pago
-            DateTime siguienteFechaPago = ultimaFechaPago.AddMonths(1); // Por ejemplo, se genera un pago mensualmente
-
-            // Verificar si la fecha actual está cerca de la fecha límite de pago
-            if (DateTime.Today > ultimaFechaPago.AddDays(5))
-            {
-                TempData["AlertaPagoAtrasado"] = true; // Mostrar alerta de pago atrasado en la vista
-            }
-
-            // Crear el nuevo pago
-            contratoC.CrearPago(contratoId, siguienteFechaPago);
-
-            return RedirectToAction("Detalles", "Contrato", new { id = contratoId });
-        }
-    }
-    */
 }

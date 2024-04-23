@@ -141,7 +141,7 @@ public IList<Contrato> ObtenerContratosSuperpuestos(int inmuebleId, DateTime fec
                 command.Parameters.AddWithValue($"@{nameof(Contrato.Fecha_Fin)}", contract.Fecha_Fin);
                 command.Parameters.AddWithValue($"@{nameof(Contrato.Monto)}", contract.Monto);
                 command.Parameters.AddWithValue($"@{nameof(Contrato.Estado)}", contract.Estado);
-                //  command.Parameters.AddWithValue($"@{nameof(Contrato.EstadoC)}", contract.EstadoC);
+        
 
 
                 connection.Open();
@@ -196,7 +196,9 @@ public IList<Contrato> ObtenerContratosSuperpuestos(int inmuebleId, DateTime fec
         using (var connection = new MySqlConnection(ConnectionString))
         {
 
-            var sql = @$"SELECT {nameof(Contrato.id_Contrato)}, {nameof(Contrato.InmuebleId)}, {nameof(Contrato.InquilinoId)}, {nameof(Contrato.Fecha_Inicio)}, {nameof(Contrato.Fecha_Fin)}, {nameof(Contrato.Monto)}, {nameof(Contrato.Estado)},{nameof(Contrato.EstadoC)}
+            var sql = @$"SELECT {nameof(Contrato.id_Contrato)}, {nameof(Contrato.InmuebleId)}, {nameof(Contrato.InquilinoId)}, 
+            {nameof(Contrato.Fecha_Inicio)}, {nameof(Contrato.Fecha_Fin)},{nameof(Contrato.Monto)}, 
+            {nameof(Contrato.Estado)},{nameof(Contrato.EstadoC)},{nameof(Contrato.EstadoC)}
         FROM contratos
         WHERE {nameof(Contrato.id_Contrato)} = @{nameof(Contrato.id_Contrato)}";
 
@@ -218,6 +220,7 @@ public IList<Contrato> ObtenerContratosSuperpuestos(int inmuebleId, DateTime fec
                             Monto = reader.GetDouble(nameof(Contrato.Monto)),
                             Estado = reader.GetString(nameof(Contrato.Estado)),
                             EstadoC = reader.GetInt32(nameof(Contrato.EstadoC)),
+                            
                         };
                           RepositorioInmueble ru = new RepositorioInmueble();
                     var inmueble = ru.ObtenerPorId(c.InmuebleId);
