@@ -75,3 +75,7 @@ body {
 .btn-dark:hover {
     background-color: #000000; /* Color de fondo del botón Alta al pasar el mouse */
 }
+.btn-55 {
+    background: linear-gradient(to bottom right, #03dce4, #03707e); 
+    color: rgb(255, 255, 255);
+}

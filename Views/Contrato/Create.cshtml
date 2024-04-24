@@ -4,7 +4,9 @@
 @{
     ViewData["Title"] = "Contrato";
 }
-
+@{
+    var isAdmin = ViewBag.Rol == "Administrador";
+}
 <hr />
 <div class="container">
     <div class="form-container">

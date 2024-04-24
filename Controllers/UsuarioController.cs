@@ -138,7 +138,7 @@ public class UsuarioController : Controller{
         // GET: Usuarios/Edit/5
         public ActionResult Edit(int UsuarioId)
         {
-            try{
+       try{
                     RepositorioUsuario repoU= new RepositorioUsuario();
                 
                 var claims =User.Claims;
@@ -148,6 +148,7 @@ public class UsuarioController : Controller{
                 if(UsuarioId==null || UsuarioId==0){
                     string correo = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
                     Usuario user1=repoU.ObtenerCorreo(correo);
+                    
                     return View(user1);
                 }
                 /* */
@@ -168,8 +169,19 @@ public class UsuarioController : Controller{
         public ActionResult Edit(int id, Usuario user)
         {
             try
-            {  
-                    RepositorioUsuario repoU= new RepositorioUsuario();
+            {   
+                RepositorioUsuario repoU= new RepositorioUsuario();
+                if (!User.IsInRole("Administrador"))
+                {
+
+                    var usuarioActual = repoU.ObtenerCorreo(User.Identity.Name);
+                    if (usuarioActual.UsuarioId != user.UsuarioId)
+                    {
+                        ViewBag.Error = "No tiene permiso para modificar otro usuario";
+                            return RedirectToAction(nameof(Index));
+                    }
+                }
+                   
                 
                 var claims =User.Claims;
                 string Rol = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
@@ -377,8 +389,7 @@ public ActionResult DeleteAvatar(int UsuarioId)
                         TempData["returnUrl"] = volverUrl;
                         return View();
                     }
-
-
+               
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Name, usuario.Correo),
@@ -394,7 +405,7 @@ public ActionResult DeleteAvatar(int UsuarioId)
 
                     await HttpContext.SignInAsync(
                             CookieAuthenticationDefaults.AuthenticationScheme,
-   
+
                          new ClaimsPrincipal(claimsIdentity));
                     TempData.Remove("returnUrl");
                     return Redirect(volverUrl);

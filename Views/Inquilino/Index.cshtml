@@ -4,7 +4,9 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
+@{
+    var isAdmin = ViewBag.Rol == "Administrador";
+}
 <div class="text-center">
     <h1 class="dispaly-4"> Lista de Inquilinos</h1>
   
@@ -55,7 +57,9 @@
           
             <td>
                 <button class="btn btn-info" onclick="window.location.href='@Url.Action("Edit", new { id = item.id_Inquilino })'">Modificar</button> |
+@if(isAdmin){
 <button class="btn btn-danger" onclick="window.location.href='@Url.Action("Delet", new { id = item.id_Inquilino })'">Baja</button>
+}
 <button class="btn btn-dark" onclick="window.location.href='@Url.Action("Detail", new { id = item.id_Inquilino })'">Detalle</button>
 
             </td>
