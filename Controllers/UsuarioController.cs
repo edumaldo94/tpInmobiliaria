@@ -279,7 +279,19 @@ public ActionResult DeleteAvatar(int UsuarioId)
         {
             try
             {
+
                     RepositorioUsuario repoU= new RepositorioUsuario();
+                       if (!User.IsInRole("Administrador"))
+                {
+
+                    var usuarioActual = repoU.ObtenerCorreo(User.Identity.Name);
+                    if (usuarioActual.UsuarioId != user.UsuarioId)
+                    {
+                        ViewBag.Error = "No tiene permiso para modificar otro usuario";
+                            return RedirectToAction(nameof(Index));
+                    }
+                }
+                   
                 Usuario usuario=repoU.Obtener(Convert.ToInt32(user.UsuarioId));
                 string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                         password: user.PasswordAnterior,

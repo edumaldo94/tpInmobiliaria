@@ -84,3 +84,7 @@ h2{
 #boton>a:hover{
     color: rgb(4, 243, 252);
 }
+.btn-primary3{
+    background: linear-gradient(to bottom right, #ebb0b0, #8d0c22); 
+    color: #fff;
+}
