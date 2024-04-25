@@ -15,9 +15,9 @@ using tpInmobliaria.Models;
 namespace tpInmobliaria.Controllers;
 
 
-public class UsuarioController : Controller{
-  private readonly IConfiguration _configuracion;
-        private readonly IWebHostEnvironment _environment;
+public class UsuarioController : Controller{//define una clase que hereda de controller q actúa como un controlador web
+  private readonly IConfiguration _configuracion; //Este campo se utiliza para almacenar la configuración de la aplicación, como la configuración del archivo appsettings.json
+        private readonly IWebHostEnvironment _environment;//proporciona  información sobre rutas de archivos, nombres de entorno, etc
 
 
     private readonly ILogger<UsuarioController> _logger;
@@ -92,7 +92,8 @@ public class UsuarioController : Controller{
         // POST: Usuarios/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Usuario usuario)
+        [Authorize(Policy = "Administrador")]
+                public ActionResult Create(Usuario usuario)
         {
             try
             {
@@ -130,31 +131,52 @@ public class UsuarioController : Controller{
             }
             catch(Exception ex)
             {
-                    ViewBag.Roles = Usuario.ObtenerRoles();
+                   
                 throw;
             }
         }
+
         [Authorize]
-        // GET: Usuarios/Edit/5
+
         public ActionResult Edit(int UsuarioId)
         {
        try{
+        
                     RepositorioUsuario repoU= new RepositorioUsuario();
-                
+              
                 var claims =User.Claims;
                 string Rol = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
                 ViewBag.Rol=Rol;          
                    
-                if(UsuarioId==null || UsuarioId==0){
-                    string correo = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
-                    Usuario user1=repoU.ObtenerCorreo(correo);
-                    
-                    return View(user1);
-                }
-                /* */
-                 
-                Usuario user=repoU.Obtener(UsuarioId);
-                return View(user);
+                string usuarioAutenticadoId = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (usuarioAutenticadoId == null)
+        {
+            // Si no se puede obtener el id del usuario autenticado, redirige a una página de error o maneja la situación según tu caso.
+             ViewBag.ErrorMessage = "Solo el administrador puede realizar esta acción.";
+        }
+
+        if (UsuarioId == 0)
+        {
+            // Si no se proporciona un UsuarioId válido, puedes redirigir a una página de error o manejar la situación según tu caso.
+       ViewBag.ErrorMessage = "Solo el administrador puede realizar esta acción.";
+        }
+
+        Usuario user = repoU.Obtener(UsuarioId);
+
+        if (user == null)
+        {
+            // Si el usuario no se encuentra en la base de datos, puedes redirigir a una página de error o manejar la situación según tu caso.
+           ViewBag.ErrorMessage = "Solo el administrador puede realizar esta acción.";
+        }
+
+        if (!User.IsInRole("Administrador") && user.UsuarioId.ToString() != usuarioAutenticadoId)
+        {
+            // Si el usuario autenticado no es un administrador y está intentando editar un usuario que no es él mismo, redirige a una página de acceso denegado.
+             ViewBag.ErrorMessage = "Solo el administrador puede realizar esta acción.";
+        }
+
+        return View(user);
             }catch(Exception ex){
                 throw;
             }
@@ -166,30 +188,35 @@ public class UsuarioController : Controller{
         // POST: Usuarios/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Usuario user)
+        public ActionResult Edit(int UsuarioId, Usuario user)
         {
             try
             {   
-                RepositorioUsuario repoU= new RepositorioUsuario();
-                if (!User.IsInRole("Administrador"))
-                {
-
-                    var usuarioActual = repoU.ObtenerCorreo(User.Identity.Name);
-                    if (usuarioActual.UsuarioId != user.UsuarioId)
-                    {
-                        ViewBag.ErrorMessage = "Solo el administrador puede realizar esta acción.";
-                            return RedirectToAction(nameof(Index));
-                    }
-                }
-                   
                 
                 var claims =User.Claims;
                 string Rol = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
                 ViewBag.Rol=Rol;    
                    
-                Usuario usuario=repoU.Obtener(Convert.ToInt32(user.UsuarioId));
-                user.Password=usuario.Password;
-                user.Avatar=usuario.Avatar;
+                 
+                RepositorioUsuario repoU= new RepositorioUsuario();
+          string usuarioAutenticadoId = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+                       
+    
+        // Obtener el usuario correspondiente al UsuarioId
+        Usuario usuario = repoU.Obtener(Convert.ToInt32(usuarioAutenticadoId));
+
+        // Verificar si el usuario existe
+        if (usuario == null)
+        {
+            // Manejar el caso de usuario no encontrado
+            return NotFound("El usuario no fue encontrado");
+        }
+
+        // Actualizar los campos necesarios del usuario
+        user.UsuarioId = usuario.UsuarioId;
+        user.Password = usuario.Password;
+        user.Avatar = usuario.Avatar;
                 repoU.Edit(user);
                 return View(user);
             }
@@ -206,8 +233,17 @@ public class UsuarioController : Controller{
         {
             try
             {  
-                    RepositorioUsuario repoU= new RepositorioUsuario();
-                Usuario usuario=repoU.Obtener(Convert.ToInt32(user.UsuarioId));
+                 RepositorioUsuario repoU= new RepositorioUsuario();
+                 var claims =User.Claims;
+                string Rol = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+                ViewBag.Rol=Rol;    
+                   
+                  string usuarioAutenticadoId = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+                       
+    
+        // Obtener el usuario correspondiente al UsuarioId
+        Usuario usuario = repoU.Obtener(Convert.ToInt32(usuarioAutenticadoId));
                 if (usuario.Avatar != null && !string.IsNullOrEmpty(usuario.Avatar)){
                         string wwwPath = _environment.WebRootPath;
                         string path2 = Path.Combine(wwwPath, "Uploads");
@@ -247,8 +283,19 @@ public ActionResult DeleteAvatar(int UsuarioId)
     try
     {
         RepositorioUsuario repoU = new RepositorioUsuario();
+     
+              
         Usuario usuario = repoU.Obtener(UsuarioId);
-        
+          if (!User.IsInRole("Administrador"))
+                {
+
+                    var usuarioActual = repoU.ObtenerCorreo(User.Identity.Name);
+                    if (usuarioActual.UsuarioId != usuario.UsuarioId)
+                    {
+                        ViewBag.ErrorMessage = "Solo el administrador puede realizar esta acción.";
+                            return RedirectToAction(nameof(Index));
+                    }
+                }
         if (usuario.Avatar != null && !string.IsNullOrEmpty(usuario.Avatar))
         {
             string wwwPath = _environment.WebRootPath;
@@ -342,6 +389,7 @@ public ActionResult DeleteAvatar(int UsuarioId)
 
         // POST: Usuarios/Delete/5
         [HttpPost]
+          [Authorize(Policy = "Administrador")]
         [ValidateAntiForgeryToken]
         public ActionResult Delet(int id, Usuario user)
         {

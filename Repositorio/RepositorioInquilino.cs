@@ -21,7 +21,8 @@ public IList<Inquilino> GetTenants(){
     var tenants= new List<Inquilino>();
     using (var connection = new MySqlConnection(ConnectionString)){
 
-        var sql= @$"SELECT {nameof(Inquilino.id_Inquilino)}, {nameof(Inquilino.Nombre)}, {nameof(Inquilino.Apellido)}, {nameof(Inquilino.Dni)}, {nameof(Inquilino.Email)},{nameof(Inquilino.Telefono)},{nameof(Inquilino.Estado)}
+        var sql= @$"SELECT {nameof(Inquilino.id_Inquilino)}, {nameof(Inquilino.Nombre)}, {nameof(Inquilino.Apellido)}, 
+        {nameof(Inquilino.Dni)}, {nameof(Inquilino.Email)},{nameof(Inquilino.Telefono)},{nameof(Inquilino.Estado)}
         From inquilinos  WHERE {nameof(Inquilino.Estado)} = 1";
         using (var command = new MySqlCommand(sql,connection)){
             connection.Open();

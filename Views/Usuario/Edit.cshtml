@@ -2,30 +2,29 @@
 <link rel="stylesheet" href="/css/Usuario/Edit.css">
 @{
     ViewData["Title"] = "Edit";
-    var rol=ViewBag.Rol;
+  //  var rol=ViewBag.Rol;
 }
 
 @{
     // Verificar si existe un error en la ViewBag
     var error = ViewBag.ErrorMessage as string;
 }
-
+@{
+    var isAdmin = ViewBag.Rol == "Administrador";
+}
 @if (!string.IsNullOrEmpty(error))
 {
     <div class="alert alert-danger">@error</div>
 }
 <div class="container">
-     <p style="color: rgb(255, 255, 255); font-size: 16px; background-color: red;">@TempData["ErrorMessage"]</p>
+  
      <div class="col-md-10">
    <div class="form-container">
         <h1>Editar</h1>
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group" hidden>
-                <label asp-for="UsuarioId" class="control-label"></label>
-                <input asp-for="UsuarioId" class="form-control" readonly/>
-                <span asp-validation-for="UsuarioId" class="text-danger"></span>
-            </div>
+            
+          
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
                 <input asp-for="Nombre" class="form-control" required/>
@@ -41,14 +40,8 @@
                 <input asp-for="Correo" class="form-control" required type="email"/>
                 <span asp-validation-for="Correo" class="text-danger"></span>
             </div>
-            @if(rol=="Empleado"){
-                <div class="form-group">
-                    <label asp-for="Rol" class="control-label"></label>
-                    <input asp-for="Rol" hidden>
-                    <input asp-for="RolNombre" class="form-control"  readonly/>
-                    <span asp-validation-for="RolNombre" class="text-danger"></span>
-                </div>
-            }else{
+           
+                 @if(isAdmin){
                 <input value="@Model.Rol" id="rol" hidden readonly>
                 <div class="form-group">
                     <label class="control-label" >Rol</label>
@@ -58,12 +51,20 @@
                     </select>
                     <span asp-validation-for="Rol" class="text-danger"></span>
                 </div>
-            }
+                }else{
+                     <div class="form-group">
+                    <label asp-for="Rol" class="control-label"></label>
+                    <input asp-for="Rol" hidden>
+                    <input asp-for="RolNombre" class="form-control"  readonly/>
+                    <span asp-validation-for="RolNombre" class="text-danger"></span>
+                </div>
+                }
+            
             <div class="form-group" id="boton">
                 <input type="submit" value="Guardar" class="btn btn-primary" />
-                @if(rol!="Empleado"){
+               
                     <a asp-action="Index" class="btn btn-primary3">Volver</a>
-                }
+                
             </div>
         </form>
     </div>
@@ -75,15 +76,15 @@
         <div class="col-md-6">
     <div class="form-container">
         <form asp-action="Edit2" enctype="multipart/form-data">
-            <div class="form-group">
-                <label asp-for="UsuarioId" class="control-label" hidden></label>
-                <input asp-for="UsuarioId" class="form-control" hidden readonly/>
+            <div class="form-group"hidden>
+                <label asp-for="UsuarioId" class="control-label" ></label>
+                <input asp-for="UsuarioId" type="hidden" class="form-control"  readonly/>
                 <span asp-validation-for="UsuarioId" class="text-danger"></span>
             </div> 
           
                  <div class="form-group"> <!-- id="avatar"-->
 			 <label asp-for="Avatar" class="control-label" style="display: block; text-align: center;">Avatar</label>
-				@if (!Model.Avatar.Equals("sin avatar")&& Model.Avatar!=null)
+				@if (Model.Avatar != null && !Model.Avatar.Equals("sin avatar"))
 				{
 					<img class="foto" src="@Model.Avatar" />
 				}
@@ -111,7 +112,7 @@
     
     <form asp-action="DeleteAvatar" method="post">
         <input type="hidden" asp-for="UsuarioId" />
-        <button type="submit" class="btn btn-danger"onclick="confirmarEliminarAvatar()">Eliminar Avatar</button>
+        <button type="submit" class="btn btn-danger">Eliminar Avatar</button>
     </form>
 }
 else
@@ -152,7 +153,7 @@ else
     </div>
 
 </div>
-
+ @if(isAdmin){
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 <script>
@@ -167,5 +168,7 @@ function cambio(){
 }
 
 </script>
+
+}
 
 }

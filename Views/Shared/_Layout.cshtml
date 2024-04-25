@@ -4,7 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Inmobiliaria E-M</title>
-    
+    @using System.Security.Claims
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/tpInmobliaria.styles.css" asp-append-version="true" />
@@ -19,9 +20,10 @@
     </style>
 </head>
 <body>
+   
      @{
         var usuario=(string)ViewBag.Rol;
-        
+         var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 
 
@@ -77,8 +79,8 @@
                         <ul class="menu">
                         <!-- Elementos de la lista desplegable -->
                         
-                        <a class="nav-link text-white"  asp-controller="Usuario" asp-action="Edit">Editar Perfil</a>
-                        
+                      <a class="nav-link text-white" asp-controller="Usuario" asp-action="Edit" asp-route-UsuarioId="@usuarioId">Editar Perfil</a>
+
                         <a class="nav-link text-white"  asp-controller="Usuario" asp-action="logout">Salir</a>
                         </ul>
                         }
