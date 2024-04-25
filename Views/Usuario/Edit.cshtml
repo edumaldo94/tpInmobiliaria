@@ -7,7 +7,7 @@
 
 @{
     // Verificar si existe un error en la ViewBag
-    var error = ViewBag.Error as string;
+    var error = ViewBag.ErrorMessage as string;
 }
 
 @if (!string.IsNullOrEmpty(error))
@@ -15,7 +15,7 @@
     <div class="alert alert-danger">@error</div>
 }
 <div class="container">
-     
+     <p style="color: rgb(255, 255, 255); font-size: 16px; background-color: red;">@TempData["ErrorMessage"]</p>
      <div class="col-md-10">
    <div class="form-container">
         <h1>Editar</h1>

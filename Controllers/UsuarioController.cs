@@ -177,7 +177,7 @@ public class UsuarioController : Controller{
                     var usuarioActual = repoU.ObtenerCorreo(User.Identity.Name);
                     if (usuarioActual.UsuarioId != user.UsuarioId)
                     {
-                        ViewBag.Error = "No tiene permiso para modificar otro usuario";
+                        ViewBag.ErrorMessage = "Solo el administrador puede realizar esta acción.";
                             return RedirectToAction(nameof(Index));
                     }
                 }
