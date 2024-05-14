@@ -1,0 +1,102 @@
+/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+  }
+  
+  a {
+    color: #0077cc;
+  }
+  
+  .btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+  }
+  
+  .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+  }
+  
+  .border-top {
+    border-top: 1px solid #e5e5e5;
+  }
+  .border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+  }
+  
+  .box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+  }
+  
+  button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+  }
+  
+  .footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    
+  }
+  li>a>img{
+    width: 20px;
+    height: 20px;
+  }
+  .list {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    margin-right: 30px;
+  }
+  
+  .list > .button {
+  
+    background-color: #212529;
+    border: none;
+    outline: none;
+    width: 100px;
+    color: #fff;
+  }
+  .button>img{
+    width: 20px;
+  }
+  .list > .menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: none;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    background-color: #252525;
+    border: 1px solid #4d4e4e;
+    color: #ffffff;
+    width: 120px;
+  }
+  
+  .list > .menu li {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .list > .menu li:hover {
+    background-color: #f0f0f0;
+  }
+  
+  
+  .list > .menu li.selected {
+    background-color: #ccc;
+  }
+  .im{
+    width: 23px;
+    height: 22px;
+  }
+  

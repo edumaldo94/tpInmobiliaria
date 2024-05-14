@@ -129,7 +129,7 @@ public class RepositorioUsuario
         }
         return users;
     }
-      public Usuario Obtener(int id){
+      public Usuario ObtenerId(int id){
         Usuario user=new Usuario();
         using (MySqlConnection connetion = new MySqlConnection(ConnectionString)){
             string query= @"SELECT UsuarioId, nombre, apellido, Password, Correo, rol, Avatar FROM usuarios WHERE UsuarioId=@id";

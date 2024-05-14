@@ -194,8 +194,9 @@ public class RepositorioInmueble
         return p;
     }
 
-    public void Modificacion(Inmueble inmueble)
+    public int Modificacion(Inmueble inmueble)
     {
+         int res = -1;
         using (var connection = new MySqlConnection(ConnectionString))
         {
             var sql = @"UPDATE inmuebles
@@ -227,12 +228,15 @@ public class RepositorioInmueble
                 command.Parameters.AddWithValue("@EstadoIn", inmueble.EstadoIn);
                 command.Parameters.AddWithValue("@id_Inmuebles", inmueble.id_Inmuebles);
 
-                connection.Open();
-                command.ExecuteNonQuery();
+                   connection.Open();
+
+                res = command.ExecuteNonQuery();
+
+                connection.Close();
             }
         }
+         return res;
     }
-
     public int Low(int id)
     {
         int res = -1;

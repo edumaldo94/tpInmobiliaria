@@ -5,6 +5,7 @@ namespace tpInmobliaria.Models;
 
     public class Inquilino
     {
+          [Key] 
         public int id_Inquilino { get; set; }
    
         
