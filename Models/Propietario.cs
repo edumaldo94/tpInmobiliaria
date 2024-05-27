@@ -1,6 +1,6 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-
+using System.ComponentModel.DataAnnotations.Schema;
 namespace tpInmobliaria.Models
 {
     public class Propietario
@@ -20,7 +20,7 @@ namespace tpInmobliaria.Models
         [DisplayName("Email")]
         public string? Email { get; set; }
         
-        public string Clave { get; set; }
+        public string? Clave { get; set; }
 
         [DisplayName("Telefono")]
         public string? Telefono { get; set; }
@@ -28,6 +28,15 @@ namespace tpInmobliaria.Models
         [DisplayName("Estado")]
         public int? EstadoP { get; set; }
             public string? Avatar {get; set; }
+     /*          [NotMapped]
+    public string ClaveAntigua { get; set; }
+
+    [NotMapped]
+    public string ClaveNueva { get; set; }
+
+    [NotMapped]
+    public string ConfirmarClaveNueva { get; set; }*/
+
         public override string ToString()
 		{
 			//return $"{Apellido}, {Nombre}";

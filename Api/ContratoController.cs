@@ -29,6 +29,7 @@ namespace tpInmobliaria.Api
 
         //Contrato de un inmueble
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Contrato>> GetContratoXInmueble(int id)
         {
 

@@ -410,7 +410,7 @@ public List<Contrato> ObtenerContratosPorInquilino(int inquilinoId)
                             Uso = reader.GetString(13),
                             Tipo = reader.GetString(14),
                             Precio = reader.GetDouble(15),
-                            Disponible = reader.GetString(16),
+                          //  Disponible = reader.GetString(16),
                             EstadoIn =reader.GetInt32(17),
                   
                         }

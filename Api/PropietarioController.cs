@@ -70,6 +70,7 @@ namespace tpInmobliaria.Api
 			}
 		}
 		[HttpGet("obtenerusuario")]
+        [Authorize]
 		public async Task<ActionResult<Propietario>> ObtenerUsuario()
 		{
 			try
@@ -85,23 +86,40 @@ namespace tpInmobliaria.Api
 				return BadRequest(ex.Message);
 			}
 		}
+[HttpGet("obtenerusuarioB")]
+[Authorize]
+public async Task<ActionResult<object>> ObtenerUsuarioB()
+{
+    try
+    {
+        var email = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
 
-		// GET api/<controller>/GetAll
-		[HttpGet("GetAll")]
-		public async Task<IActionResult> GetAll()
-		{
-			try
-			{
+        // Selecciona los campos necesarios del propietario y devuelve ese objeto proyectado
+         var propietario = await contexto.Propietarios
+            .Where(x => x.Email == email)
+            .Select(x => new
+            {
+                x.id_Propietario,
+                x.Nombre,
+                x.Apellido,
+                x.Dni,
+                x.Email,
+              //  x.Clave,
+                x.Telefono,
+             //   x.EstadoP,
+            //    x.Avatar
+            })
+            .FirstOrDefaultAsync();
 
-				//	return Ok(Convert.ToString(await contexto.Propietarios.ToListAsync()));
-				return Ok(await contexto.Propietarios.ToListAsync());
+        return propietario;
+    }
+    catch (Exception ex)
+    {
+        return BadRequest(ex.Message);
+    }
+}
 
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
-		}
+		
 
 		// POST api/<controller>/login
 	  	[HttpPost("login")]
@@ -149,56 +167,7 @@ namespace tpInmobliaria.Api
 				return BadRequest(ex.Message);
 			}
 		}
-       /*   [HttpPost("login")]
-
-    public async Task<IActionResult> Login([FromForm] LoginView loginView) // para loguearse
-    {
-        try
-        {
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: loginView.Clave,
-                salt: System.Text.Encoding.ASCII.GetBytes(config["Salt"]),
-                prf: KeyDerivationPrf.HMACSHA1,
-                iterationCount: 1000,
-                numBytesRequested: 256 / 8
-            ));
-Console.WriteLine(hashed);
-            var p = await contexto.Propietarios.FirstOrDefaultAsync(x => x.Email == loginView.Usuario);
-            if (p == null || p.Clave != hashed)
-            {
-                return BadRequest("Nombre de usuario o clave incorrectos");
-            }
-            else
-            {
-               
-               	var key = new SymmetricSecurityKey(
-						System.Text.Encoding.ASCII.GetBytes(config["TokenAuthentication:SecretKey"]));
-					var credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-                    
-					var claims = new List<Claim>
-					{
-						new Claim(ClaimTypes.Name, p.Email),
-						new Claim("FullName", p.Nombre + " " + p.Apellido),
-						new Claim(ClaimTypes.Role, "Propietario"),
-					};
-               	var token = new JwtSecurityToken(
-						issuer: config["TokenAuthentication:Issuer"],
-						audience: config["TokenAuthentication:Audience"],
-						claims: claims,
-						expires: DateTime.Now.AddMinutes(60),
-						signingCredentials: credenciales
-					);
-					return Ok(new JwtSecurityTokenHandler().WriteToken(token));
-            
-            }
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }*/
-
-
+    
 		// POST api/<controller>
 		[HttpPost]
 		public async Task<IActionResult> Post([FromForm] Propietario entidad)
@@ -219,8 +188,10 @@ Console.WriteLine(hashed);
 			}
 		}
 
+
 		// PUT api/<controller>/5
 		[HttpPut("actualizar")]
+         [Authorize]
 		public async Task<IActionResult> Put([FromBody] Propietario prop)
 		{
 			try
@@ -234,21 +205,7 @@ Console.WriteLine(hashed);
 				}
 
 
-				/*if (prop.Clave == null || prop.Clave == "")
-				{
-					prop.Clave = propietarioV.Clave;
-				}
-				else
-				{
-					string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-					   password: prop.Clave,
-					   salt: System.Text.Encoding.ASCII.GetBytes(config["Salt"]),
-					   prf: KeyDerivationPrf.HMACSHA1,
-					   iterationCount: 1000,
-					   numBytesRequested: 256 / 8));
-					prop.Clave = hashed;
-
-				}*/
+			
 				contexto.Entry(original).CurrentValues.SetValues(prop);
 				//contexto.Propietarios.Update(prop);
 				await contexto.SaveChangesAsync();
@@ -260,6 +217,10 @@ Console.WriteLine(hashed);
 				return BadRequest(ex);
 			}
 		}
+
+
+
+
 
 		// DELETE api/<controller>/5
 		[HttpDelete("{id}")]
@@ -284,64 +245,10 @@ Console.WriteLine(hashed);
 			}
 		}
 
-		// GET: api/Propietario/test
-		[HttpGet("test")]
-		[AllowAnonymous]
-		public IActionResult Test()
-		{
-			try
-			{
-				return Ok("anduvo");
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex);
-			}
-		}
-
-		// GET: api/Propietarios/test/5
-		[HttpGet("test/{codigo}")]
-		[AllowAnonymous]
-		public IActionResult Code(int codigo)
-		{
-			try
-			{
-				//StatusCodes.Status418ImATeapot //constantes con códigos
-				return StatusCode(codigo, new { Mensaje = "Anduvo", Error = false });
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex);
-			}
-		}
-	
-
-
-	///////////////////////////////VER  MAÑANA///////////////////////////////////
-	///
-
-
-	   [HttpGet("user")]
+/*
+        [HttpPut("editar")]
     [Authorize]
-
-    public async Task<ActionResult<Propietario>> GetUser() // devuelve el propietario logueado
-    {
-        try
-        {
-            var usuario =  HttpContext.User.FindFirst(ClaimTypes.Name).Value;
-            if (usuario == null) return Unauthorized("Token no válido");
-            var dbUser = await contexto.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
-            if (dbUser == null) return BadRequest("El usuario no existe");
-            return dbUser;
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
-    [HttpPut("editar")]
-    [Authorize]
-    public async Task<IActionResult> Editar([FromForm] Propietario propietario)
+    public async Task<IActionResult> Editar([FromBody] Propietario propietario)
     {
         try
         {
@@ -350,7 +257,6 @@ Console.WriteLine(hashed);
      var user = await contexto.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
             int cantidad = contexto.Propietarios.Count(u => u.Email == propietario.Email && u.Email != user.Email);
             Console.WriteLine("CORREO DESDE EDITAR: "+propietario.Email);
-
 
             if (cantidad > 0)
             {
@@ -370,7 +276,7 @@ Console.WriteLine(hashed);
             dbUser.Dni = !string.IsNullOrEmpty(propietario.Dni) ? propietario.Dni : dbUser.Dni;
             dbUser.Telefono = !string.IsNullOrEmpty(propietario.Telefono) ? propietario.Telefono : dbUser.Telefono;
             dbUser.Email = !string.IsNullOrEmpty(propietario.Email) ? propietario.Email : dbUser.Email;
-            dbUser.Avatar = !string.IsNullOrEmpty(propietario.Avatar) ? propietario.Avatar : dbUser.Avatar;
+           // dbUser.Avatar = !string.IsNullOrEmpty(propietario.Avatar) ? propietario.Avatar : dbUser.Avatar;
             Console.WriteLine("correo: " + dbUser.Email);
 
             if (propietario.Clave != null && propietario.Clave != "" && propietario.Clave != dbUser.Clave)
@@ -426,18 +332,197 @@ Console.WriteLine(hashed);
             return BadRequest(e.Message);
         }
     }
+*/
 
-  
+	[HttpPut("editar")]
+[Authorize]
+public async Task<IActionResult> Editar([FromBody] Propietario propietario)
+{
+    try
+    {
+        var usuario = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+        var user = await contexto.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
+        
+        if (user == null) return Unauthorized("Token incorrecto");
+        
+        
+        
+        int cantidad = contexto.Propietarios.Count(u => u.Email == propietario.Email && u.Email != user.Email);
+        if (cantidad > 0)
+        {
+            return BadRequest("El correo electrónico ya está en uso por otro usuario.");
+        }
 
-    [HttpPost("email")]
-    //[AllowAnonymous]
+        user.Nombre = propietario.Nombre ?? user.Nombre;
+        user.Apellido = propietario.Apellido ?? user.Apellido;
+        user.Dni = propietario.Dni ?? user.Dni;
+        user.Telefono = propietario.Telefono ?? user.Telefono;
+        user.Email = propietario.Email ?? user.Email;
+
+        contexto.Propietarios.Update(user);
+        await contexto.SaveChangesAsync();
+
+        return Ok(new 
+        {
+            user.id_Propietario,
+            user.Nombre,
+            user.Apellido,
+            user.Dni,
+            user.Email,
+            user.Telefono
+        });
+    }
+    catch (Exception e)
+    {
+        return BadRequest(e.Message);
+    }
+}
+[HttpPut("editClave")]
+[Authorize]
+public async Task<IActionResult> clave([FromBody] CambiarClaveModel model)
+{
+      try
+    {
+        var usuario = HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
+        if (usuario == null)
+        {
+            return Unauthorized("Token incorrecto");
+        }
+
+        var dbUser = await contexto.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
+        if (dbUser == null)
+        {
+            return BadRequest("No se encontró el usuario");
+        }
+
+        // Validar la clave antigua
+        var claveAntiguaHashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password: model.ClaveAntigua,
+            salt: System.Text.Encoding.ASCII.GetBytes(config["Salt"]),
+            prf: KeyDerivationPrf.HMACSHA1,
+            iterationCount: 1000,
+            numBytesRequested: 256 / 8));
+
+        if (dbUser.Clave != claveAntiguaHashed)
+        {
+            return BadRequest("La contraseña antigua es incorrecta.");
+        }
+
+        // Validar y actualizar la nueva clave
+        if (model.ClaveNueva != model.ConfirmarClaveNueva)
+        {
+            return BadRequest("La nueva contraseña y la confirmación no coinciden.");
+        }
+
+        var nuevaClaveHashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password: model.ClaveNueva,
+            salt: System.Text.Encoding.ASCII.GetBytes(config["Salt"]),
+            prf: KeyDerivationPrf.HMACSHA1,
+            iterationCount: 1000,
+            numBytesRequested: 256 / 8));
+
+        dbUser.Clave = nuevaClaveHashed;
+        contexto.Propietarios.Update(dbUser);
+        await contexto.SaveChangesAsync();
+
+        // Generar nuevo token
+        var key = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(config["TokenAuthentication:SecretKey"]));
+        var credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, dbUser.Email),
+            new Claim("FullName", dbUser.Nombre + " " + dbUser.Apellido),
+        };
+
+        var token = new JwtSecurityToken(
+            issuer: config["TokenAuthentication:Issuer"],
+            audience: config["TokenAuthentication:Audience"],
+            claims: claims,
+            expires: DateTime.Now.AddMinutes(60),
+            signingCredentials: credenciales
+        );
+
+        return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+    }
+    catch (Exception e)
+    {
+        return BadRequest(e.Message);
+    }
+}
+// GET api/<controller>/GetAll
+		[HttpGet("GetAll")]
+		public async Task<IActionResult> GetAll()
+		{
+			try
+			{
+
+				//	return Ok(Convert.ToString(await contexto.Propietarios.ToListAsync()));
+				return Ok(await contexto.Propietarios.ToListAsync());
+
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		// GET: api/Propietario/test
+		[HttpGet("test")]
+		[AllowAnonymous]
+		public IActionResult Test()
+		{
+			try
+			{
+				return Ok("anduvo");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex);
+			}
+		}
+
+		// GET: api/Propietarios/test/5
+		[HttpGet("test/{codigo}")]
+		[AllowAnonymous]
+		public IActionResult Code(int codigo)
+		{
+			try
+			{
+				//StatusCodes.Status418ImATeapot //constantes con códigos
+				return StatusCode(codigo, new { Mensaje = "Anduvo", Error = false });
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex);
+			}
+		}
+
+       [HttpGet("user")]
+    [Authorize]
+
+    public async Task<ActionResult<Propietario>> GetUser() // devuelve el propietario logueado
+    {
+        try
+        {
+            var usuario =  HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+            if (usuario == null) return Unauthorized("Token no válido");
+            var dbUser = await contexto.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
+            if (dbUser == null) return BadRequest("El usuario no existe");
+            return dbUser;
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+
+
+  [HttpPost("email")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetByEmail([FromForm] string correo)
     {
         try
         { //método sin autenticar, busca el propietario x email
-		  //var usuario = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
-           
-    // var user = await contexto.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
             Console.WriteLine($"Email: {correo}");
             var propietario = await contexto.Propietarios.FirstOrDefaultAsync(x => x.Email == correo);
             var link = "";
@@ -469,7 +554,7 @@ Console.WriteLine(hashed);
                 );
 
 
-                link = $"https://{dominio}:5000/api/Propietario/token?access_token={new JwtSecurityTokenHandler().WriteToken(token)}";
+                link = $"http://{dominio}:5000/api/Propietario/token?access_token={new JwtSecurityTokenHandler().WriteToken(token)}";
 
 
                 Console.WriteLine(link);
@@ -562,20 +647,16 @@ Console.WriteLine(hashed);
         }
     }
 
- 
+   
     [HttpGet("sendEmail")]
     private async Task<IActionResult> enviarMail(string email, string subject, string body)
     {
         var emailMessage = new MimeMessage();
-if (email == null)
-{
-    return BadRequest("La dirección de correo electrónico es nula o vacía");
-}
+
         emailMessage.From.Add(new MailboxAddress("Sistema", config["SMTPUser"]));
         emailMessage.To.Add(new MailboxAddress("", email));
         emailMessage.Subject = subject;
         emailMessage.Body = new TextPart("html") { Text = body, };
-
 
         using (var client = new SmtpClient())
         {
@@ -589,6 +670,5 @@ if (email == null)
         return Ok();
     }
 
-
-}
-}
+    }
+    }

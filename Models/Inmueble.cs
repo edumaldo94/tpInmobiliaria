@@ -26,7 +26,7 @@ public class Inmueble
   [DisplayName("Precio")]
   [Required]
   public double? Precio { get; set; }
-  public string? Disponible { get; set; }
+  public bool Disponible { get; set; }
   public int? EstadoIn { get; set; }
       public string? Foto { get; set; }
   [DisplayName("Nombre Propietario")]

@@ -1,5 +1,5 @@
 using tpInmobliaria.Models;
-
+ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -96,17 +96,17 @@ namespace tpInmobliaria.Api //<-- No hay punto y coma aquí
             }
         }
 
-        [HttpPut("{id}")]//Cambiar Estado
+        [HttpPut("disponible/{id}")]//Cambiar Estado
         public async Task<ActionResult<Inmueble>> Put([FromForm] byte estado, int id)
         {
-            var e = "no";
+            var e =false;
             if(estado == 1)
             {
-                e = "si";
+                e = true;
             }
             else
             {
-                e = "no";
+                e = false;
             }
 
             try
@@ -132,13 +132,9 @@ namespace tpInmobliaria.Api //<-- No hay punto y coma aquí
             }
         }
     
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-   [HttpPut("toogleEstado/{id}")]
+   [HttpPut("inmuEstado/{id}")]
     [Authorize]
-    public async Task<IActionResult> ToogleEstado(int id)
+    public async Task<IActionResult> inmuEstado(int id)
     {
         try
         {
@@ -146,13 +142,12 @@ namespace tpInmobliaria.Api //<-- No hay punto y coma aquí
            
      var user = await applicationDbContext.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
 
- var inmueble = await applicationDbContext.Inmuebles
-            .Where(e => e.id_Inmuebles == id)
-            .ToListAsync();
-            if (inmueble == null && inmueble.Count > 0) return NotFound();
-            if (inmueble[0].PropietarioId != user.id_Propietario) return Unauthorized("Acceso denegado");
-            inmueble[0].Disponible = "No";
-     applicationDbContext.Update(inmueble[0]);
+             var inmueble = await applicationDbContext.Inmuebles
+            .SingleOrDefaultAsync(e => e.id_Inmuebles == id);
+            if (inmueble == null) return NotFound();
+            if (inmueble.PropietarioId != user.id_Propietario) return Unauthorized("Acceso denegado");
+            inmueble.Disponible =  !inmueble.Disponible ;
+     applicationDbContext.Update(inmueble);
 
 // Guardar los cambios en la base de datos
 await applicationDbContext.SaveChangesAsync();
@@ -166,7 +161,7 @@ await applicationDbContext.SaveChangesAsync();
         }
     }
 
-    //==========================================
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     [HttpGet("{id}")]
    
     public async Task<IActionResult> GetInmueble(int id)
@@ -177,13 +172,11 @@ await applicationDbContext.SaveChangesAsync();
                 var user = await applicationDbContext.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
 
   var inmueble = await applicationDbContext.Inmuebles
-            .Where(e => e.id_Inmuebles == id)
-            .ToListAsync();
- 
-            if (inmueble != null && inmueble.Count > 0)
-            {
-             
-                if (inmueble[0].PropietarioId != user.id_Propietario) 
+            .SingleOrDefaultAsync(e => e.id_Inmuebles == id);
+
+          if (inmueble != null)
+        {
+            if (inmueble.PropietarioId != user.id_Propietario)
             {
                 return Unauthorized("Acceso denegado");
             }
@@ -192,19 +185,17 @@ await applicationDbContext.SaveChangesAsync();
                 // Si coincide, devuelve el inmueble
                 return Ok(inmueble);
             }
-            }
-
-            else
-            {
-                return NotFound("Inmueble no encontrado");
-            }
         }
+        else
+        {
+            return NotFound("Inmueble no encontrado");
+        }
+    }
         catch (Exception e)
         {
             return BadRequest(e.Message);
         }
     }
-
 
     [HttpGet("alquiladas")]
     [Authorize]
@@ -236,111 +227,147 @@ await applicationDbContext.SaveChangesAsync();
     }
 
     //==========================================
-    [HttpPost("crear")]
-    public async Task<IActionResult> CrearInmueble([FromBody] Inmueble inmueble)
+ 
+
+[HttpPost("crear")]
+[Authorize]
+public async Task<IActionResult> crearInmueble([FromBody] Inmueble inmueble)
+{
+    try
     {
-        try
+        var usuario = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+        var user = await applicationDbContext.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
+
+        inmueble.PropietarioId = user.id_Propietario;
+
+        // Verifica que estadoIn tenga un valor
+        if (inmueble.EstadoIn == 0)
         {
-            Console.WriteLine("FOTO: " + inmueble.Foto);
-            var usuario = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
-            var user = await applicationDbContext.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
-            Inmueble inmuebleF = inmueble;
-            inmueble.PropietarioId = user.id_Propietario;
-            applicationDbContext.Inmuebles.Add(inmueble);
-            applicationDbContext.SaveChanges(); // Guarda los cambios en la base de datos
+            inmueble.EstadoIn = 1;
+        }
 
-            string nombreFoto = $"img_inmueble_{user.id_Propietario}_{inmueble.id_Inmuebles}.jpg";
+        // Decodifica la foto Base64 si está presente
+        if (!string.IsNullOrEmpty(inmueble.Foto) && inmueble.Foto.Contains(","))
+        {
+            inmueble.Foto = inmueble.Foto.Split(',')[1];
+        }
 
-           if (inmuebleF.Foto.Contains(","))
-            {
-                inmuebleF.Foto = inmuebleF.Foto.Split(',')[1];
-            }
-
-            // Convierte la cadena base64 en bytes
-            byte[] imageBytes = Convert.FromBase64String(inmuebleF.Foto);
+        if (!string.IsNullOrEmpty(inmueble.Foto) && (inmueble.Foto.Length % 4 == 0) && Regex.IsMatch(inmueble.Foto, @"^[a-zA-Z0-9\+/]*={0,3}$"))
+        {
+            byte[] imageBytes = Convert.FromBase64String(inmueble.Foto);
 
             string wwwPath = environment.WebRootPath;
-            string path = Path.Combine(wwwPath, "Uploads","inmuebles");
+            string path = Path.Combine(wwwPath, "Uploads", "inmuebles");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
 
-            string fileName = nombreFoto;
-            string pathCompleto = Path.Combine(path, fileName);
-            // inmueble.Foto = Path.Combine("/Uploads", fileName);
+            // Asegúrate de que el nombre de la imagen sea único
+            string nombreFoto = $"img_inmueble_{user.id_Propietario}_{Guid.NewGuid()}.jpg";
+            string pathCompleto = Path.Combine(path, nombreFoto);
 
-
-            // Crea una memoria en la secuencia de bytes
             using (MemoryStream stream = new MemoryStream(imageBytes))
             {
-                // Crea una imagen a partir de la secuencia de bytes
                 System.Drawing.Image image = System.Drawing.Image.FromStream(stream);
                 image.Save(pathCompleto, System.Drawing.Imaging.ImageFormat.Jpeg);
             }
+
             inmueble.Foto = $"uploads/inmuebles/{nombreFoto}";
-            applicationDbContext.Update(inmueble);
-
-            await applicationDbContext.SaveChangesAsync();
-
-            return Ok(inmueble);
         }
-        catch (Exception ex)
-        {
-            return BadRequest("Error al convertir la cadena base64 a imagen: " + ex.Message);
-        }
+
+        applicationDbContext.Inmuebles.Add(inmueble);
+        await applicationDbContext.SaveChangesAsync();
+
+        return Ok(inmueble);
     }
-
-} 
+    catch (Exception ex)
+    {
+        return BadRequest("Error al convertir la cadena base64 a imagen: " + ex.Message);
+    }
 }
 
-//<-- No hay punto y coma aquí
 
-        /*[HttpPost("crear")]
-        public async Task<ActionResult<Inmueble>> Post([FromBody] Inmueble inmueble)
+ [HttpGet("propiedadesUsuario")]
+[Authorize]
+public async Task<IActionResult> GetInmu()
+{
+    try
+    {
+        var usuario = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+        var user = await applicationDbContext.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
+        if (string.IsNullOrEmpty(usuario))
         {
+            return Unauthorized("Token no válido o usuario no identificado");
+        }
 
-            try
-            {
+        var propiedades = from inmueble in applicationDbContext.Inmuebles
+                          join propietario in applicationDbContext.Propietarios
+                          on inmueble.PropietarioId equals propietario.id_Propietario
+                          where propietario.Email == user.Email
+                          select inmueble;
 
-                var email = HttpContext.User.FindFirst(ClaimTypes.Email).Value;
-                var propietario = await applicationDbContext.Propietarios.FirstOrDefaultAsync(x => x.Email == email);
-                inmueble.PropietarioId = propietario.IdPropietario;
-                if (inmueble.ImagenGuardar != null)
-                {
-                    var stream1 = new MemoryStream(Convert.FromBase64String(inmueble.ImagenGuardar));
-                    IFormFile ImagenInmo = new FormFile(stream1, 0, stream1.Length, "inmueble", ".jpg");
-                    string wwwPath = environment.WebRootPath;
-                    string path = Path.Combine(wwwPath, "Uploads");
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                    }
-                    Random r = new Random();
-                    //Path.GetFileName(u.AvatarFile.FileName);//este nombre se puede repetir
-                    string fileName = "inmueble_" + inmueble.PropietarioId + r.Next(0, 100000) + Path.GetExtension(ImagenInmo.FileName);
-                    string pathCompleto = Path.Combine(path, fileName);
+        var propiedadesList = await propiedades.ToListAsync();
 
-                    inmueble.Imagen = Path.Combine("Uploads", fileName);
-                    using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
-                    {
-                        ImagenInmo.CopyTo(stream);
-                    }
-                    applicationDbContext.Add(inmueble);
-                    await applicationDbContext.SaveChangesAsync();
-                    return inmueble;
-                }
-                else
-                {
+        if (propiedadesList.Any())
+        {
+            return Ok(propiedadesList);
+        }
+        else
+        {
+            return NotFound("No se encontraron propiedades para el usuario.");
+        }
+    }
+    catch (Exception e)
+    {
+        return BadRequest("Error en la solicitud: " + e.Message);
+    }
+}
 
-                    return BadRequest("debe incluir una imagen ");
-                }
 
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }*/
+
+    //==========================================
+
     
+ [HttpGet("qweqwe")]
+[Authorize]
+ public async Task<ActionResult<object>> ObtenerUsuarioB()
+{
+    try
+    {
+     var usuario = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+        var user = await applicationDbContext.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
 
+        // Selecciona los campos necesarios del propietario y devuelve ese objeto proyectado
+         var inmueble = await applicationDbContext.Inmuebles
+            .Where(x => x.PropietarioId == user.id_Propietario)
+            .Select(x => new
+            {
+                x.id_Inmuebles,
+                x.PropietarioId,
+                x.Latitud,
+                x.Longitud,
+                x.Ubicacion,
+                x.Direccion,
+                x.Ambientes,
+                x.Uso,
+                x.Tipo,
+                x.Precio,
+x.Disponible,
+x.EstadoIn,
+x.Foto
+            })
+            .ToListAsync();
+
+        
+        return inmueble;
+    }
+    catch (Exception ex)
+    {
+        return BadRequest(ex.Message);
+    }
+}
+
+    
+    }
+}

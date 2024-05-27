@@ -18,6 +18,12 @@ builder.WebHost.UseUrls("http://localhost:5000","http://localhost:5001", "http:/
 var configuration = builder.Configuration;
 // Agregar servicios al contenedor
  builder.Services.AddControllersWithViews();
+ builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+    });
+
  builder.Services.AddRazorPages();
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(options =>
@@ -28,6 +34,7 @@ var configuration = builder.Configuration;
                })
                .AddJwtBearer(options =>
                {
+                
                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                    {
                        ValidateIssuer = true,
@@ -41,7 +48,7 @@ var configuration = builder.Configuration;
                    };
                    options.Events = new JwtBearerEvents
                    {
-                   OnMessageReceived = context =>
+                   /*  OnMessageReceived = context =>
                        {
                            var accessToken = context.Request.Query["access_token"];
                            var path = context.HttpContext.Request.Path;
@@ -49,8 +56,8 @@ var configuration = builder.Configuration;
                            path.StartsWithSegments("/chatsegurohub"))
                            {
                                context.Token = accessToken;
-                           }
-                          /*    OnMessageReceived = context =>
+                           }*/
+                            OnMessageReceived = context =>
              {
                 // Leer el token desde el query string
                 var accessToken = context.Request.Query["access_token"];
@@ -62,13 +69,14 @@ var configuration = builder.Configuration;
                     path.StartsWithSegments("/api/Propietario/token")))
                 {//reemplazar las urls por las necesarias ruta ⬆
                     context.Token = accessToken;
-                }*/
+                }
                            return Task.CompletedTask;
                        }
                    };
                });
 
-
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
             builder.Services.AddAuthorization(options =>
             {
                options.AddPolicy("Empleado", policy => policy.RequireClaim(ClaimTypes.Role, "Administrador", "Empleado"));
@@ -101,31 +109,6 @@ var configuration = builder.Configuration;
 
 // Configurar el inicio de la aplicación
 var app = builder.Build();
-//app.UseHttpsRedirection();
-// Middleware de la aplicación
-// Permitir CORS
-app.UseCors(x => x
-    .AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader());
-app.UseStaticFiles();
-
-
-
-
-
-
-
-
-// Habilitar el enrutamiento
-app.UseRouting();
-app.UseCookiePolicy(new CookiePolicyOptions
-{
-    MinimumSameSitePolicy = SameSiteMode.None,
-});
-// Habilitar la autenticación y la autorización
-app.UseAuthentication();
-app.UseAuthorization();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -135,61 +118,18 @@ else
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-
-
-// Configurar los endpoints
-//app.MapControllerRoute(
- //   name: "default",
-   // pattern: "{controller=Home}/{action=Index}/{id?}");
-   app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapControllerRoute("login", "entrar/{**accion}", new { controller = "Usuarios", action = "Login" });
-app.MapControllerRoute("rutaFija", "ruteo/{valor}", new { controller = "Home", action = "Ruta", valor = "defecto" });
-app.MapControllerRoute("fechas", "{controller=Home}/{action=Fecha}/{anio}/{mes}/{dia}");
-app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-  /* app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });*/
-app.MapRazorPages();
-
-
-// Ejecutar la aplicación
-app.Run();
-
-/*
-using Microsoft.AspNetCore;
-
-using Microsoft.Extensions.Configuration;
-
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-
-namespace tpInmobliaria
+if (app.Environment.IsDevelopment())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
-
-*/
+app.UseCors(x => x.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+app.UseStaticFiles();
+app.UseRouting();
+//app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapControllers();
+app.Run();

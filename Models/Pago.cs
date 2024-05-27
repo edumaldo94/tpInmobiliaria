@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 namespace tpInmobliaria.Models;
 
 public class Pago
@@ -33,5 +34,7 @@ public class Pago
   public string? InquilinoApellido { get; set; }
   [NotMapped]
   public Inmueble? inmueble { get; set; }
+
+
 
 }

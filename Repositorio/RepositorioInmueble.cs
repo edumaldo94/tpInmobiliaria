@@ -58,7 +58,7 @@ public class RepositorioInmueble
                             Uso = reader.GetString(4),
                             Tipo = reader.GetString(5),
                             Precio = reader.GetFloat(6),
-                            Disponible = reader.GetString(7),
+                      //      Disponible = reader.GetString(7),
                             EstadoIn = reader.GetInt32(8),
                             ProprietorName = reader.IsDBNull(reader.GetOrdinal("ProprietorName")) ? null : reader.GetString("ProprietorName"),
                             ProprietorLastName = reader.IsDBNull(reader.GetOrdinal("ProprietorLastName")) ? null : reader.GetString("ProprietorLastName")
@@ -110,7 +110,7 @@ public class RepositorioInmueble
                             Uso = reader.GetString(4),
                             Tipo = reader.GetString(5),
                             Precio = reader.GetFloat(6),
-                            Disponible = reader.GetString(7),
+                      //      Disponible = reader.GetString(7),
                             EstadoIn = reader.GetInt32(8),
                             ProprietorName = reader.IsDBNull(reader.GetOrdinal("ProprietorName")) ? null : reader.GetString("ProprietorName"),
                             ProprietorLastName = reader.IsDBNull(reader.GetOrdinal("ProprietorLastName")) ? null : reader.GetString("ProprietorLastName")
@@ -182,7 +182,7 @@ public class RepositorioInmueble
                         Uso = reader.GetString(7),
                         Tipo = reader.GetString(8),
                         Precio = reader.GetFloat(9),
-                        Disponible = reader.GetString(10),
+                       // Disponible = reader.GetString(10),
                         EstadoIn = reader.GetInt32(11),
 
                     };
@@ -327,7 +327,7 @@ public int DisponibleInmuSi(int id)
                                 Uso = reader.GetString(7),
                                 Tipo = reader.GetString(8),
                                 Precio = reader.GetDouble(9),
-                                Disponible = reader.GetString(10),
+                             //   Disponible = reader.GetString(10),
                     };
                     inmuebles.Add(inmueble);
                 }
@@ -339,3 +339,162 @@ public int DisponibleInmuSi(int id)
 }
 
 }
+
+
+/*   [HttpPut("toogleEstado/{id}")]
+    [Authorize]
+    public async Task<IActionResult> ToogleEstado(int id)
+    {
+        try
+        {
+        var usuario = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+           
+     var user = await applicationDbContext.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
+
+ var inmueble = await applicationDbContext.Inmuebles
+            .Where(e => e.id_Inmuebles == id)
+            .ToListAsync();
+            if (inmueble == null && inmueble.Count > 0) return NotFound();
+            if (inmueble[0].PropietarioId != user.id_Propietario) return Unauthorized("Acceso denegado");
+            inmueble[0].Disponible = "No";
+     applicationDbContext.Update(inmueble[0]);
+
+// Guardar los cambios en la base de datos
+await applicationDbContext.SaveChangesAsync();
+
+            return Ok(inmueble);
+        }
+        catch (Exception e)
+        {
+            // Manejo de errores
+            return BadRequest(e.Message);
+        }
+    }
+
+    //==========================================
+    [HttpGet("{id}")]
+   
+    public async Task<IActionResult> GetInmueble(int id)
+    {
+        try
+        {
+           var usuario = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+                var user = await applicationDbContext.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
+
+  var inmueble = await applicationDbContext.Inmuebles
+            .Where(e => e.id_Inmuebles == id)
+            .ToListAsync();
+ 
+            if (inmueble != null && inmueble.Count > 0)
+            {
+             
+                if (inmueble[0].PropietarioId != user.id_Propietario) 
+            {
+                return Unauthorized("Acceso denegado");
+            }
+            else
+            {
+                // Si coincide, devuelve el inmueble
+                return Ok(inmueble);
+            }
+            }
+
+            else
+            {
+                return NotFound("Inmueble no encontrado");
+            }
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+
+    [HttpGet("alquiladas")]
+    [Authorize]
+    public async Task<IActionResult> GetAlquiladas()
+    {
+        try
+        {
+         var usuario = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+            
+            var user = await applicationDbContext.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
+            var fecha = DateTime.Today;
+
+        
+        var inmuebles = await applicationDbContext.Contratos
+            .Where(e => e.Inmueble.PropietarioId == user.id_Propietario && 
+                        e.Estado == "Activo" && 
+                        e.Fecha_Fin >= fecha)
+            .Select(e => e.Inmueble)
+            .ToListAsync();
+
+            Console.WriteLine("COUNT: " + inmuebles.Count);
+            return Ok(inmuebles);
+
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    //==========================================
+    [HttpPost("crear")]
+    public async Task<IActionResult> CrearInmueble([FromBody] Inmueble inmueble)
+    {
+        try
+        {
+            Console.WriteLine("FOTO: " + inmueble.Foto);
+            var usuario = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+            var user = await applicationDbContext.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
+            Inmueble inmuebleF = inmueble;
+            inmueble.PropietarioId = user.id_Propietario;
+            applicationDbContext.Inmuebles.Add(inmueble);
+            applicationDbContext.SaveChanges(); // Guarda los cambios en la base de datos
+
+            string nombreFoto = $"img_inmueble_{user.id_Propietario}_{inmueble.id_Inmuebles}.jpg";
+
+           if (inmuebleF.Foto.Contains(","))
+            {
+                inmuebleF.Foto = inmuebleF.Foto.Split(',')[1];
+            }
+
+            // Convierte la cadena base64 en bytes
+            byte[] imageBytes = Convert.FromBase64String(inmuebleF.Foto);
+
+            string wwwPath = environment.WebRootPath;
+            string path = Path.Combine(wwwPath, "Uploads","inmuebles");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            string fileName = nombreFoto;
+            string pathCompleto = Path.Combine(path, fileName);
+            // inmueble.Foto = Path.Combine("/Uploads", fileName);
+
+
+            // Crea una memoria en la secuencia de bytes
+            using (MemoryStream stream = new MemoryStream(imageBytes))
+            {
+                // Crea una imagen a partir de la secuencia de bytes
+                System.Drawing.Image image = System.Drawing.Image.FromStream(stream);
+                image.Save(pathCompleto, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+            inmueble.Foto = $"uploads/inmuebles/{nombreFoto}";
+            applicationDbContext.Update(inmueble);
+
+            await applicationDbContext.SaveChangesAsync();
+
+            return Ok(inmueble);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Error al convertir la cadena base64 a imagen: " + ex.Message);
+        }
+    }
+
+} 
+}*/

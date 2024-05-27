@@ -66,23 +66,26 @@ public async Task<ActionResult<Inquilino>> Get(int id)
     }
 }
 
-[HttpGet("inquiloActual/{inmuebleId}")]
+[HttpGet("inquiloActual/{id}")]
 [Authorize]
-public async Task<IActionResult> GetInquilinoActivoPorInmueble(int inmuebleId)
+public async Task<IActionResult> obtenerInquiloAct(int id)
 {
     try
     {
-        var usuario = User.Identity.Name;
-        if (usuario == null) return Unauthorized("Token incorrecto");
+        var usuario = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+       
         var user = await contexto.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
         var fecha = DateTime.Today;
 
-        var contratoActivo = await contexto.Contratos
+       var contratoActivo = await contexto.Contratos
             .Include(c => c.Inquilino)
+            .Include(c => c.Inmueble)
             .FirstOrDefaultAsync(c =>
-                c.InmuebleId == inmuebleId &&
+                c.InmuebleId == id &&
                 c.Inmueble.PropietarioId == user.id_Propietario &&
-                c.Estado == "Activo");
+                c.Estado == "Activo" &&
+                c.Fecha_Fin >= fecha);
+
 
         if (contratoActivo != null)
         {
